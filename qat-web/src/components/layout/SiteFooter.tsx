@@ -19,7 +19,7 @@ export function SiteFooter() {
               Connecting quantum science, art, education, and public imagination
               across Thailand and beyond.
             </p>
-            <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-600">
+            <p className="mt-6 text-xs text-slate-600">
               &copy; {year} QAT Assoc. · CreativeLabTH Group
             </p>
           </div>
