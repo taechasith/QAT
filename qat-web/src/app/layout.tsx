@@ -3,6 +3,7 @@ import { IBM_Plex_Sans_Thai, JetBrains_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SplashScreen } from "@/components/layout/SplashScreen";
 
 import "./globals.css";
 
@@ -39,7 +40,8 @@ export default function RootLayout({
       className={`${ibmPlexSansThai.variable} ${manrope.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">
-        <div className="flex min-h-screen flex-col">
+        <SplashScreen />
+        <div className="flex min-h-screen flex-col" style={{ animation: "fade-in 600ms ease-out 3500ms both" }}>
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
