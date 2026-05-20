@@ -8,14 +8,6 @@ import { Button } from "@/components/ui/button";
 import { LogoMark } from "./LogoMark";
 import { NavMenu } from "./NavMenu";
 
-const primaryNav = [
-  { label: "Game", href: "/game" },
-  { label: "Course", href: "/course" },
-  { label: "Exhibition", href: "/exhibition" },
-  { label: "Research", href: "/research" },
-  { label: "News", href: "/news" },
-];
-
 function AuthFallback() {
   return (
     <Button
@@ -33,22 +25,6 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030711]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-10">
         <LogoMark />
-
-        {/* Inline primary nav — xl+ only */}
-        <nav
-          className="hidden xl:flex flex-1 items-center justify-center gap-0.5"
-          aria-label="Primary"
-        >
-          {primaryNav.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-400 transition-colors duration-150 hover:bg-white/6 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="flex items-center gap-3">
           <Suspense fallback={<AuthFallback />}>

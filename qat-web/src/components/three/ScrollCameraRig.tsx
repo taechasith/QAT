@@ -20,7 +20,7 @@ const FOV_BREATH   = 2.0;
 const ORBIT_END      = 0.82;
 // Final state of the zoom — camera plunges into model center
 const ZOOM_FINAL_R   = 1.1;   // nearly inside the model
-const ZOOM_FINAL_Y   = 0.0;
+const ZOOM_FINAL_Y   = -6.5;  // low, dramatic low-angle finale
 const ZOOM_FINAL_FOV = 11;    // cinematic telephoto
 
 function lerp(a: number, b: number, t: number) {
