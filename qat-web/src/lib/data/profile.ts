@@ -12,13 +12,18 @@ export type Profile = {
 };
 
 export async function getProfile(userId: string): Promise<Profile | null> {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("profiles")
-    .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
-    .eq("id", userId)
-    .maybeSingle();
-  return data as Profile | null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("profiles")
+      .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
+      .eq("id", userId)
+      .maybeSingle();
+    if (!data) return null;
+    return { avatar_type: "artist_cat", ...data } as Profile;
+  } catch {
+    return null;
+  }
 }
 
 export async function upsertProfile(

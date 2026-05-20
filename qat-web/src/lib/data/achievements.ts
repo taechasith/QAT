@@ -7,12 +7,16 @@ export type Achievement = {
 };
 
 export async function getUserAchievements(userId: string): Promise<Achievement[]> {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("user_achievements")
-    .select("id, item_id, item_type")
-    .eq("user_id", userId);
-  return (data ?? []) as Achievement[];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("user_achievements")
+      .select("id, item_id, item_type")
+      .eq("user_id", userId);
+    return (data ?? []) as Achievement[];
+  } catch {
+    return [];
+  }
 }
 
 export async function addAchievement(
