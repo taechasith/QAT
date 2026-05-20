@@ -32,7 +32,7 @@ export function QuantumHeroScene() {
 
   return (
     <Canvas
-      camera={{ position: [0, -9.0, 8], fov: 42 }}
+      camera={{ position: [0, -6.0, 8.5], fov: 42 }}
       dpr={mobile ? [1, 1] : [1, 1.5]}
       gl={{ antialias: !mobile, alpha: true }}
       style={{ background: "transparent" }}

@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { ContentFormData } from "@/lib/validation/content";
+import type { Block } from "@/lib/types/blocks";
 
 const adminSelect = `
   id,
@@ -33,7 +34,7 @@ export async function getContentById(id: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("content_items")
-    .select(`${adminSelect}, body_md, metadata`)
+    .select(`${adminSelect}, body_md, body_blocks, metadata`)
     .eq("id", id)
     .maybeSingle();
 
@@ -43,6 +44,7 @@ export async function getContentById(id: string) {
 export async function createContent(
   userId: string,
   values: ContentFormData,
+  bodyBlocks: Block[] = [],
 ): Promise<{ id?: string; error?: string }> {
   const supabase = await createClient();
 
@@ -52,6 +54,7 @@ export async function createContent(
     external_url: values.external_url || null,
     excerpt: values.excerpt || null,
     body_md: values.body_md || null,
+    body_blocks: bodyBlocks,
     location: values.location || null,
     start_at: values.start_at || null,
     end_at: values.end_at || null,
@@ -73,6 +76,7 @@ export async function updateContent(
   id: string,
   userId: string,
   values: ContentFormData,
+  bodyBlocks: Block[] = [],
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
 
@@ -95,6 +99,7 @@ export async function updateContent(
     external_url: values.external_url || null,
     excerpt: values.excerpt || null,
     body_md: values.body_md || null,
+    body_blocks: bodyBlocks,
     location: values.location || null,
     start_at: values.start_at || null,
     end_at: values.end_at || null,

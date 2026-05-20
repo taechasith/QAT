@@ -1,3 +1,6 @@
+# Claude Code local config
+.claude/
+
 # private docs
 QAT_CLI_Phase_By_Phase_SRD.md
 

@@ -41,6 +41,7 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           end_at: item.end_at ? item.end_at.slice(0, 16) : "",
           sort_order: item.sort_order,
         }}
+        defaultBodyBlocks={Array.isArray(item.body_blocks) ? item.body_blocks : []}
       />
     </AdminShell>
   );

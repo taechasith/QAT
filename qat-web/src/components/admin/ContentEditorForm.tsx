@@ -8,13 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { contentSchema, slugify, CONTENT_TYPES, CONTENT_STATUSES } from "@/lib/validation/content";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { ContentType } from "@/lib/data/content";
+import type { Block } from "@/lib/types/blocks";
 import { CategoryGuide } from "./CategoryGuide";
 import { ContentPreview } from "./ContentPreview";
+import { CoverUpload } from "./CoverUpload";
+import { BlockEditor } from "./BlockEditor";
 
 type ContentEditorFormProps = {
   mode: "create" | "edit";
   itemId?: string;
   defaultValues?: Partial<ContentFormData>;
+  defaultBodyBlocks?: Block[];
 };
 
 const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
@@ -34,10 +38,12 @@ export function ContentEditorForm({
   mode,
   itemId,
   defaultValues,
+  defaultBodyBlocks,
 }: ContentEditorFormProps) {
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [blocks, setBlocks] = useState<Block[]>(defaultBodyBlocks ?? []);
 
   const {
     register,
@@ -74,7 +80,7 @@ export function ContentEditorForm({
     const res = await fetch(endpoint, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, body_blocks: blocks }),
     });
 
     const json = await res.json().catch(() => ({}));
@@ -165,32 +171,18 @@ export function ContentEditorForm({
           />
         </div>
 
-        {/* Body */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="body_md" className="text-sm font-medium text-slate-200">
-            Body (Markdown)
-          </label>
-          <textarea
-            id="body_md"
-            rows={12}
-            {...register("body_md")}
-            placeholder="Write the full content in Markdown format…"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
-        </div>
+        {/* Cover — 16:9 direct upload */}
+        <CoverUpload
+          value={watched.cover_image_url ?? ""}
+          onChange={(url) => setValue("cover_image_url", url)}
+        />
 
-        {/* Cover image URL */}
+        {/* Body blocks — visual editor */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="cover_image_url" className="text-sm font-medium text-slate-200">
-            Cover image URL
-          </label>
-          <input
-            id="cover_image_url"
-            type="text"
-            {...register("cover_image_url")}
-            placeholder="https://… or Supabase storage URL"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
+          <label className="text-sm font-medium text-slate-200">Page content</label>
+          <div className="rounded-xl border border-white/10 bg-white/2 px-2 py-2">
+            <BlockEditor value={blocks} onChange={setBlocks} />
+          </div>
         </div>
 
         {/* External URL */}

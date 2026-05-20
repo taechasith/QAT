@@ -6,24 +6,11 @@ import * as THREE from "three";
 
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
-type CameraKeyframe = {
-  progress: number;
-  position: [number, number, number];
-  target: [number, number, number];
-  fov: number;
-};
-
-const PATH: CameraKeyframe[] = [
-  { progress: 0.0,  position: [0, -9.0, 8],  target: [0,  0.3, 0], fov: 42 },
-  { progress: 0.25, position: [0, -6.0, 8],  target: [0,  0.0, 0], fov: 41 },
-  { progress: 0.5,  position: [0, -4.0, 8],  target: [0,  0.0, 0], fov: 40 },
-  { progress: 0.75, position: [0, -2.8, 9],  target: [0,  0.0, 0], fov: 41 },
-  { progress: 1.0,  position: [0, -2.0, 11], target: [0,  0.0, 0], fov: 44 },
-];
-
-function smoothstep(t: number) {
-  return t * t * (3 - 2 * t);
-}
+const ORBIT_RADIUS = 8.5;
+const START_Y     = -6.0;   // camera height at scroll=0 (looking up)
+const END_Y       = -2.0;   // camera height at scroll=1 (still below model)
+const START_FOV   = 42;
+const END_FOV     = 46;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -33,59 +20,44 @@ function damp(current: number, target: number, lambda: number, dt: number) {
   return lerp(current, target, 1 - Math.exp(-lambda * dt));
 }
 
-function samplePath(raw: number): { pos: THREE.Vector3; tgt: THREE.Vector3; fov: number } {
+function sampleOrbit(raw: number): { pos: THREE.Vector3; fov: number } {
   const p = Math.max(0, Math.min(1, raw));
-  let a = PATH[0];
-  let b = PATH[PATH.length - 1];
-  for (let i = 0; i < PATH.length - 1; i++) {
-    if (p >= PATH[i].progress && p <= PATH[i + 1].progress) {
-      a = PATH[i];
-      b = PATH[i + 1];
-      break;
-    }
-  }
-  const range = b.progress - a.progress;
-  const t = range > 0 ? smoothstep((p - a.progress) / range) : 0;
+  // full 360° orbit as scroll goes 0→1, starting from front (angle=0 = positive Z)
+  const angle = p * Math.PI * 2;
+  const y     = lerp(START_Y, END_Y, p);
+  const fov   = lerp(START_FOV, END_FOV, p);
   return {
     pos: new THREE.Vector3(
-      lerp(a.position[0], b.position[0], t),
-      lerp(a.position[1], b.position[1], t),
-      lerp(a.position[2], b.position[2], t),
+      Math.sin(angle) * ORBIT_RADIUS,
+      y,
+      Math.cos(angle) * ORBIT_RADIUS,
     ),
-    tgt: new THREE.Vector3(
-      lerp(a.target[0], b.target[0], t),
-      lerp(a.target[1], b.target[1], t),
-      lerp(a.target[2], b.target[2], t),
-    ),
-    fov: lerp(a.fov, b.fov, t),
+    fov,
   };
 }
 
+const INITIAL = sampleOrbit(0);
+const TARGET  = new THREE.Vector3(0, 0, 0);
+
 export function ScrollCameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const { camera } = useThree();
-  const scroll = useScrollProgress();
-  const pos = useRef(new THREE.Vector3(...PATH[0].position));
-  const tgt = useRef(new THREE.Vector3(...PATH[0].target));
-  const fovRef = useRef(PATH[0].fov);
+  const scroll   = useScrollProgress();
+  const pos      = useRef(INITIAL.pos.clone());
+  const fovRef   = useRef(INITIAL.fov);
 
   useFrame((_, dt) => {
-    const sample = samplePath(reducedMotion ? 0 : scroll);
-    const lam = reducedMotion ? 100 : 5;
+    const sample = sampleOrbit(reducedMotion ? 0 : scroll);
+    const lam    = reducedMotion ? 100 : 4;
 
     pos.current.set(
       damp(pos.current.x, sample.pos.x, lam, dt),
       damp(pos.current.y, sample.pos.y, lam, dt),
       damp(pos.current.z, sample.pos.z, lam, dt),
     );
-    tgt.current.set(
-      damp(tgt.current.x, sample.tgt.x, lam, dt),
-      damp(tgt.current.y, sample.tgt.y, lam, dt),
-      damp(tgt.current.z, sample.tgt.z, lam, dt),
-    );
     fovRef.current = damp(fovRef.current, sample.fov, lam, dt);
 
     camera.position.copy(pos.current);
-    camera.lookAt(tgt.current);
+    camera.lookAt(TARGET);
     if ("fov" in camera) {
       (camera as THREE.PerspectiveCamera).fov = fovRef.current;
       (camera as THREE.PerspectiveCamera).updateProjectionMatrix();
