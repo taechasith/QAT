@@ -6,7 +6,9 @@
       "PowerShell(dir \"C:\\\\Users\\\\HP OMEN\\\\QAT\\\\qat-web\\\\src\" -Recurse | Where-Object { !$_.PSIsContainer } | Select-Object FullName)",
       "PowerShell(New-Item *)",
       "PowerShell(pnpm dev *)",
-      "PowerShell(Start-Process \"http://localhost:3000\")"
+      "PowerShell(Start-Process \"http://localhost:3000\")",
+      "PowerShell(gh api *)",
+      "PowerShell(pnpm *)"
     ]
   }
 }
