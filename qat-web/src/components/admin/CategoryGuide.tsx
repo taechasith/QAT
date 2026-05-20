@@ -42,6 +42,21 @@ const guides: Record<ContentType, Guide> = {
     hint: "An announcement, press release, or update about QAT or its partners.",
     extraFields: ["Related event or project (mention in body)"],
   },
+  talk: {
+    label: "Talk",
+    hint: "A lecture, panel discussion, or conversation at the intersection of quantum science and culture.",
+    extraFields: ["Speaker name(s) (in body)", "External recording URL", "Start date"],
+  },
+  experiment: {
+    label: "Experiment",
+    hint: "An interactive or conceptual experiment exploring quantum phenomena through art and design.",
+    extraFields: ["External demo URL", "Tools / materials used (in body)"],
+  },
+  video: {
+    label: "Video",
+    hint: "A documentary, artistic, or educational video work produced under the QAT initiative.",
+    extraFields: ["External video URL (YouTube, Vimeo, etc.)"],
+  },
 };
 
 type CategoryGuideProps = {
