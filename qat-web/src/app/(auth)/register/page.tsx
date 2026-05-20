@@ -11,6 +11,16 @@ import { createClient } from "@/lib/supabase/client";
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
+function friendlySignUpError(msg: string): string {
+  if (msg.toLowerCase().includes("already registered") || msg.toLowerCase().includes("already been registered")) {
+    return "An account with this email already exists. Sign in instead.";
+  }
+  if (msg.toLowerCase().includes("invalid email")) {
+    return "Please enter a valid email address.";
+  }
+  return msg;
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -18,7 +28,6 @@ export default function RegisterPage() {
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [needsConfirm, setNeedsConfirm] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,54 +43,19 @@ export default function RegisterPage() {
     setErrorMsg("");
 
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
+    const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
-      setErrorMsg(error.message);
+      setErrorMsg(friendlySignUpError(error.message));
       setLoading(false);
       return;
     }
 
-    if (data.session) {
-      // Email confirmation disabled — user is immediately signed in
-      router.push("/account");
-      router.refresh();
-    } else {
-      // Email confirmation required
-      setNeedsConfirm(true);
-      setLoading(false);
-    }
-  }
-
-  if (needsConfirm) {
-    return (
-      <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-5 py-16">
-        <div className="glass-panel w-full max-w-md rounded-2xl p-8 text-center">
-          <div className="flex justify-center">
-            <LogoMark />
-          </div>
-          <p className="mt-8 font-mono text-xs uppercase tracking-widest text-cyan-200">
-            Almost there
-          </p>
-          <h1 className="mt-3 text-2xl font-semibold text-white">Confirm your email</h1>
-          <p className="mt-4 text-sm leading-6 text-slate-300">
-            We sent a confirmation link to{" "}
-            <span className="font-medium text-white">{email}</span>. Click it to activate your
-            account.
-          </p>
-          <Link
-            href="/login"
-            className="mt-8 inline-block text-sm text-cyan-100 underline underline-offset-4 hover:text-white"
-          >
-            Back to sign in
-          </Link>
-        </div>
-      </div>
-    );
+    // Redirect to login regardless of email confirmation state.
+    // If Supabase email confirmation is ON, the user must confirm before they
+    // can sign in — but we do not show that screen here. Disable confirmation
+    // in Supabase Dashboard → Authentication → Email → "Enable email confirmations".
+    router.push("/login?registered=1");
   }
 
   return (
@@ -144,9 +118,17 @@ export default function RegisterPage() {
           </div>
 
           {errorMsg && (
-            <p className="rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-300">
+            <div className="rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-300">
               {errorMsg}
-            </p>
+              {errorMsg.includes("already exists") && (
+                <Link
+                  href="/login"
+                  className="ml-2 underline underline-offset-4 hover:text-red-100"
+                >
+                  Sign in →
+                </Link>
+              )}
+            </div>
           )}
 
           <button

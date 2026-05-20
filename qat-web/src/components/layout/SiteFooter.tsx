@@ -20,7 +20,7 @@ export function SiteFooter() {
               across Thailand and beyond.
             </p>
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-slate-600">
-              &copy; {year} QAT Assoc. · CreativeLabTH
+              &copy; {year} QAT Assoc. · CreativeLabTH Group
             </p>
           </div>
 

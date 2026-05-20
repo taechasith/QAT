@@ -9,14 +9,14 @@ type SocialPanelProps = {
 export function SocialPanel({ links }: SocialPanelProps) {
   return (
     <section
-      className="rounded-lg border border-white/10 bg-white/[0.04] p-4"
+      className="flex flex-col items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] p-6"
       aria-labelledby="social-panel-heading"
     >
       <div className="flex items-center gap-2 text-sm font-semibold text-white">
         <Share2 className="size-4 text-cyan-200" aria-hidden="true" />
         <h2 id="social-panel-heading">Social Media</h2>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
         {links.map((link) => (
           <a
             key={`${link.label}-${link.href}`}

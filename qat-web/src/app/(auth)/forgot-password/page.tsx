@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { LogoMark } from "@/components/layout/LogoMark";
 import { createClient } from "@/lib/supabase/client";
@@ -9,8 +10,9 @@ import { createClient } from "@/lib/supabase/client";
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
+function ForgotPasswordForm() {
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -43,29 +45,43 @@ export default function ForgotPasswordPage() {
 
         {sent ? (
           <div className="mt-8 text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">Check inbox</p>
-            <h1 className="mt-3 text-2xl font-semibold text-white">Reset link sent</h1>
-            <p className="mt-4 text-sm leading-6 text-slate-300">
-              We sent a password reset link to{" "}
-              <span className="font-medium text-white">{email}</span>. Click it to set a new
-              password.
+            <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
+              Check your inbox
             </p>
-            <Link
-              href="/login"
-              className="mt-8 inline-block text-sm text-cyan-100 underline underline-offset-4 hover:text-white"
-            >
-              Back to sign in
-            </Link>
+            <h1 className="mt-3 text-2xl font-semibold text-white">Reset link sent</h1>
+            <p className="mt-4 text-sm leading-7 text-slate-300">
+              A password reset link was sent to{" "}
+              <span className="font-medium text-white">{email}</span>.{" "}
+              Click the link in that email to set a new password.
+            </p>
+            <p className="mt-3 text-xs text-slate-500">
+              Didn&apos;t receive it? Check your spam folder or try again.
+            </p>
+            <div className="mt-8 flex flex-col items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setSent(false)}
+                className="text-sm text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+              >
+                Send again
+              </button>
+              <Link
+                href="/login"
+                className="text-sm text-slate-400 underline underline-offset-4 hover:text-slate-200"
+              >
+                Back to sign in
+              </Link>
+            </div>
           </div>
         ) : (
           <>
             <div className="mt-8 text-center">
               <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
-                Forgot password
+                Password reset
               </p>
-              <h1 className="mt-3 text-2xl font-semibold text-white">Reset your password</h1>
-              <p className="mt-2 text-sm text-slate-300">
-                Enter your email and we will send a reset link.
+              <h1 className="mt-3 text-2xl font-semibold text-white">Forgot your password?</h1>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                Enter your email and we&apos;ll send a secure reset link.
               </p>
             </div>
 
@@ -102,7 +118,10 @@ export default function ForgotPasswordPage() {
             </form>
 
             <p className="mt-6 text-center text-sm text-slate-400">
-              <Link href="/login" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
+              <Link
+                href="/login"
+                className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+              >
                 Back to sign in
               </Link>
             </p>
@@ -110,5 +129,13 @@ export default function ForgotPasswordPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense>
+      <ForgotPasswordForm />
+    </Suspense>
   );
 }
