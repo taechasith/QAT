@@ -1,158 +1,149 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+function Particles() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    for (let i = 0; i < 80; i++) {
+      const p = document.createElement("div");
+      const size = Math.random() * 2 + 1;
+      const color = Math.random() > 0.5 ? "#54ddfc" : "#d0bcff";
+      p.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}vw;
+        bottom: -10px;
+        background-color: ${color};
+        box-shadow: 0 0 ${size * 3}px ${color}, 0 0 ${size * 6}px ${color};
+        animation: move-particle ${Math.random() * 10 + 5}s linear ${Math.random() * 10}s infinite;
+        opacity: 0;
+      `;
+      container.appendChild(p);
+    }
+
+    return () => { container.innerHTML = ""; };
+  }, []);
+
+  return <div ref={containerRef} className="pointer-events-none absolute inset-0 z-0" />;
+}
 
 export default function Loading() {
+  const [pct, setPct] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPct((prev) => {
+        const next = prev + 100 / (3000 / 50);
+        if (next >= 100) {
+          clearInterval(interval);
+          setReady(true);
+          return 100;
+        }
+        return next;
+      });
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#030711] overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#131B2E] text-[#dfe2f4]">
 
-      {/* ── Corner data labels ───────────────────────────── */}
-      <div
-        className="absolute top-6 left-7 flex flex-col gap-1"
-        style={{ animation: "fade-in 1s ease both", animationDelay: "0.4s" }}
-      >
-        <span className="font-mono text-[0.5rem] tracking-[0.28em] text-cyan-300/30 uppercase">QAT // v1.0</span>
-        <span className="font-mono text-[0.5rem] tracking-[0.24em] text-slate-500/40 uppercase">Initialising systems</span>
-      </div>
-      <div
-        className="absolute top-6 right-7 flex flex-col items-end gap-1"
-        style={{ animation: "fade-in 1s ease both", animationDelay: "0.4s" }}
-      >
-        <span className="font-mono text-[0.5rem] tracking-[0.28em] text-cyan-300/30 uppercase">Quantum Art Thailand</span>
-        <span className="font-mono text-[0.5rem] tracking-[0.24em] text-slate-500/40 uppercase">CreativeLabTH Group</span>
+      {/* Radial bg */}
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: "radial-gradient(circle at center, rgba(84,221,252,0.05) 0%, #131B2E 100%)" }} />
+
+      {/* Grid overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(#54ddfc 1px, transparent 1px), linear-gradient(90deg, #54ddfc 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+
+      {/* Spinning rings */}
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20">
+        <div className="max-h-[800px] max-w-[800px] size-[60vw] rounded-full border border-[#54ddfc]/30" style={{ animation: "spin 8s linear infinite" }} />
+        <div className="absolute max-h-[650px] max-w-[650px] size-[50vw] rounded-full border border-[#d0bcff]/20" style={{ animation: "spin-reverse 12s linear infinite" }} />
+        <div className="absolute max-h-[500px] max-w-[500px] size-[40vw] rounded-full border border-[#8ed5ff]/10" style={{ animation: "spin 15s linear infinite" }} />
       </div>
 
-      {/* ── Scan line ────────────────────────────────────── */}
-      <div
-        className="pointer-events-none absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent"
-        style={{ animation: "scan-line 6s linear infinite" }}
-      />
+      {/* Particles */}
+      <Particles />
 
-      {/* ── Top ambient glow ─────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 size-[800px] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.055)_0%,transparent_60%)]" />
-        <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 size-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.045)_0%,transparent_55%)]" />
-      </div>
+      {/* Content */}
+      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center px-5 md:px-20">
 
-      {/* ── Main content ─────────────────────────────────── */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-0">
-
-        {/* Orbital system */}
+        {/* Logo */}
         <div
-          className="relative flex items-center justify-center"
-          style={{ animation: "fade-in 1.8s ease both", animationDelay: "0.1s" }}
+          className="relative mb-16 rounded-full p-8"
+          style={{
+            background: "rgba(19,27,46,0.4)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(84,221,252,0.1)",
+            boxShadow: "0 8px 32px 0 rgba(0,0,0,0.3)",
+            animation: "float 6s ease-in-out infinite",
+          }}
         >
-          <div className="absolute size-96 animate-spin rounded-full border border-cyan-400/[0.04] [animation-duration:35s]" />
-          <div className="absolute size-80 animate-spin rounded-full border border-dashed border-violet-400/[0.06] [animation-direction:reverse] [animation-duration:26s]" />
-          <div className="absolute size-72 animate-spin rounded-full border border-cyan-300/[0.08] [animation-duration:18s]" />
-          <div className="absolute size-60 animate-spin rounded-full border border-dashed border-violet-300/[0.11] [animation-direction:reverse] [animation-duration:13s]" />
-          <div className="absolute size-48 animate-spin rounded-full border border-cyan-200/[0.17] [animation-duration:8s]" />
-          <div className="absolute size-36 animate-spin rounded-full border border-dashed border-violet-200/[0.22] [animation-direction:reverse] [animation-duration:5s]" />
-          <div className="absolute size-24 animate-spin rounded-full border border-cyan-200/30 [animation-duration:3s]" />
-          <div className="absolute size-14 animate-spin rounded-full border border-dashed border-violet-200/40 [animation-direction:reverse] [animation-duration:1.8s]" />
-
-          {/* Core */}
-          <div className="relative z-10 flex items-center justify-center">
-            <div className="absolute size-12 animate-ping rounded-full bg-cyan-400/10 [animation-duration:3s]" />
-            <div className="absolute size-8 rounded-full bg-cyan-300/20 blur-lg" />
-            <div className="relative size-3.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_32px_10px_rgba(34,211,238,0.6)] [animation-duration:2.2s]" />
-          </div>
-        </div>
-
-        {/* Logo block */}
-        <div
-          className="mt-16 flex flex-col items-center gap-4"
-          style={{ animation: "fade-in-up 1.4s ease both", animationDelay: "0.7s" }}
-        >
+          <div
+            className="absolute inset-0 rounded-full border-2 border-[#54ddfc]/50 bg-[#54ddfc] mix-blend-screen"
+            style={{ animation: "pulse-glow 3s cubic-bezier(0.4,0,0.6,1) infinite", transform: "scale(1.1)" }}
+          />
           <Image
             src="/brand/QAT_Logo.png"
             alt="QAT"
-            width={64}
-            height={64}
-            className="size-16 object-contain drop-shadow-[0_0_24px_rgba(34,211,238,0.55)]"
+            width={192}
+            height={192}
+            className="relative z-10 size-32 object-contain md:size-48"
             priority
           />
-          <div className="flex flex-col items-center gap-1 leading-none">
-            <span className="text-3xl font-semibold tracking-[0.4em] text-white">QAT</span>
-            <span className="font-mono text-[0.62rem] tracking-[0.32em] text-cyan-100/45 uppercase">
-              Quantum Art Thailand Association
+        </div>
+
+        {/* Progress panel */}
+        <div
+          className="flex w-full max-w-md flex-col items-center gap-6 rounded-xl p-6"
+          style={{
+            background: "rgba(19,27,46,0.4)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(84,221,252,0.1)",
+            boxShadow: "0 8px 32px 0 rgba(0,0,0,0.3)",
+          }}
+        >
+          {/* Status text */}
+          <div className="flex flex-col items-center gap-2 text-center">
+            <p
+              className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#54ddfc]"
+              style={ready ? undefined : { animation: "pulse 2s cubic-bezier(0.4,0,0.6,1) infinite" }}
+            >
+              {ready ? "SYSTEM READY" : "Initializing Quantum Realm"}
+            </p>
+            <p className="font-mono text-[12px] tracking-[0.05em] text-[#94A3B8]">
+              {ready ? "Interface connection established" : "Preparing artistic-scientific interface"}
+            </p>
+          </div>
+
+          {/* Progress bar */}
+          <div className="relative h-[2px] w-full overflow-hidden rounded-full bg-[#252a37]">
+            <div
+              className="absolute left-0 top-0 h-full rounded-full bg-[#54ddfc]"
+              style={{
+                width: `${Math.floor(pct)}%`,
+                boxShadow: "0 0 10px rgba(84,221,252,1)",
+                transition: "width 50ms linear",
+              }}
+            />
+          </div>
+
+          {/* Coordinate row */}
+          <div className="mt-2 flex w-full justify-between font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#3e484f]">
+            <span>[SYS.INIT: 0xQAT]</span>
+            <span style={ready ? { color: "#54ddfc" } : undefined}>
+              {Math.floor(pct)}%
             </span>
           </div>
         </div>
-
-        {/* Tagline */}
-        <p
-          className="mt-7 max-w-sm text-center text-base leading-9 font-light tracking-wide text-slate-300/60"
-          style={{ animation: "fade-in-up 1.4s ease both", animationDelay: "1.2s" }}
-        >
-          Where quantum science meets<br />human imagination
-        </p>
-
-        {/* Thin divider */}
-        <div
-          className="mt-9 h-px w-32 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent"
-          style={{ animation: "fade-in 1.2s ease both", animationDelay: "1.8s" }}
-        />
-
-        {/* Status */}
-        <div
-          className="mt-7 flex items-center gap-3"
-          style={{ animation: "fade-in 1.2s ease both", animationDelay: "2.1s" }}
-        >
-          <span className="font-mono text-[0.6rem] tracking-[0.32em] text-cyan-300/40 uppercase">
-            Entering the quantum realm
-          </span>
-          <span className="flex gap-1.5">
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                className="size-1 rounded-full bg-cyan-300/50"
-                style={{
-                  animation: "loader-blink 1.5s ease-in-out infinite",
-                  animationDelay: `${2.1 + i * 0.28}s`,
-                }}
-              />
-            ))}
-          </span>
-        </div>
-
-        {/* Stat row */}
-        <div
-          className="mt-10 flex items-center gap-8"
-          style={{ animation: "fade-in 1s ease both", animationDelay: "2.6s" }}
-        >
-          {[
-            { label: "Dimension", value: "Quantum" },
-            { label: "State", value: "Superposed" },
-            { label: "Field", value: "Active" },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex flex-col items-center gap-1">
-              <span className="font-mono text-[0.5rem] tracking-[0.26em] text-slate-500/60 uppercase">{label}</span>
-              <span className="font-mono text-[0.62rem] font-medium tracking-[0.18em] text-cyan-300/55">{value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Progress bar at bottom ───────────────────────── */}
-      <div className="relative mx-auto mb-12 w-48">
-        <div
-          className="h-px w-full overflow-hidden rounded-full bg-white/5"
-          style={{ animation: "fade-in 0.8s ease both", animationDelay: "2.8s" }}
-        >
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-cyan-400/60 to-violet-400/60"
-            style={{
-              animation: "progress-fill 3.5s ease both",
-              animationDelay: "3s",
-              transformOrigin: "left",
-            }}
-          />
-        </div>
-        <p
-          className="mt-3 text-center font-mono text-[0.52rem] tracking-[0.28em] text-slate-500/45 uppercase"
-          style={{ animation: "fade-in 0.8s ease both", animationDelay: "2.8s" }}
-        >
-          CreativeLabTH Group International Initiative
-        </p>
       </div>
     </div>
   );
