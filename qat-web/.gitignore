@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large 3D assets — host on Supabase Storage, not git
+*.glb
+*.gltf
