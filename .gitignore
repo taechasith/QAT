@@ -1,0 +1,10 @@
+# local logs
+*.log
+
+# local build artifacts
+.next/
+node_modules/
+
+# large 3D assets are hosted in Supabase Storage
+*.glb
+*.gltf

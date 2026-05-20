@@ -1,6 +1,6 @@
 {
-  "installCommand": "cd qat-web && pnpm install",
-  "buildCommand": "cd qat-web && pnpm build",
+  "installCommand": "corepack enable && corepack prepare pnpm@10.29.3 --activate && cd qat-web && pnpm install --frozen-lockfile",
+  "buildCommand": "corepack enable && cd qat-web && pnpm build",
   "outputDirectory": "qat-web/.next",
-  "devCommand": "cd qat-web && pnpm dev --port $PORT"
+  "devCommand": "corepack enable && cd qat-web && pnpm dev --port $PORT"
 }
