@@ -25,6 +25,9 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   exhibition: "Exhibition",
   research_article: "Research / Article",
   news: "News",
+  talk: "Talk",
+  experiment: "Experiment",
+  video: "Video",
 };
 
 export function ContentEditorForm({
