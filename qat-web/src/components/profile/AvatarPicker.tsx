@@ -12,7 +12,7 @@ type Props = {
   userId: string;
   current: AvatarType;
   currentUrl: string | null;
-  onSaved: (type: AvatarType, url: string | null) => void;
+  onSaved?: (type: AvatarType, url: string | null) => void;
 };
 
 export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
@@ -69,7 +69,7 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
     setSaving(false);
     if (res.ok) {
       setMsg("Saved!");
-      onSaved(selected, selected === "upload" ? previewUrl : null);
+      onSaved?.(selected, selected === "upload" ? previewUrl : null);
     } else {
       setMsg("Save failed. Try again.");
     }

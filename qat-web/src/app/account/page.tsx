@@ -64,7 +64,6 @@ export default async function ProfilePage() {
             userId={user.id}
             current={avatarType}
             currentUrl={avatarUrl}
-            onSaved={() => {}}
           />
         </section>
 
