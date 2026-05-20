@@ -7,7 +7,10 @@ export type ContentType =
   | "course"
   | "exhibition"
   | "research_article"
-  | "news";
+  | "news"
+  | "talk"
+  | "experiment"
+  | "video";
 
 export type ContentItem = {
   id: string;

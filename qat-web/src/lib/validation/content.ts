@@ -8,6 +8,9 @@ export const CONTENT_TYPES = [
   "exhibition",
   "research_article",
   "news",
+  "talk",
+  "experiment",
+  "video",
 ] as const;
 
 export const CONTENT_STATUSES = ["draft", "published", "archived"] as const;
