@@ -1,4 +1,4 @@
-﻿import { ContentGrid } from "@/components/content/ContentGrid";
+import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -7,15 +7,15 @@ export default async function CoursePage() {
 
   return (
     <PublicPageShell
-      eyebrow="Destination"
+      eyebrow="Learning Lab"
       title="Course"
-      description="Courses, workshops, and learning programs for quantum science communication will appear here."
+      description="Structured programs bridging quantum science and creative practice — workshops, courses, and guided explorations."
     >
       <ContentGrid
         items={items}
         error={error}
-        emptyTitle="No courses published yet"
-        emptyDescription="Courses will appear here once they are published. Stay tuned for upcoming learning opportunities."
+        emptyTitle="No courses yet"
+        emptyDescription="Courses and workshops will appear here once published. New programs are in development."
       />
     </PublicPageShell>
   );

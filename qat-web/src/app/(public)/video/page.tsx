@@ -1,4 +1,4 @@
-﻿import { ContentGrid } from "@/components/content/ContentGrid";
+import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -7,15 +7,15 @@ export default async function VideoPage() {
 
   return (
     <PublicPageShell
-      eyebrow="Videos"
-      title="Videos"
-      description="Documentary, artistic, and educational video works produced under the QAT initiative."
+      eyebrow="Archive"
+      title="Video"
+      description="Filmed documentation of exhibitions, performances, and educational programs produced under the QAT initiative."
     >
       <ContentGrid
         items={items}
         error={error}
-        emptyTitle="No videos published yet"
-        emptyDescription="Documentary, artistic, and educational videos will appear here once they are published."
+        emptyTitle="No videos yet"
+        emptyDescription="Video documentation and short films will appear here once published."
       />
     </PublicPageShell>
   );

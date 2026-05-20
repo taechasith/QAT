@@ -12,16 +12,23 @@ export function EmptyContentState({
   note,
 }: EmptyContentStateProps) {
   return (
-    <div className="glass-panel rounded-lg p-8 text-center">
-      <div className="mx-auto grid size-12 place-items-center rounded-full border border-cyan-200/20 bg-cyan-200/8">
-        <Orbit className="size-5 text-cyan-200" aria-hidden="true" />
+    <div className="relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] px-8 py-16 text-center">
+      {/* Subtle radial glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,211,238,0.07),transparent_55%)]" />
+
+      <div className="relative mx-auto grid size-14 place-items-center rounded-full border border-cyan-200/20 bg-gradient-to-b from-cyan-200/10 to-transparent">
+        <Orbit className="size-6 text-cyan-300/70" aria-hidden="true" />
       </div>
-      <h2 className="mt-5 text-2xl font-semibold text-white">{title}</h2>
-      <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+
+      <h2 className="relative mt-6 text-lg font-semibold tracking-tight text-white">
+        {title}
+      </h2>
+      <p className="relative mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-400">
         {description}
       </p>
+
       {note ? (
-        <p className="mx-auto mt-4 max-w-2xl font-mono text-xs uppercase tracking-[0.18em] text-cyan-100/70">
+        <p className="relative mx-auto mt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-100/50">
           {note}
         </p>
       ) : null}

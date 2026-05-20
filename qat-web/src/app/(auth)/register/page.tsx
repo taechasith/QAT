@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { LogoMark } from "@/components/layout/LogoMark";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
@@ -116,9 +117,8 @@ export default function RegisterPage() {
             <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-200">
               Password
             </label>
-            <input
+            <PasswordInput
               id="password"
-              type="password"
               required
               autoComplete="new-password"
               value={password}
@@ -132,9 +132,8 @@ export default function RegisterPage() {
             <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-slate-200">
               Confirm password
             </label>
-            <input
+            <PasswordInput
               id="confirm"
-              type="password"
               required
               autoComplete="new-password"
               value={confirm}

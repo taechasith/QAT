@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { LogoMark } from "@/components/layout/LogoMark";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
@@ -75,9 +76,8 @@ export default function LoginPage() {
                 Forgot password?
               </Link>
             </div>
-            <input
+            <PasswordInput
               id="password"
-              type="password"
               required
               autoComplete="current-password"
               value={password}

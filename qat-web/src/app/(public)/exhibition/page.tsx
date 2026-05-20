@@ -1,4 +1,4 @@
-﻿import { ContentGrid } from "@/components/content/ContentGrid";
+import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -7,15 +7,15 @@ export default async function ExhibitionPage() {
 
   return (
     <PublicPageShell
-      eyebrow="Archive"
+      eyebrow="Gallery"
       title="Exhibition"
-      description="Past and upcoming exhibitions will document how quantum ideas become public cultural experiences."
+      description="Curated installations and digital exhibitions mapping the boundary where physics becomes cultural experience."
     >
       <ContentGrid
         items={items}
         error={error}
-        emptyTitle="No exhibitions published yet"
-        emptyDescription="The exhibition archive will grow as new shows and installations are added. Come back soon."
+        emptyTitle="No exhibitions yet"
+        emptyDescription="Exhibition documentation and upcoming shows will be listed here as they open."
       />
     </PublicPageShell>
   );

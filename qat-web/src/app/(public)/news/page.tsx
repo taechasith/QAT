@@ -1,4 +1,4 @@
-﻿import { ContentGrid } from "@/components/content/ContentGrid";
+import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -7,15 +7,15 @@ export default async function NewsPage() {
 
   return (
     <PublicPageShell
-      eyebrow="Updates"
-      title="News Updated"
-      description="Official QAT updates, announcements, and public notices will be published here."
+      eyebrow="Dispatch"
+      title="News"
+      description="Updates from the quantum art frontier — events, partnerships, grants, and announcements from QAT Assoc."
     >
       <ContentGrid
         items={items}
         error={error}
-        emptyTitle="No news published yet"
-        emptyDescription="News and announcements will appear here as they are published."
+        emptyTitle="No news yet"
+        emptyDescription="Announcements and updates will appear here as they are published."
       />
     </PublicPageShell>
   );

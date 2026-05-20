@@ -1,4 +1,4 @@
-﻿import { ContentGrid } from "@/components/content/ContentGrid";
+import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -7,15 +7,15 @@ export default async function ExperimentPage() {
 
   return (
     <PublicPageShell
-      eyebrow="Experiments"
-      title="Experiments"
-      description="Interactive and conceptual experiments exploring quantum phenomena through art and design."
+      eyebrow="Field Work"
+      title="Experiment"
+      description="Live experiments, prototypes, and works-in-progress — open research from QAT's ongoing creative investigations."
     >
       <ContentGrid
         items={items}
         error={error}
-        emptyTitle="No experiments published yet"
-        emptyDescription="Experiments and interactive works will appear here once they are live."
+        emptyTitle="No experiments yet"
+        emptyDescription="Experimental works and prototypes will be shared here as they develop."
       />
     </PublicPageShell>
   );

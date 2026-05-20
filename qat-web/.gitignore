@@ -47,3 +47,7 @@ next-env.d.ts
 *.gltf
 
 .vercel
+
+# Hallmark design skill (local agent install)
+.agents/
+.hallmark/
