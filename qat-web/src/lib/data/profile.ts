@@ -20,7 +20,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
       .eq("id", userId)
       .maybeSingle();
     if (!data) return null;
-    return { avatar_type: "artist_cat", ...data } as Profile;
+    return { ...data, avatar_type: data.avatar_type ?? "artist_cat" } as Profile;
   } catch {
     return null;
   }
