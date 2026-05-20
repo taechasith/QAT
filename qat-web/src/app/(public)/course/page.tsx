@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function CoursePage() {
         items={items}
         error={error}
         emptyTitle="No courses published yet"
-        emptyDescription="This page is ready for CMS-driven course listings. Draft items stay private until they are published."
+        emptyDescription="Courses will appear here once they are published. Stay tuned for upcoming learning opportunities."
       />
     </PublicPageShell>
   );

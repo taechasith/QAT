@@ -95,7 +95,7 @@ export function ContentEditorForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_320px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_360px]">
       <div className="flex flex-col gap-6">
         {/* Category */}
         <div className="flex flex-col gap-1.5">
@@ -118,38 +118,39 @@ export function ContentEditorForm({
           ) : null}
         </div>
 
-        {/* Title */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="title" className="text-sm font-medium text-slate-200">
-            Title <span className="text-red-400">*</span>
-          </label>
-          <input
-            id="title"
-            type="text"
-            {...register("title", { onChange: handleTitleChange })}
-            placeholder="Enter a clear, descriptive title"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
-          {errors.title ? (
-            <p className="text-xs text-red-400">{errors.title.message}</p>
-          ) : null}
-        </div>
+        {/* Title + Slug — side by side on md+ */}
+        <div className="grid gap-4 md:grid-cols-[1fr_220px]">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="title" className="text-sm font-medium text-slate-200">
+              Title <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="title"
+              type="text"
+              {...register("title", { onChange: handleTitleChange })}
+              placeholder="Enter a clear, descriptive title"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+            />
+            {errors.title ? (
+              <p className="text-xs text-red-400">{errors.title.message}</p>
+            ) : null}
+          </div>
 
-        {/* Slug */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="slug" className="text-sm font-medium text-slate-200">
-            Slug <span className="text-red-400">*</span>
-          </label>
-          <input
-            id="slug"
-            type="text"
-            {...register("slug")}
-            placeholder="url-friendly-slug"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
-          {errors.slug ? (
-            <p className="text-xs text-red-400">{errors.slug.message}</p>
-          ) : null}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="slug" className="text-sm font-medium text-slate-200">
+              Slug <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="slug"
+              type="text"
+              {...register("slug")}
+              placeholder="url-friendly-slug"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+            />
+            {errors.slug ? (
+              <p className="text-xs text-red-400">{errors.slug.message}</p>
+            ) : null}
+          </div>
         </div>
 
         {/* Excerpt */}

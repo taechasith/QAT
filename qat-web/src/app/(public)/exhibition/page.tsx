@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function ExhibitionPage() {
         items={items}
         error={error}
         emptyTitle="No exhibitions published yet"
-        emptyDescription="The exhibition archive is ready. Published exhibition records will appear here after CMS content is added."
+        emptyDescription="The exhibition archive will grow as new shows and installations are added. Come back soon."
       />
     </PublicPageShell>
   );

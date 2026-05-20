@@ -79,7 +79,7 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
     <div className="flex flex-col gap-5">
       <p className="text-sm font-medium text-slate-200">Choose avatar</p>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
         {CAT_TYPES.map((type) => {
           const cfg = CAT_CONFIG[type];
           const active = selected === type;

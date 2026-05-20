@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function ResearchPage() {
         items={items}
         error={error}
         emptyTitle="No research articles published yet"
-        emptyDescription="The research page is wired to published CMS articles only. Drafts remain hidden from public visitors."
+        emptyDescription="Research articles and papers will appear here once they are published."
       />
     </PublicPageShell>
   );

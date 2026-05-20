@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function VideoPage() {
         items={items}
         error={error}
         emptyTitle="No videos published yet"
-        emptyDescription="Video listings will appear here after admins publish content through the CMS."
+        emptyDescription="Documentary, artistic, and educational videos will appear here once they are published."
       />
     </PublicPageShell>
   );

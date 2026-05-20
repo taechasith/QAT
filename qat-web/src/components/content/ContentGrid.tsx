@@ -20,7 +20,7 @@ export function ContentGrid({
       <EmptyContentState
         title={emptyTitle}
         description={emptyDescription}
-        note={error ? "CMS connection pending" : "Awaiting published content"}
+        note={error ? "Content temporarily unavailable" : "Check back soon"}
       />
     );
   }

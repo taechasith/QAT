@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function TalkPage() {
         items={items}
         error={error}
         emptyTitle="No talks published yet"
-        emptyDescription="Talk listings will appear here after admins publish content through the CMS."
+        emptyDescription="Talks, lectures, and presentations will appear here once they are published."
       />
     </PublicPageShell>
   );

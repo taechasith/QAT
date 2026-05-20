@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function GamePage() {
         items={items}
         error={error}
         emptyTitle="No games published yet"
-        emptyDescription="The game page is connected to the public content layer and will show only published CMS items once the admin team adds them."
+        emptyDescription="Games created under the QAT initiative will be listed here once they are available."
       />
     </PublicPageShell>
   );

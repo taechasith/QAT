@@ -45,7 +45,7 @@ export default async function AdminPage() {
           <span className="font-medium text-white">{user.email}</span>
         </p>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {quickLinks.map(({ href, icon: Icon, label, desc }) => (
             <Link
               key={href}

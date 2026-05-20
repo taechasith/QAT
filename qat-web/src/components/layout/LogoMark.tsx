@@ -18,7 +18,7 @@ export function LogoMark() {
       />
       <span className="flex flex-col leading-none">
         <span className="text-sm font-semibold tracking-[0.18em] text-white">
-          QAT
+          QAT Assoc.
         </span>
         <span className="mt-0.5 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-cyan-100/70">
           Quantum Art Thailand

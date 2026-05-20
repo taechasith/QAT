@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function ExperimentPage() {
         items={items}
         error={error}
         emptyTitle="No experiments published yet"
-        emptyDescription="Experiment listings will appear here after admins publish content through the CMS."
+        emptyDescription="Experiments and interactive works will appear here once they are live."
       />
     </PublicPageShell>
   );

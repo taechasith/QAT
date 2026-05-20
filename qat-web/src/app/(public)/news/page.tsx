@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 
@@ -15,7 +15,7 @@ export default async function NewsPage() {
         items={items}
         error={error}
         emptyTitle="No news published yet"
-        emptyDescription="News listings will appear here after admins publish updates through the CMS."
+        emptyDescription="News and announcements will appear here as they are published."
       />
     </PublicPageShell>
   );
