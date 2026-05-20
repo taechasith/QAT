@@ -141,12 +141,9 @@ export default function Loading() {
           <div
             className="h-full rounded-full bg-gradient-to-r from-cyan-400/60 to-violet-400/60"
             style={{
-              animation: "fade-in 3s ease both",
+              animation: "progress-fill 3.5s ease both",
               animationDelay: "3s",
-              width: "100%",
-              transform: "scaleX(0)",
               transformOrigin: "left",
-              animationName: "progress-fill",
             }}
           />
         </div>
