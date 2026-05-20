@@ -73,13 +73,13 @@ export function QuantumLanding({
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#mission"
-              className="inline-flex h-11 items-center rounded-full bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="inline-flex h-11 items-center rounded-full bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition-all duration-200 hover:bg-cyan-100 hover:scale-[1.04] hover:shadow-[0_0_32px_rgba(34,211,238,0.45)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
               Discover the mission
             </a>
             <a
               href="#portal"
-              className="inline-flex h-11 items-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="inline-flex h-11 items-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/12 hover:border-white/35 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
               Explore destinations
             </a>

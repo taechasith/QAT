@@ -54,7 +54,7 @@ export function NavMenu() {
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="rounded-lg px-4 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
               >
                 {item.label}
               </Link>
