@@ -14,12 +14,12 @@ type CameraKeyframe = {
 };
 
 const PATH: CameraKeyframe[] = [
-  { progress: 0.0, position: [0, -9.0, 8], target: [0, 0.5, 0], fov: 42 },
-  { progress: 0.18, position: [4, 2.0, 5], target: [0, 0.4, 0], fov: 38 },
-  { progress: 0.36, position: [-3.8, 1.2, 4], target: [0, 0, 0], fov: 36 },
-  { progress: 0.58, position: [0, 4.5, 3.4], target: [0, 0, 0], fov: 40 },
-  { progress: 0.78, position: [0, 1.4, 9], target: [0, 0, 0], fov: 46 },
-  { progress: 1.0, position: [0, 0.8, 12], target: [0, 0, 0], fov: 50 },
+  { progress: 0.0,  position: [0,    -9.0, 8],   target: [0, 0.5, 0], fov: 42 },
+  { progress: 0.18, position: [3.5,   0.5, 7.5], target: [0, 0.3, 0], fov: 40 },
+  { progress: 0.36, position: [-3.2,  1.0, 7.5], target: [0, 0.1, 0], fov: 38 },
+  { progress: 0.58, position: [0,     2.0, 8.0], target: [0, 0,   0], fov: 40 },
+  { progress: 0.78, position: [0,     1.2, 9.5], target: [0, 0,   0], fov: 44 },
+  { progress: 1.0,  position: [0,     0.8, 12],  target: [0, 0,   0], fov: 48 },
 ];
 
 function smoothstep(t: number) {
