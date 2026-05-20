@@ -1,4 +1,5 @@
 {
+  "framework": "nextjs",
   "installCommand": "cd qat-web && pnpm install --frozen-lockfile",
   "buildCommand": "cd qat-web && pnpm build",
   "outputDirectory": "qat-web/.next",
