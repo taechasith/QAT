@@ -8,17 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { contentSchema, slugify, CONTENT_TYPES, CONTENT_STATUSES } from "@/lib/validation/content";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { ContentType } from "@/lib/data/content";
-import type { Block } from "@/lib/types/blocks";
 import { CategoryGuide } from "./CategoryGuide";
 import { ContentPreview } from "./ContentPreview";
 import { CoverUpload } from "./CoverUpload";
-import { BlockEditor } from "./BlockEditor";
 
 type ContentEditorFormProps = {
   mode: "create" | "edit";
   itemId?: string;
   defaultValues?: Partial<ContentFormData>;
-  defaultBodyBlocks?: Block[];
 };
 
 const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
@@ -38,12 +35,10 @@ export function ContentEditorForm({
   mode,
   itemId,
   defaultValues,
-  defaultBodyBlocks,
 }: ContentEditorFormProps) {
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [blocks, setBlocks] = useState<Block[]>(defaultBodyBlocks ?? []);
 
   const {
     register,
@@ -80,7 +75,7 @@ export function ContentEditorForm({
     const res = await fetch(endpoint, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...values, body_blocks: blocks }),
+      body: JSON.stringify(values),
     });
 
     const json = await res.json().catch(() => ({}));
@@ -177,13 +172,6 @@ export function ContentEditorForm({
           onChange={(url) => setValue("cover_image_url", url)}
         />
 
-        {/* Body blocks — visual editor */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-200">Page content</label>
-          <div className="rounded-xl border border-white/10 bg-white/2 px-2 py-2">
-            <BlockEditor value={blocks} onChange={setBlocks} />
-          </div>
-        </div>
 
         {/* External URL */}
         <div className="flex flex-col gap-1.5">

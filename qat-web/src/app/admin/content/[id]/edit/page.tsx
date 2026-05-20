@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -17,12 +18,20 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
 
   return (
     <AdminShell>
-      <div className="mb-8">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-          Admin CMS
-        </p>
-        <h1 className="mt-1 text-3xl font-semibold text-white">Edit content</h1>
-        <p className="mt-1 text-sm text-slate-400">ID: {id}</p>
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+            Admin CMS
+          </p>
+          <h1 className="mt-1 text-3xl font-semibold text-white">Edit content</h1>
+          <p className="mt-1 text-sm text-slate-400">ID: {id}</p>
+        </div>
+        <Link
+          href={`/admin/content/${id}/blocks`}
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-cyan-300/30 px-5 text-sm font-medium text-cyan-300 transition hover:border-cyan-300/60 hover:bg-cyan-300/5"
+        >
+          Edit page content →
+        </Link>
       </div>
       <ContentEditorForm
         mode="edit"
@@ -41,7 +50,6 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           end_at: item.end_at ? item.end_at.slice(0, 16) : "",
           sort_order: item.sort_order,
         }}
-        defaultBodyBlocks={Array.isArray(item.body_blocks) ? item.body_blocks : []}
       />
     </AdminShell>
   );

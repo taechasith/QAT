@@ -122,11 +122,12 @@ export function SplashScreen() {
           }}
         >
           <div
-            className="absolute inset-0 rounded-full bg-cyan-400 mix-blend-screen"
+            className="absolute inset-0 rounded-full"
             style={{
               animation: "pulse-glow 3s cubic-bezier(0.4,0,0.6,1) infinite",
               transform: "scale(1.1)",
-              border: "2px solid rgba(34,211,238,0.4)",
+              border: "1.5px solid rgba(34,211,238,0.35)",
+              boxShadow: "0 0 24px rgba(34,211,238,0.18), inset 0 0 16px rgba(34,211,238,0.06)",
             }}
           />
           <Image
