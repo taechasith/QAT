@@ -14,7 +14,7 @@ type CameraKeyframe = {
 };
 
 const PATH: CameraKeyframe[] = [
-  { progress: 0.0, position: [0, -6.0, 8], target: [0, 0.5, 0], fov: 42 },
+  { progress: 0.0, position: [0, -9.0, 8], target: [0, 0.5, 0], fov: 42 },
   { progress: 0.18, position: [4, 2.0, 5], target: [0, 0.4, 0], fov: 38 },
   { progress: 0.36, position: [-3.8, 1.2, 4], target: [0, 0, 0], fov: 36 },
   { progress: 0.58, position: [0, 4.5, 3.4], target: [0, 0, 0], fov: 40 },

@@ -1,10 +1,13 @@
 import {
   BookOpen,
+  FlaskConical,
   Gamepad2,
   Globe,
   GraduationCap,
   Layers,
+  Mic2,
   Newspaper,
+  Video,
 } from "lucide-react";
 
 import type { ContentItem } from "@/lib/data/content";
@@ -52,6 +55,24 @@ const destinations = [
     href: "/news",
     icon: Newspaper,
   },
+  {
+    title: "Talk",
+    description: "Lectures, discussions, and conversations at the intersection of quantum science and culture.",
+    href: "/talk",
+    icon: Mic2,
+  },
+  {
+    title: "Experiment",
+    description: "Interactive and conceptual experiments exploring quantum phenomena through art and design.",
+    href: "/experiment",
+    icon: FlaskConical,
+  },
+  {
+    title: "Video",
+    description: "Documentary, artistic, and educational video works produced under the QAT initiative.",
+    href: "/video",
+    icon: Video,
+  },
 ];
 
 type FinalPortalProps = {
@@ -81,7 +102,7 @@ export function FinalPortal({
 
       <div className="mt-24">
         <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-200">
-          Six destinations
+          Nine destinations
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
           Where do you want to go?
