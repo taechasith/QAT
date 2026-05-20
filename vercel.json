@@ -1,0 +1,6 @@
+{
+  "installCommand": "cd qat-web && pnpm install",
+  "buildCommand": "cd qat-web && pnpm build",
+  "outputDirectory": "qat-web/.next",
+  "devCommand": "cd qat-web && pnpm dev --port $PORT"
+}
