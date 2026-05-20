@@ -60,7 +60,7 @@ export function QuantumLanding({
         className="relative flex min-h-svh flex-col items-center justify-center px-5 py-28 text-center sm:px-8 lg:px-10"
       >
         <div className="max-w-4xl">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.32em] text-cyan-200">
+          <p className="font-mono text-xs font-semibold tracking-[0.32em] text-cyan-200">
             CreativeLabTH Group International Initiative
           </p>
           <h1 className="mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
@@ -95,13 +95,13 @@ export function QuantumLanding({
         </div>
       </section>
 
-      {/* mission — dark bg so 3D fades behind */}
-      <div className="relative bg-background">
+      {/* mission */}
+      <div className="relative">
         <MissionSection />
       </div>
 
       {/* portal */}
-      <div className="relative bg-background">
+      <div className="relative">
         <FinalPortal
           featuredItems={featuredItems}
           featuredError={featuredError}
