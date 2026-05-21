@@ -26,6 +26,7 @@
 - Added `components/admin/ContentEditorForm.tsx`, `ContentTable.tsx`, `ContentPreview.tsx`, `CategoryGuide.tsx`.
 - Added `app/admin/content/page.tsx`, `new/page.tsx`, `[id]/edit/page.tsx`.
 - Added `app/api/admin/content/route.ts`, `[id]/route.ts`.
+- Added `ContentCard.tsx` with `unoptimized` attribute for cover images to prevent GIF quality loss by bypassing Next.js optimization.
 
 ### Phase 10: Media Uploads
 - Added `lib/data/media.ts`, `components/admin/MediaUploader.tsx`, `app/api/admin/media/route.ts`.
