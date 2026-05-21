@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useTr } from "@/lib/i18n/context";
 
@@ -16,6 +17,7 @@ export function ProfileNameForm({
 }) {
   const tr = useTr();
   const p = tr.profileName;
+  const router = useRouter();
   const [name, setName] = useState(initialName);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
@@ -32,7 +34,12 @@ export function ProfileNameForm({
     });
 
     setSaving(false);
-    setMsg(res.ok ? p.saved : p.failed);
+    if (res.ok) {
+      setMsg(p.saved);
+      router.refresh();
+    } else {
+      setMsg(p.failed);
+    }
   }
 
   return (

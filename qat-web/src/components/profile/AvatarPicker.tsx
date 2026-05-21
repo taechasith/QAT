@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { CatAvatar, CAT_CONFIG, type CatType } from "./CatAvatar";
 import type { AvatarType } from "@/lib/data/profile";
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
+  const router = useRouter();
   const [selected, setSelected] = useState<AvatarType>(current);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl);
   const [saving, setSaving] = useState(false);
@@ -57,6 +59,7 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
     if (res.ok) {
       setMsg("Saved!");
       onSaved?.(selected, selected === "upload" ? previewUrl : null);
+      router.refresh();
     } else {
       setMsg("Save failed. Try again.");
     }
