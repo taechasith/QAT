@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/i18n/locale";
+import type { Block } from "@/lib/types/blocks";
 
 export type ContentType =
   | "event"
@@ -33,6 +34,37 @@ export type ContentItem = {
   metadata: Record<string, unknown> | null;
 };
 
+function localizeBlocks(
+  blocks: unknown[] | null,
+  metadata: Record<string, unknown> | null,
+  locale: string,
+) {
+  if (locale !== "th") return blocks;
+
+  const thaiBlocks = metadata?.body_blocks_th;
+  if (Array.isArray(thaiBlocks) && thaiBlocks.length > 0) {
+    return thaiBlocks;
+  }
+
+  if (!Array.isArray(blocks)) return blocks;
+
+  return (blocks as Block[]).map((block) => {
+    if (block.type === "heading" || block.type === "paragraph") {
+      return block.text_th ? { ...block, text: block.text_th } : block;
+    }
+
+    if (block.type === "image") {
+      return {
+        ...block,
+        alt: block.alt_th || block.alt,
+        caption: block.caption_th || block.caption,
+      };
+    }
+
+    return block;
+  });
+}
+
 export function localizeItem(item: ContentItem, locale: string): ContentItem {
   if (locale !== "th") return item;
   return {
@@ -40,6 +72,7 @@ export function localizeItem(item: ContentItem, locale: string): ContentItem {
     title: (item.metadata?.title_th as string | undefined) || item.title,
     excerpt: (item.metadata?.excerpt_th as string | undefined) || item.excerpt,
     body_md: (item.metadata?.body_md_th as string | undefined) || item.body_md,
+    body_blocks: localizeBlocks(item.body_blocks, item.metadata, locale),
     cover_image_url: (item.metadata?.cover_image_url_th as string | undefined) || item.cover_image_url,
   };
 }

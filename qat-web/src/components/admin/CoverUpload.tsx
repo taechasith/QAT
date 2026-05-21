@@ -3,16 +3,13 @@
 import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
+import { isVideoUrl } from "@/lib/media";
 
 type Props = {
   value: string;
   onChange: (url: string) => void;
   label?: string;
 };
-
-export function isVideoUrl(url: string) {
-  return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url);
-}
 
 export function CoverUpload({ value, onChange, label }: Props) {
   const tr = useTr();
@@ -139,4 +136,3 @@ export function CoverUpload({ value, onChange, label }: Props) {
     </div>
   );
 }
-

@@ -18,7 +18,13 @@ export default async function ContentBlocksPage({ params }: Props) {
       <BlocksEditorPage
         itemId={id}
         title={item.title}
+        titleTh={(item.metadata as Record<string, string> | null)?.title_th ?? ""}
         initialBlocks={Array.isArray(item.body_blocks) ? item.body_blocks : []}
+        initialBlocksTh={
+          Array.isArray((item.metadata as Record<string, unknown> | null)?.body_blocks_th)
+            ? ((item.metadata as Record<string, unknown>).body_blocks_th as [])
+            : []
+        }
       />
     </AdminShell>
   );

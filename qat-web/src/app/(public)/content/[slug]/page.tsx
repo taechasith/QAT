@@ -7,14 +7,11 @@ import { BlockRenderer } from "@/components/content/BlockRenderer";
 import { ContentComments } from "@/components/content/ContentComments";
 import { ContentEngagement } from "@/components/content/ContentEngagement";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
-
-function isVideoUrl(url: string) {
-  return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url);
-}
 import { createClient } from "@/lib/supabase/server";
 import { getPublishedContentBySlug } from "@/lib/data/content";
 import { getOgSettings } from "@/lib/data/site-settings";
 import { getLocale, getTranslations } from "@/lib/i18n/locale";
+import { isVideoUrl } from "@/lib/media";
 import type { Block } from "@/lib/types/blocks";
 
 type ContentDetailPageProps = {

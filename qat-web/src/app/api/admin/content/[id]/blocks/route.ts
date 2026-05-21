@@ -20,12 +20,25 @@ export async function PATCH(request: Request, { params }: Params) {
   const { id } = await params;
   const body = await request.json().catch(() => null);
   const blocks: Block[] = Array.isArray(body?.blocks) ? body.blocks : [];
+  const blocksTh: Block[] = Array.isArray(body?.blocks_th) ? body.blocks_th : [];
 
   // Write with service-role client to bypass RLS on published rows
   const db = createAdminClient();
+  const { data: existing, error: readError } = await db
+    .from("content_items")
+    .select("metadata")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (readError) return NextResponse.json({ error: readError.message }, { status: 500 });
+
+  const metadata = ((existing?.metadata as Record<string, unknown> | null) ?? {});
+  if (blocksTh.length > 0) metadata.body_blocks_th = blocksTh;
+  else delete metadata.body_blocks_th;
+
   const { error } = await db
     .from("content_items")
-    .update({ body_blocks: blocks, updated_by: user.id })
+    .update({ body_blocks: blocks, metadata, updated_by: user.id })
     .eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

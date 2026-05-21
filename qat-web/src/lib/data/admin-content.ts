@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { buildContentBlocks } from "@/lib/content-blocks";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { Block } from "@/lib/types/blocks";
 
@@ -77,7 +78,7 @@ export async function createContent(
     .maybeSingle()
     .then((r) => r.data);
 
-  const metadata: Record<string, string> = {};
+  const metadata: Record<string, unknown> = {};
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
   if (body_md_th?.trim()) metadata.body_md_th = body_md_th.trim();
@@ -87,9 +88,12 @@ export async function createContent(
   if (author_bio?.trim()) metadata.author_bio = author_bio.trim();
   if (profile?.avatar_url) metadata.author_avatar_url = profile.avatar_url;
   if (profile?.avatar_type) metadata.author_avatar_type = profile.avatar_type;
+  const thaiBlocks = buildContentBlocks(values, "th");
+  if (thaiBlocks.length > 0) metadata.body_blocks_th = thaiBlocks;
 
   // DB title is NOT NULL — fall back to TH title if EN not provided
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
+  const resolvedBlocks = bodyBlocks.length > 0 ? bodyBlocks : buildContentBlocks(values, "en");
 
   const payload = {
     ...rest,
@@ -98,7 +102,7 @@ export async function createContent(
     external_url: rest.external_url || null,
     excerpt: rest.excerpt || null,
     body_md: rest.body_md || null,
-    body_blocks: bodyBlocks,
+    body_blocks: resolvedBlocks,
     location: rest.location || null,
     start_at: rest.start_at || null,
     end_at: rest.end_at || null,
@@ -126,7 +130,7 @@ export async function updateContent(
   const supabase = createAdminClient();
 
   const [existingResult, profile] = await Promise.all([
-    supabase.from("content_items").select("status, published_at, metadata").eq("id", id).maybeSingle(),
+    supabase.from("content_items").select("status, published_at, body_blocks, metadata").eq("id", id).maybeSingle(),
     supabase.from("profiles").select("full_name, bio, avatar_url, avatar_type").eq("id", userId).maybeSingle().then((r) => r.data),
   ]);
 
@@ -138,8 +142,8 @@ export async function updateContent(
       : (existingResult.data?.published_at ?? null);
 
   const { title_th, excerpt_th, body_md_th, cover_image_url_th, author_name, author_bio, ...rest } = values;
-  const existingMeta = (existingResult.data?.metadata as Record<string, string>) ?? {};
-  const metadata: Record<string, string> = { ...existingMeta };
+  const existingMeta = (existingResult.data?.metadata as Record<string, unknown>) ?? {};
+  const metadata: Record<string, unknown> = { ...existingMeta };
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   else delete metadata.title_th;
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
@@ -159,6 +163,22 @@ export async function updateContent(
   else delete metadata.author_avatar_type;
 
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
+  const existingBlocks = Array.isArray(existingResult.data?.body_blocks)
+    ? (existingResult.data.body_blocks as Block[])
+    : [];
+  const existingThaiBlocks = Array.isArray(metadata.body_blocks_th)
+    ? (metadata.body_blocks_th as Block[])
+    : [];
+  const resolvedBlocks = bodyBlocks.length > 0
+    ? bodyBlocks
+    : existingBlocks.length > 0
+      ? existingBlocks
+      : buildContentBlocks(values, "en");
+
+  if (existingThaiBlocks.length === 0) {
+    const thaiBlocks = buildContentBlocks(values, "th");
+    if (thaiBlocks.length > 0) metadata.body_blocks_th = thaiBlocks;
+  }
 
   const payload = {
     ...rest,
@@ -167,7 +187,7 @@ export async function updateContent(
     external_url: rest.external_url || null,
     excerpt: rest.excerpt || null,
     body_md: rest.body_md || null,
-    body_blocks: bodyBlocks,
+    body_blocks: resolvedBlocks,
     location: rest.location || null,
     start_at: rest.start_at || null,
     end_at: rest.end_at || null,

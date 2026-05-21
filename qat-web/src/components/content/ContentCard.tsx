@@ -5,14 +5,11 @@ import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import type { ContentItem } from "@/lib/data/content";
 import { getLocale } from "@/lib/i18n/locale";
 import { t } from "@/lib/i18n/translations";
+import { isVideoUrl } from "@/lib/media";
 
 type ContentCardProps = {
   item: ContentItem;
 };
-
-function isVideoUrl(url: string) {
-  return /\.(mp4|webm|mov|ogg)(\?|$)/i.test(url);
-}
 
 async function formatDate(value: string | null, locale: string) {
   if (!value) return null;
