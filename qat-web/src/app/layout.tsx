@@ -3,6 +3,7 @@ import { IBM_Plex_Sans_Thai, JetBrains_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SplashScreen } from "@/components/layout/SplashScreen";
 import { LocaleProvider } from "@/lib/i18n/context";
 import { getLocale } from "@/lib/i18n/locale";
 import { metadataBase } from "@/lib/metadata";
@@ -62,6 +63,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full bg-background text-foreground">
         <LocaleProvider locale={locale}>
+          <SplashScreen />
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">{children}</main>
