@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { updateNotificationPreference } from "@/lib/data/profile";
+import { upsertProfile, updateNotificationPreference } from "@/lib/data/profile";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
+  await upsertProfile(user.id, user.email ?? "");
   const result = await updateNotificationPreference(user.id, body.wants);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
