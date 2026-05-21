@@ -6,6 +6,7 @@ import { getLocale } from "@/lib/i18n/locale";
 import { t } from "@/lib/i18n/translations";
 import { createClient } from "@/lib/supabase/server";
 
+import { isAdminEmail } from "@/lib/auth/admin";
 import { LanguageToggle } from "./LanguageToggle";
 import { LogoMark } from "./LogoMark";
 import { NavMenu } from "./NavMenu";
@@ -25,6 +26,14 @@ export async function SiteHeader() {
           <LanguageToggle current={locale} />
           {user ? (
             <div className="hidden items-center gap-2 sm:flex">
+              {isAdminEmail(user.email) && (
+                <Link
+                  href="/admin"
+                  className="rounded-full px-3 py-2 text-sm font-medium text-violet-300 transition hover:bg-white/8 hover:text-violet-200"
+                >
+                  Admin
+                </Link>
+              )}
               <Button
                 variant="outline"
                 className="border-cyan-200/30 bg-cyan-200/8 text-cyan-50 hover:bg-cyan-200/14 hover:text-white"
