@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { BlockEditor } from "./BlockEditor";
+import { BlockRenderer } from "@/components/content/BlockRenderer";
 import type { Block } from "@/lib/types/blocks";
 import { useTr } from "@/lib/i18n/context";
 
@@ -119,8 +120,39 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
         </div>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/2 px-3 py-3">
-        <BlockEditor value={activeBlocks} onChange={setActiveBlocks} />
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.8fr)]">
+        <div className="rounded-xl border border-white/10 bg-white/2 px-3 py-3">
+          <BlockEditor value={activeBlocks} onChange={setActiveBlocks} />
+        </div>
+
+        <aside className="xl:sticky xl:top-4 xl:self-start">
+          <div className="overflow-hidden rounded-xl border border-white/10 bg-slate-950">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                  Preview page
+                </p>
+                <p className="mt-1 text-sm font-medium text-slate-200">
+                  {activeLocale === "en" ? "English user mode" : "Thai user mode"}
+                </p>
+              </div>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                activeLocale === "en" ? "bg-cyan-300/15 text-cyan-200" : "bg-amber-300/15 text-amber-200"
+              }`}>
+                {activeLocale.toUpperCase()}
+              </span>
+            </div>
+            <div className="max-h-[72vh] overflow-y-auto px-5 py-6">
+              {activeBlocks.length > 0 ? (
+                <BlockRenderer blocks={activeBlocks} />
+              ) : (
+                <div className="flex min-h-60 items-center justify-center rounded-lg border border-dashed border-white/10 bg-white/[0.03] text-center">
+                  <p className="text-xs text-slate-500">Add blocks to preview this page.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </aside>
       </div>
 
       {(blocks.length > 0 || blocksTh.length > 0) && (

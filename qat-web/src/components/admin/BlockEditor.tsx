@@ -6,10 +6,11 @@ import type {
   Block,
   BlockType,
   HeadingBlock,
-  ParagraphBlock,
   ImageBlock,
+  ParagraphBlock,
   SpacerBlock,
   TextAlign,
+  TextSize,
 } from "@/lib/types/blocks";
 import { makeBlock } from "@/lib/types/blocks";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
@@ -19,7 +20,31 @@ type Props = {
   onChange: (blocks: Block[]) => void;
 };
 
-/* ── shared toolbar atoms ── */
+const TEXT_SIZE_OPTIONS: { value: TextSize; label: string }[] = [
+  { value: "xs", label: "XS" },
+  { value: "sm", label: "S" },
+  { value: "md", label: "M" },
+  { value: "lg", label: "L" },
+  { value: "xl", label: "XL" },
+  { value: "2xl", label: "2XL" },
+  { value: "3xl", label: "3XL" },
+  { value: "4xl", label: "4XL" },
+];
+
+function editorFontSize(size: TextSize | undefined, fallback: TextSize) {
+  const sizes: Record<TextSize, string> = {
+    xs: "0.75rem",
+    sm: "0.875rem",
+    md: "1rem",
+    lg: "1.125rem",
+    xl: "1.25rem",
+    "2xl": "1.5rem",
+    "3xl": "1.875rem",
+    "4xl": "2.25rem",
+  };
+
+  return sizes[size ?? fallback];
+}
 
 function AlignBtn({
   align,
@@ -30,13 +55,13 @@ function AlignBtn({
   current: TextAlign;
   set: (a: TextAlign) => void;
 }) {
-  const icons: Record<TextAlign, string> = { left: "⬅", center: "⬌", right: "➡" };
+  const icons: Record<TextAlign, string> = { left: "L", center: "C", right: "R" };
   return (
     <button
       type="button"
       onClick={() => set(align)}
       title={`Align ${align}`}
-      className={`px-1.5 py-0.5 rounded text-xs transition ${
+      className={`rounded px-1.5 py-0.5 text-xs transition ${
         current === align
           ? "bg-cyan-300/20 text-cyan-300"
           : "text-slate-500 hover:text-slate-200"
@@ -44,6 +69,38 @@ function AlignBtn({
     >
       {icons[align]}
     </button>
+  );
+}
+
+function SizeControls({
+  current,
+  fallback,
+  set,
+}: {
+  current: TextSize | undefined;
+  fallback: TextSize;
+  set: (size: TextSize) => void;
+}) {
+  const active = current ?? fallback;
+
+  return (
+    <div className="flex flex-wrap items-center gap-1">
+      {TEXT_SIZE_OPTIONS.map(({ value, label }) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => set(value)}
+          title={`Text size ${label}`}
+          className={`rounded px-1.5 py-0.5 text-[10px] font-semibold transition ${
+            active === value
+              ? "bg-cyan-300/20 text-cyan-300"
+              : "text-slate-500 hover:text-slate-200"
+          }`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
   );
 }
 
@@ -63,7 +120,7 @@ function Toggle({
       type="button"
       onClick={onClick}
       title={title}
-      className={`px-1.5 py-0.5 rounded text-xs font-bold transition ${
+      className={`rounded px-1.5 py-0.5 text-xs font-bold transition ${
         on ? "bg-cyan-300/20 text-cyan-300" : "text-slate-500 hover:text-slate-200"
       }`}
     >
@@ -73,10 +130,8 @@ function Toggle({
 }
 
 function Sep() {
-  return <span className="text-white/10 select-none">|</span>;
+  return <span className="select-none text-white/10">|</span>;
 }
-
-/* ── heading block ── */
 
 function HeadingEditor({
   block,
@@ -85,26 +140,34 @@ function HeadingEditor({
   block: HeadingBlock;
   patch: (p: Partial<HeadingBlock>) => void;
 }) {
+  const fallbackSize = block.level === 1 ? "3xl" : block.level === 2 ? "2xl" : "xl";
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-1 border-b border-white/8 pb-2">
-        {([1, 2, 3] as const).map((l) => (
+        {([1, 2, 3] as const).map((level) => (
           <button
-            key={l}
+            key={level}
             type="button"
-            onClick={() => patch({ level: l })}
-            className={`px-2 py-0.5 rounded text-xs font-bold transition ${
-              block.level === l
+            onClick={() => patch({ level })}
+            className={`rounded px-2 py-0.5 text-xs font-bold transition ${
+              block.level === level
                 ? "bg-violet-400/20 text-violet-300"
                 : "text-slate-500 hover:text-slate-200"
             }`}
           >
-            H{l}
+            H{level}
           </button>
         ))}
         <Sep />
-        {(["left", "center", "right"] as TextAlign[]).map((a) => (
-          <AlignBtn key={a} align={a} current={block.align} set={(v) => patch({ align: v })} />
+        <SizeControls
+          current={block.size}
+          fallback={fallbackSize}
+          set={(size) => patch({ size })}
+        />
+        <Sep />
+        {(["left", "center", "right"] as TextAlign[]).map((align) => (
+          <AlignBtn key={align} align={align} current={block.align} set={(value) => patch({ align: value })} />
         ))}
         <Sep />
         <Toggle
@@ -117,33 +180,18 @@ function HeadingEditor({
       <input
         type="text"
         value={block.text}
-        onChange={(e) => patch({ text: e.target.value })}
-        placeholder="Heading text…"
+        onChange={(event) => patch({ text: event.target.value })}
+        placeholder="Heading text..."
         style={{
           textAlign: block.align,
           fontWeight: block.bold ? 700 : block.level === 1 ? 700 : block.level === 2 ? 600 : 500,
-          fontSize:
-            block.level === 1 ? "1.5rem" : block.level === 2 ? "1.25rem" : "1.05rem",
+          fontSize: editorFontSize(block.size, fallbackSize),
         }}
         className="w-full bg-transparent text-white placeholder:text-slate-600 outline-none"
       />
-      <div className="mt-2 border-t border-white/8 pt-2">
-        <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-amber-400/70">
-          TH — Thai translation (optional)
-        </label>
-        <input
-          type="text"
-          value={block.text_th ?? ""}
-          onChange={(e) => patch({ text_th: e.target.value })}
-          placeholder="ข้อความหัวเรื่องภาษาไทย…"
-          className="w-full bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none"
-        />
-      </div>
     </div>
   );
 }
-
-/* ── paragraph block ── */
 
 function ParagraphEditor({
   block,
@@ -155,8 +203,10 @@ function ParagraphEditor({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-1 border-b border-white/8 pb-2">
-        {(["left", "center", "right"] as TextAlign[]).map((a) => (
-          <AlignBtn key={a} align={a} current={block.align} set={(v) => patch({ align: v })} />
+        <SizeControls current={block.size} fallback="md" set={(size) => patch({ size })} />
+        <Sep />
+        {(["left", "center", "right"] as TextAlign[]).map((align) => (
+          <AlignBtn key={align} align={align} current={block.align} set={(value) => patch({ align: value })} />
         ))}
         <Sep />
         <Toggle
@@ -174,33 +224,20 @@ function ParagraphEditor({
       </div>
       <textarea
         value={block.text}
-        onChange={(e) => patch({ text: e.target.value })}
-        placeholder="Paragraph text…"
+        onChange={(event) => patch({ text: event.target.value })}
+        placeholder="Paragraph text..."
         rows={3}
         style={{
           textAlign: block.align,
           fontWeight: block.bold ? 700 : 400,
           fontStyle: block.italic ? "italic" : "normal",
+          fontSize: editorFontSize(block.size, "md"),
         }}
-        className="w-full resize-y bg-transparent text-sm text-slate-200 placeholder:text-slate-600 outline-none"
+        className="w-full resize-y bg-transparent text-slate-200 placeholder:text-slate-600 outline-none"
       />
-      <div className="mt-2 border-t border-white/8 pt-2">
-        <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-amber-400/70">
-          TH — Thai translation (optional)
-        </label>
-        <textarea
-          value={block.text_th ?? ""}
-          onChange={(e) => patch({ text_th: e.target.value })}
-          placeholder="ข้อความภาษาไทย…"
-          rows={2}
-          className="w-full resize-y bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none"
-        />
-      </div>
     </div>
   );
 }
-
-/* ── image block ── */
 
 function ImageBlockEditor({
   block,
@@ -236,8 +273,8 @@ function ImageBlockEditor({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-1 border-b border-white/8 pb-2">
-        {(["left", "center", "right"] as TextAlign[]).map((a) => (
-          <AlignBtn key={a} align={a} current={block.align} set={(v) => patch({ align: v })} />
+        {(["left", "center", "right"] as TextAlign[]).map((align) => (
+          <AlignBtn key={align} align={align} current={block.align} set={(value) => patch({ align: value })} />
         ))}
       </div>
 
@@ -254,9 +291,9 @@ function ImageBlockEditor({
           <button
             type="button"
             onClick={() => patch({ url: "" })}
-            className="absolute right-2 top-2 flex size-7 items-center justify-center rounded-full bg-black/60 text-xs text-white hover:bg-black/80 transition"
+            className="absolute right-2 top-2 flex size-7 items-center justify-center rounded-full bg-black/60 text-xs text-white transition hover:bg-black/80"
           >
-            ×
+            X
           </button>
         </div>
       ) : (
@@ -264,15 +301,15 @@ function ImageBlockEditor({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            const f = e.dataTransfer.files?.[0];
-            if (f) handleFile(f);
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault();
+            const file = event.dataTransfer.files?.[0];
+            if (file) handleFile(file);
           }}
-          className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-white/20 text-sm text-slate-500 hover:border-white/40 hover:text-slate-300 transition"
+          className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-white/20 text-sm text-slate-500 transition hover:border-white/40 hover:text-slate-300"
         >
-          {uploading ? "Uploading…" : "Click or drag image here"}
+          {uploading ? "Uploading..." : "Click or drag image here"}
         </button>
       )}
 
@@ -281,15 +318,15 @@ function ImageBlockEditor({
       <input
         type="text"
         value={block.alt}
-        onChange={(e) => patch({ alt: e.target.value })}
-        placeholder="Alt text (accessibility)"
+        onChange={(event) => patch({ alt: event.target.value })}
+        placeholder="Alt text"
         className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 placeholder:text-slate-600 outline-none focus:border-white/25"
       />
       <input
         type="text"
         value={block.caption}
-        onChange={(e) => patch({ caption: e.target.value })}
-        placeholder="Caption (optional)"
+        onChange={(event) => patch({ caption: event.target.value })}
+        placeholder="Caption"
         className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-400 placeholder:text-slate-600 outline-none focus:border-white/25"
       />
 
@@ -298,17 +335,15 @@ function ImageBlockEditor({
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) handleFile(f);
-          e.target.value = "";
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file) handleFile(file);
+          event.target.value = "";
         }}
       />
     </div>
   );
 }
-
-/* ── divider block ── */
 
 function DividerEditor() {
   return (
@@ -320,8 +355,6 @@ function DividerEditor() {
   );
 }
 
-/* ── spacer block ── */
-
 function SpacerEditor({
   block,
   patch,
@@ -332,32 +365,30 @@ function SpacerEditor({
   return (
     <div className="flex items-center gap-2 py-1">
       <span className="text-xs text-slate-500">Space:</span>
-      {(["sm", "md", "lg"] as const).map((s) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <button
-          key={s}
+          key={size}
           type="button"
-          onClick={() => patch({ size: s })}
+          onClick={() => patch({ size })}
           className={`rounded px-2 py-0.5 text-xs transition ${
-            block.size === s
+            block.size === size
               ? "bg-white/15 text-slate-200"
               : "text-slate-500 hover:text-slate-300"
           }`}
         >
-          {s.toUpperCase()}
+          {size.toUpperCase()}
         </button>
       ))}
     </div>
   );
 }
 
-/* ── add-block button ── */
-
 const ADD_TYPES: { type: BlockType; label: string; icon: string }[] = [
   { type: "heading", label: "Heading", icon: "H" },
-  { type: "paragraph", label: "Paragraph", icon: "¶" },
-  { type: "image", label: "Image", icon: "🖼" },
-  { type: "divider", label: "Divider", icon: "—" },
-  { type: "spacer", label: "Spacer", icon: "↕" },
+  { type: "paragraph", label: "Paragraph", icon: "P" },
+  { type: "image", label: "Image", icon: "Img" },
+  { type: "divider", label: "Divider", icon: "-" },
+  { type: "spacer", label: "Spacer", icon: "Space" },
 ];
 
 function AddBlockButton({ onAdd }: { onAdd: (type: BlockType) => void }) {
@@ -366,14 +397,13 @@ function AddBlockButton({ onAdd }: { onAdd: (type: BlockType) => void }) {
     <div className="relative flex justify-center py-1">
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setOpen((value) => !value)}
         className="h-6 rounded-full border border-white/15 bg-slate-950 px-3 text-xs text-slate-500 transition hover:border-cyan-300/40 hover:text-cyan-300"
       >
         + Add block
       </button>
       {open && (
         <>
-          {/* close on outside click */}
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute top-8 z-20 flex gap-1 rounded-xl border border-white/15 bg-slate-900/95 p-2 shadow-xl backdrop-blur-sm">
             {ADD_TYPES.map(({ type, label, icon }) => (
@@ -397,19 +427,17 @@ function AddBlockButton({ onAdd }: { onAdd: (type: BlockType) => void }) {
   );
 }
 
-/* ── main BlockEditor ── */
-
 export function BlockEditor({ value, onChange }: Props) {
   function patch<T extends Block>(id: string, partial: Partial<T>) {
-    onChange(value.map((b) => (b.id === id ? { ...b, ...partial } : b)) as Block[]);
+    onChange(value.map((block) => (block.id === id ? { ...block, ...partial } : block)) as Block[]);
   }
 
   function remove(id: string) {
-    onChange(value.filter((b) => b.id !== id));
+    onChange(value.filter((block) => block.id !== id));
   }
 
   function move(id: string, dir: -1 | 1) {
-    const idx = value.findIndex((b) => b.id === id);
+    const idx = value.findIndex((block) => block.id === id);
     if (idx < 0) return;
     const next = idx + dir;
     if (next < 0 || next >= value.length) return;
@@ -427,12 +455,11 @@ export function BlockEditor({ value, onChange }: Props) {
 
   return (
     <div className="flex flex-col">
-      <AddBlockButton onAdd={(t) => addAt(t, -1)} />
+      <AddBlockButton onAdd={(type) => addAt(type, -1)} />
 
       {value.map((block, idx) => (
         <div key={block.id} className="flex flex-col">
           <div className="group relative mt-1 rounded-xl border border-white/10 bg-white/3 p-4 transition hover:border-white/20">
-            {/* block controls */}
             <div className="absolute right-2 top-2 flex items-center gap-0.5 opacity-0 transition group-hover:opacity-100">
               <button
                 type="button"
@@ -441,7 +468,7 @@ export function BlockEditor({ value, onChange }: Props) {
                 title="Move up"
                 className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-slate-200 disabled:opacity-20"
               >
-                ↑
+                Up
               </button>
               <button
                 type="button"
@@ -450,7 +477,7 @@ export function BlockEditor({ value, onChange }: Props) {
                 title="Move down"
                 className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-slate-200 disabled:opacity-20"
               >
-                ↓
+                Dn
               </button>
               <button
                 type="button"
@@ -458,32 +485,32 @@ export function BlockEditor({ value, onChange }: Props) {
                 title="Delete block"
                 className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-red-400"
               >
-                ✕
+                X
               </button>
             </div>
 
             {block.type === "heading" && (
-              <HeadingEditor block={block} patch={(p) => patch(block.id, p)} />
+              <HeadingEditor block={block} patch={(partial) => patch(block.id, partial)} />
             )}
             {block.type === "paragraph" && (
-              <ParagraphEditor block={block} patch={(p) => patch(block.id, p)} />
+              <ParagraphEditor block={block} patch={(partial) => patch(block.id, partial)} />
             )}
             {block.type === "image" && (
-              <ImageBlockEditor block={block} patch={(p) => patch(block.id, p)} />
+              <ImageBlockEditor block={block} patch={(partial) => patch(block.id, partial)} />
             )}
             {block.type === "divider" && <DividerEditor />}
             {block.type === "spacer" && (
-              <SpacerEditor block={block} patch={(p) => patch(block.id, p)} />
+              <SpacerEditor block={block} patch={(partial) => patch(block.id, partial)} />
             )}
           </div>
 
-          <AddBlockButton onAdd={(t) => addAt(t, idx)} />
+          <AddBlockButton onAdd={(type) => addAt(type, idx)} />
         </div>
       ))}
 
       {value.length === 0 && (
         <p className="py-4 text-center text-xs text-slate-600">
-          No blocks yet — add one above
+          No blocks yet. Add one above.
         </p>
       )}
     </div>

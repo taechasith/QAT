@@ -147,13 +147,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           </div>
         ) : null}
 
-        {item.body_md ? (
-          <div className="mt-8 whitespace-pre-wrap text-base leading-8 text-slate-200">
-            {item.body_md}
-          </div>
-        ) : null}
-
-        {!item.body_md && !(Array.isArray(item.body_blocks) && item.body_blocks.length > 0) ? (
+        {!(Array.isArray(item.body_blocks) && item.body_blocks.length > 0) ? (
           <p className="mt-8 text-base leading-8 text-slate-300">
             {tr.contentDetail.noContent}
           </p>

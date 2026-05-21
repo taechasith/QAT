@@ -1,4 +1,4 @@
-import type { Block, TextAlign } from "@/lib/types/blocks";
+import type { Block, TextAlign, TextSize } from "@/lib/types/blocks";
 
 function alignClass(align: TextAlign) {
   if (align === "center") return "text-center";
@@ -12,6 +12,21 @@ function figureAlign(align: TextAlign) {
   return "mr-auto";
 }
 
+function textSizeClass(size: TextSize | undefined, fallback: TextSize) {
+  const sizes: Record<TextSize, string> = {
+    xs: "text-xs leading-5",
+    sm: "text-sm leading-6",
+    md: "text-base leading-8",
+    lg: "text-lg leading-8",
+    xl: "text-xl leading-8",
+    "2xl": "text-2xl sm:text-3xl leading-tight",
+    "3xl": "text-3xl sm:text-4xl leading-tight",
+    "4xl": "text-4xl sm:text-5xl leading-tight",
+  };
+
+  return sizes[size ?? fallback];
+}
+
 type Props = { blocks: Block[] };
 
 export function BlockRenderer({ blocks }: Props) {
@@ -23,13 +38,13 @@ export function BlockRenderer({ blocks }: Props) {
         switch (block.type) {
           case "heading": {
             const Tag = `h${block.level}` as "h1" | "h2" | "h3";
-            const sizes = { 1: "text-3xl sm:text-4xl", 2: "text-2xl sm:text-3xl", 3: "text-xl sm:text-2xl" };
+            const fallbackSizes = { 1: "3xl", 2: "2xl", 3: "xl" } as const;
             return (
               <Tag
                 key={block.id}
                 className={[
-                  sizes[block.level],
-                  "font-semibold leading-tight tracking-tight text-white",
+                  textSizeClass(block.size, fallbackSizes[block.level]),
+                  "font-semibold tracking-tight text-white",
                   alignClass(block.align),
                   block.bold ? "font-bold" : "",
                 ].join(" ")}
@@ -44,7 +59,8 @@ export function BlockRenderer({ blocks }: Props) {
               <p
                 key={block.id}
                 className={[
-                  "text-base leading-8 text-slate-200",
+                  textSizeClass(block.size, "md"),
+                  "text-slate-200",
                   alignClass(block.align),
                   block.bold ? "font-semibold" : "",
                   block.italic ? "italic" : "",

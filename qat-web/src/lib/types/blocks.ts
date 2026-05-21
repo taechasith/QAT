@@ -1,5 +1,6 @@
 export type TextAlign = "left" | "center" | "right";
 export type HeadingLevel = 1 | 2 | 3;
+export type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
 export type SpacerSize = "sm" | "md" | "lg";
 
 export type HeadingBlock = {
@@ -8,6 +9,7 @@ export type HeadingBlock = {
   text: string;
   text_th?: string;
   level: HeadingLevel;
+  size?: TextSize;
   align: TextAlign;
   bold: boolean;
 };
@@ -17,6 +19,7 @@ export type ParagraphBlock = {
   type: "paragraph";
   text: string;
   text_th?: string;
+  size?: TextSize;
   align: TextAlign;
   bold: boolean;
   italic: boolean;
@@ -57,9 +60,9 @@ export function makeBlock(type: BlockType): Block {
   const id = Math.random().toString(36).slice(2, 10);
   switch (type) {
     case "heading":
-      return { id, type: "heading", text: "", level: 2, align: "left", bold: false };
+      return { id, type: "heading", text: "", level: 2, size: "2xl", align: "left", bold: false };
     case "paragraph":
-      return { id, type: "paragraph", text: "", align: "left", bold: false, italic: false };
+      return { id, type: "paragraph", text: "", size: "md", align: "left", bold: false, italic: false };
     case "image":
       return { id, type: "image", url: "", alt: "", caption: "", align: "center" };
     case "divider":

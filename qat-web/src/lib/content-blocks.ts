@@ -23,11 +23,11 @@ export function buildContentBlocks(values: ContentFormData, locale: ContentBlock
   const blocks: Block[] = [];
 
   if (title) {
-    blocks.push({ id: blockId(locale, "title"), type: "heading", text: title, level: 1, align: "left", bold: true });
+    blocks.push({ id: blockId(locale, "title"), type: "heading", text: title, level: 1, size: "3xl", align: "left", bold: true });
   }
 
   if (excerpt) {
-    blocks.push({ id: blockId(locale, "excerpt"), type: "paragraph", text: excerpt, align: "left", bold: true, italic: false });
+    blocks.push({ id: blockId(locale, "excerpt"), type: "paragraph", text: excerpt, size: "lg", align: "left", bold: true, italic: false });
   }
 
   if (coverUrl) {
@@ -35,7 +35,7 @@ export function buildContentBlocks(values: ContentFormData, locale: ContentBlock
   }
 
   splitParagraphs(body).forEach((paragraph, index) => {
-    blocks.push({ id: blockId(locale, "body", index), type: "paragraph", text: paragraph, align: "left", bold: false, italic: false });
+    blocks.push({ id: blockId(locale, "body", index), type: "paragraph", text: paragraph, size: "md", align: "left", bold: false, italic: false });
   });
 
   return blocks;
