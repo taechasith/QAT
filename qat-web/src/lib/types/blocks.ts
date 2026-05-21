@@ -6,6 +6,7 @@ export type HeadingBlock = {
   id: string;
   type: "heading";
   text: string;
+  text_th?: string;
   level: HeadingLevel;
   align: TextAlign;
   bold: boolean;
@@ -15,6 +16,7 @@ export type ParagraphBlock = {
   id: string;
   type: "paragraph";
   text: string;
+  text_th?: string;
   align: TextAlign;
   bold: boolean;
   italic: boolean;
@@ -25,7 +27,9 @@ export type ImageBlock = {
   type: "image";
   url: string;
   alt: string;
+  alt_th?: string;
   caption: string;
+  caption_th?: string;
   align: TextAlign;
 };
 

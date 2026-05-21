@@ -40,6 +40,8 @@ export const contentSchema = z.object({
   start_at: z.string().optional(),
   end_at: z.string().optional(),
   sort_order: z.number().int(),
+  title_th: z.string().max(255).optional(),
+  excerpt_th: z.string().max(500).optional(),
 });
 
 export type ContentFormData = z.infer<typeof contentSchema>;

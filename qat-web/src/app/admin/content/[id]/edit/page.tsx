@@ -50,6 +50,8 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           start_at: item.start_at ? item.start_at.slice(0, 10) : "",
           end_at: item.end_at ? item.end_at.slice(0, 10) : "",
           sort_order: item.sort_order,
+          title_th: (item.metadata as Record<string, string> | null)?.title_th ?? "",
+          excerpt_th: (item.metadata as Record<string, string> | null)?.excerpt_th ?? "",
         }}
       />
     </AdminShell>

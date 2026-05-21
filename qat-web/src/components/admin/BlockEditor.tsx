@@ -126,6 +126,18 @@ function HeadingEditor({
         }}
         className="w-full bg-transparent text-white placeholder:text-slate-600 outline-none"
       />
+      <div className="mt-2 border-t border-white/8 pt-2">
+        <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-amber-400/70">
+          TH — Thai translation (optional)
+        </label>
+        <input
+          type="text"
+          value={block.text_th ?? ""}
+          onChange={(e) => patch({ text_th: e.target.value })}
+          placeholder="ข้อความหัวเรื่องภาษาไทย…"
+          className="w-full bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none"
+        />
+      </div>
     </div>
   );
 }
@@ -171,6 +183,18 @@ function ParagraphEditor({
         }}
         className="w-full resize-y bg-transparent text-sm text-slate-200 placeholder:text-slate-600 outline-none"
       />
+      <div className="mt-2 border-t border-white/8 pt-2">
+        <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-amber-400/70">
+          TH — Thai translation (optional)
+        </label>
+        <textarea
+          value={block.text_th ?? ""}
+          onChange={(e) => patch({ text_th: e.target.value })}
+          placeholder="ข้อความภาษาไทย…"
+          rows={2}
+          className="w-full resize-y bg-transparent text-sm text-slate-300 placeholder:text-slate-600 outline-none"
+        />
+      </div>
     </div>
   );
 }

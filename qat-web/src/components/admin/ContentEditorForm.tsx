@@ -62,6 +62,7 @@ export function ContentEditorForm({
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [lang, setLang] = useState<"en" | "th">("en");
 
   const {
     register,
@@ -143,22 +144,68 @@ export function ContentEditorForm({
           ) : null}
         </div>
 
+        {/* Language tabs */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-slate-400">Language:</span>
+          <div className="flex rounded-lg border border-white/15 bg-white/5 p-0.5">
+            <button
+              type="button"
+              onClick={() => setLang("en")}
+              className={`rounded-md px-3 py-1 text-xs font-medium transition ${
+                lang === "en" ? "bg-cyan-300/15 text-cyan-200" : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang("th")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
+                lang === "th" ? "bg-cyan-300/15 text-cyan-200" : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              TH
+              {!watched.title_th && (
+                <span className="rounded-full bg-amber-400/20 px-1.5 py-0.5 text-[10px] text-amber-300">recommended</span>
+              )}
+            </button>
+          </div>
+        </div>
+
         {/* Title + Slug — side by side on md+ */}
         <div className="grid gap-4 md:grid-cols-[1fr_220px]">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="title" className="text-sm font-medium text-slate-200">
-              Title <span className="text-red-400">*</span>
-            </label>
-            <input
-              id="title"
-              type="text"
-              {...register("title", { onChange: handleTitleChange })}
-              placeholder="Enter a clear, descriptive title"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-            />
-            {errors.title ? (
-              <p className="text-xs text-red-400">{errors.title.message}</p>
-            ) : null}
+            {lang === "en" ? (
+              <>
+                <label htmlFor="title" className="text-sm font-medium text-slate-200">
+                  Title <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  {...register("title", { onChange: handleTitleChange })}
+                  placeholder="Enter a clear, descriptive title"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                />
+                {errors.title ? (
+                  <p className="text-xs text-red-400">{errors.title.message}</p>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <label htmlFor="title_th" className="text-sm font-medium text-slate-200">
+                  Title (Thai)
+                  <span className="ml-2 text-xs font-normal text-amber-300">recommended</span>
+                </label>
+                <input
+                  id="title_th"
+                  type="text"
+                  {...register("title_th")}
+                  placeholder="ชื่อเนื้อหาภาษาไทย"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                />
+              </>
+            )}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -180,16 +227,34 @@ export function ContentEditorForm({
 
         {/* Excerpt */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="excerpt" className="text-sm font-medium text-slate-200">
-            Excerpt
-          </label>
-          <textarea
-            id="excerpt"
-            rows={2}
-            {...register("excerpt")}
-            placeholder="Short summary shown on cards (max 500 chars)"
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
+          {lang === "en" ? (
+            <>
+              <label htmlFor="excerpt" className="text-sm font-medium text-slate-200">
+                Excerpt
+              </label>
+              <textarea
+                id="excerpt"
+                rows={2}
+                {...register("excerpt")}
+                placeholder="Short summary shown on cards (max 500 chars)"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </>
+          ) : (
+            <>
+              <label htmlFor="excerpt_th" className="text-sm font-medium text-slate-200">
+                Excerpt (Thai)
+                <span className="ml-2 text-xs font-normal text-amber-300">recommended</span>
+              </label>
+              <textarea
+                id="excerpt_th"
+                rows={2}
+                {...register("excerpt_th")}
+                placeholder="สรุปย่อภาษาไทย แสดงบนการ์ด"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </>
+          )}
         </div>
 
         {/* Cover — 16:9 direct upload */}

@@ -68,17 +68,23 @@ export async function createContent(
 ): Promise<{ id?: string; error?: string }> {
   const supabase = createAdminClient();
 
+  const { title_th, excerpt_th, ...rest } = values;
+  const metadata: Record<string, string> = {};
+  if (title_th?.trim()) metadata.title_th = title_th.trim();
+  if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
+
   const payload = {
-    ...values,
-    cover_image_url: values.cover_image_url || null,
-    external_url: values.external_url || null,
-    excerpt: values.excerpt || null,
-    body_md: values.body_md || null,
+    ...rest,
+    cover_image_url: rest.cover_image_url || null,
+    external_url: rest.external_url || null,
+    excerpt: rest.excerpt || null,
+    body_md: rest.body_md || null,
     body_blocks: bodyBlocks,
-    location: values.location || null,
-    start_at: values.start_at || null,
-    end_at: values.end_at || null,
-    published_at: values.status === "published" ? new Date().toISOString() : null,
+    location: rest.location || null,
+    start_at: rest.start_at || null,
+    end_at: rest.end_at || null,
+    published_at: rest.status === "published" ? new Date().toISOString() : null,
+    metadata,
     created_by: userId,
     updated_by: userId,
   };
@@ -102,7 +108,7 @@ export async function updateContent(
 
   const existing = await supabase
     .from("content_items")
-    .select("status, published_at")
+    .select("status, published_at, metadata")
     .eq("id", id)
     .maybeSingle();
 
@@ -113,17 +119,26 @@ export async function updateContent(
       ? new Date().toISOString()
       : (existing.data?.published_at ?? null);
 
+  const { title_th, excerpt_th, ...rest } = values;
+  const existingMeta = (existing.data?.metadata as Record<string, string>) ?? {};
+  const metadata: Record<string, string> = { ...existingMeta };
+  if (title_th?.trim()) metadata.title_th = title_th.trim();
+  else delete metadata.title_th;
+  if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
+  else delete metadata.excerpt_th;
+
   const payload = {
-    ...values,
-    cover_image_url: values.cover_image_url || null,
-    external_url: values.external_url || null,
-    excerpt: values.excerpt || null,
-    body_md: values.body_md || null,
+    ...rest,
+    cover_image_url: rest.cover_image_url || null,
+    external_url: rest.external_url || null,
+    excerpt: rest.excerpt || null,
+    body_md: rest.body_md || null,
     body_blocks: bodyBlocks,
-    location: values.location || null,
-    start_at: values.start_at || null,
-    end_at: values.end_at || null,
+    location: rest.location || null,
+    start_at: rest.start_at || null,
+    end_at: rest.end_at || null,
     published_at: publishedAt,
+    metadata,
     updated_by: userId,
   };
 

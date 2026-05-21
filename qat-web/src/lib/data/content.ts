@@ -28,7 +28,17 @@ export type ContentItem = {
   end_at: string | null;
   published_at: string | null;
   sort_order: number;
+  metadata: Record<string, unknown> | null;
 };
+
+export function localizeItem(item: ContentItem, locale: string): ContentItem {
+  if (locale !== "th") return item;
+  return {
+    ...item,
+    title: (item.metadata?.title_th as string | undefined) || item.title,
+    excerpt: (item.metadata?.excerpt_th as string | undefined) || item.excerpt,
+  };
+}
 
 type ContentQueryResult = {
   items: ContentItem[];
@@ -50,7 +60,8 @@ const publicContentSelect = `
   start_at,
   end_at,
   published_at,
-  sort_order
+  sort_order,
+  metadata
 `;
 
 export async function getPublishedContentByType(
