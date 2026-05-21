@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { updateProfile } from "@/lib/data/profile";
+import { upsertProfile, updateProfile } from "@/lib/data/profile";
 import type { AvatarType } from "@/lib/data/profile";
 
 const VALID_AVATAR_TYPES: AvatarType[] = [
@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     fields.avatar_url = typeof body.avatar_url === "string" ? body.avatar_url : null;
   }
 
+  await upsertProfile(user.id, user.email ?? "");
   const result = await updateProfile(user.id, fields);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
