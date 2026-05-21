@@ -21,6 +21,7 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
   const [selected, setSelected] = useState<AvatarType>(current);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -28,12 +29,14 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
     const file = e.target.files?.[0];
     if (!file) return;
     setMsg("");
+    setUploading(true);
 
     const fd = new FormData();
     fd.append("file", file);
 
     const res = await fetch("/api/profile/avatar", { method: "POST", body: fd });
     const json = await res.json();
+    setUploading(false);
 
     if (!res.ok) {
       setMsg("Upload failed: " + (json.error ?? "unknown error"));
@@ -92,15 +95,23 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
 
         {/* Upload option */}
         <button
-          onClick={() => fileRef.current?.click()}
+          onClick={() => !uploading && fileRef.current?.click()}
+          disabled={uploading}
           className={`flex flex-col items-center justify-center gap-2 rounded-xl p-3 transition ${
             selected === "upload"
               ? "bg-cyan-300/10 ring-2 ring-cyan-300"
               : "bg-white/5 hover:bg-white/8 ring-1 ring-white/10"
-          }`}
+          } disabled:opacity-70`}
           style={{ minHeight: 130 }}
         >
-          {previewUrl && selected === "upload" ? (
+          {uploading ? (
+            <div className="flex size-20 items-center justify-center rounded-full bg-white/10">
+              <svg className="size-8 animate-spin text-cyan-300" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z" />
+              </svg>
+            </div>
+          ) : previewUrl && selected === "upload" ? (
             <Image
               src={previewUrl}
               alt="Your photo"
@@ -113,7 +124,9 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
               📷
             </div>
           )}
-          <span className="text-xs font-medium text-slate-200">Upload photo</span>
+          <span className="text-xs font-medium text-slate-200">
+            {uploading ? "Uploading…" : "Upload photo"}
+          </span>
           <span className="text-[10px] text-slate-400">JPG, PNG · max 2 MB</span>
         </button>
       </div>
