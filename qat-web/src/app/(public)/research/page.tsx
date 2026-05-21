@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
 import { getTranslations } from "@/lib/i18n/locale";
+import { getListingMetadata } from "@/lib/metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getListingMetadata("research");
+}
 
 export default async function ResearchPage() {
   const [{ items, error }, tr] = await Promise.all([

@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { LocaleProvider } from "@/lib/i18n/context";
 import { getLocale } from "@/lib/i18n/locale";
+import { metadataBase } from "@/lib/metadata";
 
 import "./globals.css";
 
@@ -24,10 +25,27 @@ const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
+const DESCRIPTION =
+  "A CreativeLabTH Group initiative connecting quantum science, art, and public imagination.";
+
 export const metadata: Metadata = {
-  title: "Quantum Art Thailand Association",
-  description:
-    "A CreativeLabTH Group initiative connecting quantum science, art, and public imagination.",
+  metadataBase: metadataBase(),
+  title: {
+    default: "Quantum Art Thailand Association",
+    template: "%s | QAT",
+  },
+  description: DESCRIPTION,
+  openGraph: {
+    siteName: "Quantum Art Thailand Association",
+    title: "Quantum Art Thailand Association",
+    description: DESCRIPTION,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Quantum Art Thailand Association",
+    description: DESCRIPTION,
+  },
 };
 
 export default async function RootLayout({

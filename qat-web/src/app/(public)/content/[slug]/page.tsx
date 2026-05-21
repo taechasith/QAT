@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CalendarDays, ExternalLink, MapPin } from "lucide-react";
 
@@ -7,12 +8,43 @@ import { ContentEngagement } from "@/components/content/ContentEngagement";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { createClient } from "@/lib/supabase/server";
 import { getPublishedContentBySlug } from "@/lib/data/content";
+import { getOgSettings } from "@/lib/data/site-settings";
 import { getLocale, getTranslations } from "@/lib/i18n/locale";
 import type { Block } from "@/lib/types/blocks";
 
 type ContentDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: ContentDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const [{ item }, og] = await Promise.all([
+    getPublishedContentBySlug(slug),
+    getOgSettings(),
+  ]);
+
+  if (!item) return {};
+
+  const description = item.excerpt ?? og.description;
+  const image = item.cover_image_url ?? og.imageUrl;
+
+  return {
+    title: item.title,
+    description,
+    openGraph: {
+      title: item.title,
+      description,
+      type: "article",
+      images: image ? [{ url: image, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: item.title,
+      description,
+      images: image ? [image] : [],
+    },
+  };
+}
 
 export default async function ContentDetailPage({ params }: ContentDetailPageProps) {
   const { slug } = await params;

@@ -25,33 +25,20 @@ export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setMsg("Please upload an image file.");
-      return;
-    }
-    if (file.size > 2 * 1024 * 1024) {
-      setMsg("Image must be under 2 MB.");
-      return;
-    }
     setMsg("");
 
-    const { createClient } = await import("@/lib/supabase/client");
-    const supabase = createClient();
+    const fd = new FormData();
+    fd.append("file", file);
 
-    const ext = file.name.split(".").pop();
-    const path = `avatars/${userId}/avatar.${ext}`;
+    const res = await fetch("/api/profile/avatar", { method: "POST", body: fd });
+    const json = await res.json();
 
-    const { error: uploadError } = await supabase.storage
-      .from("qat-media")
-      .upload(path, file, { upsert: true });
-
-    if (uploadError) {
-      setMsg("Upload failed: " + uploadError.message);
+    if (!res.ok) {
+      setMsg("Upload failed: " + (json.error ?? "unknown error"));
       return;
     }
 
-    const { data } = supabase.storage.from("qat-media").getPublicUrl(path);
-    setPreviewUrl(data.publicUrl);
+    setPreviewUrl(json.url);
     setSelected("upload");
   }
 
