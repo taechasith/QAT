@@ -40,11 +40,15 @@ export async function POST(request: Request) {
     fields.avatar_url = typeof body.avatar_url === "string" ? body.avatar_url : null;
   }
 
-  await upsertProfile(user.id, user.email ?? "");
+  const upsertResult = await upsertProfile(user.id, user.email ?? "");
+  if (upsertResult.error) {
+    return NextResponse.json({ error: upsertResult.error }, { status: 500 });
+  }
+
   const result = await updateProfile(user.id, fields);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, profile: result.profile });
 }

@@ -29,12 +29,13 @@ export async function getProfile(userId: string): Promise<Profile | null> {
 export async function upsertProfile(
   userId: string,
   email: string,
-): Promise<void> {
+): Promise<{ error?: string }> {
   const supabase = await createClient();
-  await supabase.from("profiles").upsert(
+  const { error } = await supabase.from("profiles").upsert(
     { id: userId, email },
     { onConflict: "id", ignoreDuplicates: true },
   );
+  return error ? { error: error.message } : {};
 }
 
 export async function updateProfile(
@@ -44,13 +45,18 @@ export async function updateProfile(
     avatar_type?: AvatarType;
     avatar_url?: string;
   },
-): Promise<{ error?: string }> {
+): Promise<{ profile?: Profile; error?: string }> {
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
     .update({ ...fields, updated_at: new Date().toISOString() })
-    .eq("id", userId);
-  return error ? { error: error.message } : {};
+    .eq("id", userId)
+    .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
+    .maybeSingle();
+
+  if (error) return { error: error.message };
+  if (!data) return { error: "Profile was not saved." };
+  return { profile: { ...data, avatar_type: data.avatar_type ?? "artist_cat" } as Profile };
 }
 
 export async function updateNotificationPreference(
@@ -58,9 +64,17 @@ export async function updateNotificationPreference(
   wants: boolean,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
-    .update({ wants_update_email: wants })
-    .eq("id", userId);
-  return error ? { error: error.message } : {};
+    .update({
+      wants_update_email: wants,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", userId)
+    .select("id")
+    .maybeSingle();
+
+  if (error) return { error: error.message };
+  if (!data) return { error: "Notification preference was not saved." };
+  return {};
 }

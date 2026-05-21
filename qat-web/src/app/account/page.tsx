@@ -58,7 +58,10 @@ export default async function ProfilePage() {
               </div>
             </div>
             <div className="mt-5 border-t border-white/8 pt-5">
-              <ProfileNameForm userId={user.id} initialName={profile?.full_name ?? ""} />
+              <ProfileNameForm
+                key={profile?.full_name ?? ""}
+                initialName={profile?.full_name ?? ""}
+              />
             </div>
           </section>
 

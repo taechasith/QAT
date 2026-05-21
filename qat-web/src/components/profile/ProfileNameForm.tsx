@@ -9,10 +9,8 @@ const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
 export function ProfileNameForm({
-  userId,
   initialName,
 }: {
-  userId: string;
   initialName: string;
 }) {
   const tr = useTr();

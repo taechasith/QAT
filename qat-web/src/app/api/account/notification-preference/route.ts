@@ -17,7 +17,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  await upsertProfile(user.id, user.email ?? "");
+  const upsertResult = await upsertProfile(user.id, user.email ?? "");
+  if (upsertResult.error) {
+    return NextResponse.json({ error: upsertResult.error }, { status: 500 });
+  }
+
   const result = await updateNotificationPreference(user.id, body.wants);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
