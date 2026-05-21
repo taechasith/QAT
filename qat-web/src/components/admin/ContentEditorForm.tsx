@@ -65,7 +65,6 @@ export function ContentEditorForm({
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [lang, setLang] = useState<"en" | "th">("en");
 
   const {
     register,
@@ -147,78 +146,13 @@ export function ContentEditorForm({
           ) : null}
         </div>
 
-        {/* Language tabs */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-slate-400">
-            {locale === "th" ? "ภาษา:" : "Language:"}
-          </span>
-          <div className="flex rounded-lg border border-white/15 bg-white/5 p-0.5">
-            <button
-              type="button"
-              onClick={() => setLang("en")}
-              className={`rounded-md px-3 py-1 text-xs font-medium transition ${
-                lang === "en" ? "bg-cyan-300/15 text-cyan-200" : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLang("th")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
-                lang === "th" ? "bg-cyan-300/15 text-cyan-200" : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              TH
-              {!watched.title_th && (
-                <span className="rounded-full bg-amber-400/20 px-1.5 py-0.5 text-[10px] text-amber-300">
-                  {locale === "th" ? "แนะนำ" : "recommended"}
-                </span>
-              )}
-            </button>
-          </div>
-        </div>
+        {/* Bilingual title + excerpt — both always visible */}
+        <div className="rounded-xl border border-white/10 bg-white/3 p-4 flex flex-col gap-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+            Content — fill at least one language, both recommended
+          </p>
 
-        {/* Title + Slug — side by side on md+ */}
-        <div className="grid gap-4 md:grid-cols-[1fr_220px]">
-          <div className="flex flex-col gap-1.5">
-            {lang === "en" ? (
-              <>
-                <label htmlFor="title" className="text-sm font-medium text-slate-200">
-                  {tr.admin.form.title} <span className="text-red-400">*</span>
-                </label>
-                <input
-                  id="title"
-                  type="text"
-                  {...register("title", { onChange: handleTitleChange })}
-                  placeholder={tr.admin.form.titlePlaceholder}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-                />
-                {errors.title ? (
-                  <p className="text-xs text-red-400">
-                    {errors.title.message === "Title is required" ? tr.admin.form.titleRequired : errors.title.message}
-                  </p>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <label htmlFor="title_th" className="text-sm font-medium text-slate-200">
-                  {locale === "th" ? "ชื่อหัวข้อเรื่อง (ภาษาไทย)" : "Title (Thai)"}
-                  <span className="ml-2 text-xs font-normal text-amber-300">
-                    {locale === "th" ? "แนะนำ" : "recommended"}
-                  </span>
-                </label>
-                <input
-                  id="title_th"
-                  type="text"
-                  {...register("title_th")}
-                  placeholder={locale === "th" ? "ระบุชื่อหัวข้อเรื่องภาษาไทย" : "Thai title"}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-                />
-              </>
-            )}
-          </div>
-
+          {/* Slug (shared, above both columns) */}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="slug" className="text-sm font-medium text-slate-200">
               {tr.admin.form.slug} <span className="text-red-400">*</span>
@@ -240,39 +174,94 @@ export function ContentEditorForm({
               </p>
             ) : null}
           </div>
-        </div>
 
-        {/* Excerpt */}
-        <div className="flex flex-col gap-1.5">
-          {lang === "en" ? (
-            <>
-              <label htmlFor="excerpt" className="text-sm font-medium text-slate-200">
-                {tr.admin.form.excerpt}
-              </label>
-              <textarea
-                id="excerpt"
-                rows={2}
-                {...register("excerpt")}
-                placeholder={tr.admin.form.excerptPlaceholder}
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-              />
-            </>
-          ) : (
-            <>
-              <label htmlFor="excerpt_th" className="text-sm font-medium text-slate-200">
-                {locale === "th" ? "คำโปรยสั้น (ภาษาไทย)" : "Excerpt (Thai)"}
-                <span className="ml-2 text-xs font-normal text-amber-300">
-                  {locale === "th" ? "แนะนำ" : "recommended"}
-                </span>
-              </label>
-              <textarea
-                id="excerpt_th"
-                rows={2}
-                {...register("excerpt_th")}
-                placeholder={locale === "th" ? "สรุปเนื้อความภาษาไทยสำหรับแสดงผลบนการ์ด" : "Thai excerpt"}
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-              />
-            </>
+          {/* EN + TH side by side */}
+          <div className="grid gap-4 xl:grid-cols-2">
+            {/* English */}
+            <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/3 p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
+                <span className="text-[10px] text-red-400">required</span>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="title" className="text-xs font-medium text-slate-300">
+                  {tr.admin.form.title} <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  {...register("title", { onChange: handleTitleChange })}
+                  placeholder={tr.admin.form.titlePlaceholder}
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                />
+                {errors.title ? (
+                  <p className="text-xs text-red-400">
+                    {errors.title.message === "Title is required" ? tr.admin.form.titleRequired : errors.title.message}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="excerpt" className="text-xs font-medium text-slate-300">
+                  {tr.admin.form.excerpt}
+                </label>
+                <textarea
+                  id="excerpt"
+                  rows={3}
+                  {...register("excerpt")}
+                  placeholder={tr.admin.form.excerptPlaceholder}
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                />
+              </div>
+            </div>
+
+            {/* Thai */}
+            <div className={`flex flex-col gap-3 rounded-lg border p-4 transition ${
+              watched.title_th
+                ? "border-amber-400/30 bg-amber-400/5"
+                : "border-dashed border-white/10 bg-white/3"
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
+                {!watched.title_th ? (
+                  <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[10px] text-amber-300">
+                    แนะนำ · recommended
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-emerald-400">✓ filled</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="title_th" className="text-xs font-medium text-slate-300">
+                  ชื่อหัวข้อ (Thai title)
+                </label>
+                <input
+                  id="title_th"
+                  type="text"
+                  {...register("title_th")}
+                  placeholder="ชื่อเนื้อหาภาษาไทย"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="excerpt_th" className="text-xs font-medium text-slate-300">
+                  คำโปรยสั้น (Thai excerpt)
+                </label>
+                <textarea
+                  id="excerpt_th"
+                  rows={3}
+                  {...register("excerpt_th")}
+                  placeholder="สรุปย่อภาษาไทย สำหรับแสดงบนการ์ด"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Publish warning when TH missing */}
+          {watched.status === "published" && !watched.title_th && (
+            <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-300">
+              Thai version is empty — Thai-language users will see the English version as fallback.
+            </p>
           )}
         </div>
 
