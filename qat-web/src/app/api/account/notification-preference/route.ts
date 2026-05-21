@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { upsertProfile, updateNotificationPreference } from "@/lib/data/profile";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -17,14 +17,35 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const upsertResult = await upsertProfile(user.id, user.email ?? "");
-  if (upsertResult.error) {
-    return NextResponse.json({ error: upsertResult.error }, { status: 500 });
+  const admin = createAdminClient();
+
+  const { error: upsertError } = await admin
+    .from("profiles")
+    .upsert(
+      { id: user.id, email: user.email ?? "" },
+      { onConflict: "id", ignoreDuplicates: true },
+    );
+
+  if (upsertError) {
+    console.error("[notification-preference] upsert error:", upsertError.message);
+    return NextResponse.json({ error: upsertError.message }, { status: 500 });
   }
 
-  const result = await updateNotificationPreference(user.id, body.wants);
-  if (result.error) {
-    return NextResponse.json({ error: result.error }, { status: 500 });
+  const { data, error: updateError } = await admin
+    .from("profiles")
+    .update({ wants_update_email: body.wants, updated_at: new Date().toISOString() })
+    .eq("id", user.id)
+    .select("id")
+    .maybeSingle();
+
+  if (updateError) {
+    console.error("[notification-preference] update error:", updateError.message);
+    return NextResponse.json({ error: updateError.message }, { status: 500 });
+  }
+
+  if (!data) {
+    console.error("[notification-preference] no row found, userId:", user.id);
+    return NextResponse.json({ error: "Profile row missing." }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
