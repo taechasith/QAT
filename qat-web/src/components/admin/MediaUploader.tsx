@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Upload, X } from "lucide-react";
 import { useTr } from "@/lib/i18n/context";
+import { clientUploadMedia } from "@/lib/supabase/client-upload";
 
 type MediaUploaderProps = {
   value: string;
@@ -23,16 +24,12 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
     setUploading(true);
     setError("");
 
-    const form = new FormData();
-    form.append("file", file);
+    const { url, error: uploadErr } = await clientUploadMedia(file);
 
-    const res = await fetch("/api/admin/media", { method: "POST", body: form });
-    const json = await res.json().catch(() => ({}));
-
-    if (!res.ok || !json.url) {
-      setError(json.error ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
+    if (uploadErr || !url) {
+      setError(uploadErr ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
-      onChange(json.url);
+      onChange(url);
     }
     setUploading(false);
   }

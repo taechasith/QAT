@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
+import { clientUploadMedia } from "@/lib/supabase/client-upload";
 
 type Props = {
   value: string;
@@ -26,18 +27,13 @@ export function CoverUpload({ value, onChange }: Props) {
     }
     setError("");
     setUploading(true);
-
-    const form = new FormData();
-    form.append("file", file);
-
-    const res = await fetch("/api/admin/media", { method: "POST", body: form });
-    const json = await res.json().catch(() => ({}));
+    const { url, error: uploadErr } = await clientUploadMedia(file);
     setUploading(false);
 
-    if (!res.ok || !json.url) {
-      setError(json.error ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
+    if (uploadErr || !url) {
+      setError(uploadErr ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
-      onChange(json.url);
+      onChange(url);
     }
   }
 

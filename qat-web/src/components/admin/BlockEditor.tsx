@@ -12,6 +12,7 @@ import type {
   TextAlign,
 } from "@/lib/types/blocks";
 import { makeBlock } from "@/lib/types/blocks";
+import { clientUploadMedia } from "@/lib/supabase/client-upload";
 
 type Props = {
   value: Block[];
@@ -223,16 +224,13 @@ function ImageBlockEditor({
     }
     setErr("");
     setUploading(true);
-    const form = new FormData();
-    form.append("file", file);
-    const res = await fetch("/api/admin/media", { method: "POST", body: form });
-    const json = await res.json().catch(() => ({}));
+    const { url, error: uploadErr } = await clientUploadMedia(file);
     setUploading(false);
-    if (!res.ok || !json.url) {
-      setErr(json.error ?? "Upload failed.");
+    if (uploadErr || !url) {
+      setErr(uploadErr ?? "Upload failed.");
       return;
     }
-    patch({ url: json.url });
+    patch({ url });
   }
 
   return (
