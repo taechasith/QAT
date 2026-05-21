@@ -321,6 +321,16 @@ export const t = {
           settings: "Settings",
           settingsDesc: "Homepage copy and site settings",
         },
+        stats: {
+          total: "Total Content",
+          published: "Published",
+          drafts: "Drafts",
+          views: "Total Views",
+        },
+        recentActivity: "Recent Activity",
+        quickActions: "Quick Actions",
+        adminProfile: "Admin Profile",
+        role: "System Administrator",
       },
       contentList: {
         title: "All content",
@@ -820,6 +830,16 @@ export const t = {
           settings: "การตั้งค่าทั่วไป",
           settingsDesc: "จัดการข้อมูลหน้าแรกและการตั้งค่าทั่วไปของเว็บไซต์",
         },
+        stats: {
+          total: "เนื้อหาทั้งหมด",
+          published: "เผยแพร่แล้ว",
+          drafts: "ฉบับร่าง",
+          views: "จำนวนเข้าชม",
+        },
+        recentActivity: "ความเคลื่อนไหวล่าสุด",
+        quickActions: "จัดการด่วน",
+        adminProfile: "ข้อมูลผู้ดูแลระบบ",
+        role: "ผู้ดูแลระบบ",
       },
       contentList: {
         title: "เนื้อหาทั้งหมด",
