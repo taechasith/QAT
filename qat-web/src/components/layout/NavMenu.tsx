@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
 import type { User } from "@supabase/supabase-js";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { t, type Locale } from "@/lib/i18n/translations";
+import { createClient } from "@/lib/supabase/client";
 
 export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User | null }) {
   const [open, setOpen] = useState(false);
@@ -34,10 +34,7 @@ export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User 
   ];
 
   async function handleSignOut() {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
+    const supabase = createClient();
     await supabase.auth.signOut();
     setOpen(false);
     router.push("/");
