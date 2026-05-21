@@ -10,6 +10,10 @@ type Props = {
   onChange: (url: string) => void;
 };
 
+function isVideoUrl(url: string) {
+  return /\.(mp4|webm|mov|ogg)(\?|$)/i.test(url);
+}
+
 export function CoverUpload({ value, onChange }: Props) {
   const tr = useTr();
   const [uploading, setUploading] = useState(false);
@@ -17,7 +21,7 @@ export function CoverUpload({ value, onChange }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
-    if (!file.type.startsWith("image/")) {
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
       setError(tr.admin.form.onlyImages);
       return;
     }
@@ -64,14 +68,24 @@ export function CoverUpload({ value, onChange }: Props) {
       >
         {value ? (
           <>
-            {/* unoptimized so GIFs animate */}
-            <Image
-              src={value}
-              alt="Cover"
-              fill
-              unoptimized
-              className="object-cover"
-            />
+            {isVideoUrl(value) ? (
+              <video
+                src={value}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <Image
+                src={value}
+                alt="Cover"
+                fill
+                unoptimized
+                className="object-cover"
+              />
+            )}
             <button
               type="button"
               onClick={() => onChange("")}
@@ -94,7 +108,7 @@ export function CoverUpload({ value, onChange }: Props) {
               <>
                 <span className="text-3xl">🖼</span>
                 <span className="text-sm">{tr.admin.form.dragToUpload}</span>
-                <span className="text-xs text-slate-500">JPG · PNG · GIF · WebP · max 20 MB</span>
+                <span className="text-xs text-slate-500">JPG · PNG · GIF · WebP · MP4 · WebM · max 20 MB</span>
               </>
             )}
           </button>
@@ -116,7 +130,7 @@ export function CoverUpload({ value, onChange }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/*,video/mp4,video/webm,video/quicktime,video/ogg"
         className="hidden"
         onChange={onInputChange}
       />

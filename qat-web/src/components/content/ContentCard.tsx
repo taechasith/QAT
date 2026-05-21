@@ -10,6 +10,10 @@ type ContentCardProps = {
   item: ContentItem;
 };
 
+function isVideoUrl(url: string) {
+  return /\.(mp4|webm|mov|ogg)(\?|$)/i.test(url);
+}
+
 async function formatDate(value: string | null, locale: string) {
   if (!value) return null;
   return new Intl.DateTimeFormat(locale, {
@@ -29,15 +33,26 @@ export async function ContentCard({ item }: ContentCardProps) {
   return (
     <article className="glass-panel overflow-hidden rounded-lg">
       {item.cover_image_url ? (
-        <div className="relative aspect-[16/9] border-b border-white/10">
-          <Image
-            src={item.cover_image_url}
-            alt=""
-            fill
-            unoptimized
-            className="object-cover"
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
+        <div className="relative aspect-[16/9] border-b border-white/10 overflow-hidden">
+          {isVideoUrl(item.cover_image_url) ? (
+            <video
+              src={item.cover_image_url}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <Image
+              src={item.cover_image_url}
+              alt=""
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="(min-width: 1024px) 33vw, 100vw"
+            />
+          )}
         </div>
       ) : null}
       <div className="p-5">
