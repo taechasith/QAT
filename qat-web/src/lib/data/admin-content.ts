@@ -68,12 +68,25 @@ export async function createContent(
 ): Promise<{ id?: string; error?: string }> {
   const supabase = createAdminClient();
 
-  const { title_th, excerpt_th, body_md_th, cover_image_url_th, ...rest } = values;
+  const { title_th, excerpt_th, body_md_th, cover_image_url_th, author_name, author_bio, ...rest } = values;
+
+  const profile = await supabase
+    .from("profiles")
+    .select("full_name, bio, avatar_url, avatar_type")
+    .eq("id", userId)
+    .maybeSingle()
+    .then((r) => r.data);
+
   const metadata: Record<string, string> = {};
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
   if (body_md_th?.trim()) metadata.body_md_th = body_md_th.trim();
   if (cover_image_url_th?.trim()) metadata.cover_image_url_th = cover_image_url_th.trim();
+  const resolvedAuthorName = author_name?.trim() || profile?.full_name || "";
+  if (resolvedAuthorName) metadata.author_name = resolvedAuthorName;
+  if (author_bio?.trim()) metadata.author_bio = author_bio.trim();
+  if (profile?.avatar_url) metadata.author_avatar_url = profile.avatar_url;
+  if (profile?.avatar_type) metadata.author_avatar_type = profile.avatar_type;
 
   // DB title is NOT NULL — fall back to TH title if EN not provided
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
@@ -112,21 +125,20 @@ export async function updateContent(
 ): Promise<{ error?: string }> {
   const supabase = createAdminClient();
 
-  const existing = await supabase
-    .from("content_items")
-    .select("status, published_at, metadata")
-    .eq("id", id)
-    .maybeSingle();
+  const [existingResult, profile] = await Promise.all([
+    supabase.from("content_items").select("status, published_at, metadata").eq("id", id).maybeSingle(),
+    supabase.from("profiles").select("full_name, bio, avatar_url, avatar_type").eq("id", userId).maybeSingle().then((r) => r.data),
+  ]);
 
-  const wasPublished = existing.data?.status === "published";
+  const wasPublished = existingResult.data?.status === "published";
   const nowPublished = values.status === "published";
   const publishedAt =
     nowPublished && !wasPublished
       ? new Date().toISOString()
-      : (existing.data?.published_at ?? null);
+      : (existingResult.data?.published_at ?? null);
 
-  const { title_th, excerpt_th, body_md_th, cover_image_url_th, ...rest } = values;
-  const existingMeta = (existing.data?.metadata as Record<string, string>) ?? {};
+  const { title_th, excerpt_th, body_md_th, cover_image_url_th, author_name, author_bio, ...rest } = values;
+  const existingMeta = (existingResult.data?.metadata as Record<string, string>) ?? {};
   const metadata: Record<string, string> = { ...existingMeta };
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   else delete metadata.title_th;
@@ -136,6 +148,15 @@ export async function updateContent(
   else delete metadata.body_md_th;
   if (cover_image_url_th?.trim()) metadata.cover_image_url_th = cover_image_url_th.trim();
   else delete metadata.cover_image_url_th;
+  const resolvedAuthorName = author_name?.trim() || profile?.full_name || "";
+  if (resolvedAuthorName) metadata.author_name = resolvedAuthorName;
+  else delete metadata.author_name;
+  if (author_bio?.trim()) metadata.author_bio = author_bio.trim();
+  else delete metadata.author_bio;
+  if (profile?.avatar_url) metadata.author_avatar_url = profile.avatar_url;
+  else delete metadata.author_avatar_url;
+  if (profile?.avatar_type) metadata.author_avatar_type = profile.avatar_type;
+  else delete metadata.author_avatar_type;
 
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
 

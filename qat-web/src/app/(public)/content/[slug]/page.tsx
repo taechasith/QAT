@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { CalendarDays, ExternalLink, MapPin } from "lucide-react";
+import { CalendarDays, Clock, ExternalLink, MapPin, User } from "lucide-react";
 
 import { BlockRenderer } from "@/components/content/BlockRenderer";
 import { ContentComments } from "@/components/content/ContentComments";
 import { ContentEngagement } from "@/components/content/ContentEngagement";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
+
+function isVideoUrl(url: string) {
+  return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url);
+}
 import { createClient } from "@/lib/supabase/server";
 import { getPublishedContentBySlug } from "@/lib/data/content";
 import { getOgSettings } from "@/lib/data/site-settings";
@@ -71,9 +76,35 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
       title={item.title}
       description={item.excerpt ?? ""}
     >
-      <article className="glass-panel rounded-lg p-6 sm:p-8">
+      <article className="glass-panel overflow-hidden rounded-lg">
+        {item.cover_image_url ? (
+          <div className="relative aspect-[16/9] w-full">
+            {isVideoUrl(item.cover_image_url) ? (
+              <video
+                src={item.cover_image_url}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Image
+                src={item.cover_image_url}
+                alt=""
+                fill
+                unoptimized
+                className="object-cover"
+                priority
+              />
+            )}
+          </div>
+        ) : null}
+
+        <div className="p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-4 text-sm text-slate-300">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300">
             {date ? (
               <span className="inline-flex items-center gap-2">
                 <CalendarDays className="size-4 text-cyan-200" aria-hidden="true" />
@@ -84,6 +115,24 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
               <span className="inline-flex items-center gap-2">
                 <MapPin className="size-4 text-cyan-200" aria-hidden="true" />
                 {item.location}
+              </span>
+            ) : null}
+            {(item.metadata?.author_name as string | undefined) ? (
+              <span className="inline-flex items-center gap-2">
+                <User className="size-4 text-cyan-200" aria-hidden="true" />
+                {item.metadata!.author_name as string}
+              </span>
+            ) : null}
+            {item.published_at ? (
+              <span className="inline-flex items-center gap-2 text-slate-400">
+                <Clock className="size-4" aria-hidden="true" />
+                {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(new Date(item.published_at))}
+                {item.updated_at && item.updated_at !== item.published_at ? (
+                  <span className="text-slate-500">
+                    · {locale === "th" ? "แก้ไขล่าสุด" : "updated"}{" "}
+                    {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(new Date(item.updated_at))}
+                  </span>
+                ) : null}
               </span>
             ) : null}
           </div>
@@ -109,6 +158,39 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           </p>
         )}
 
+        {(item.metadata?.author_name as string | undefined) ? (() => {
+          const authorName = item.metadata!.author_name as string;
+          const authorBio = item.metadata?.author_bio as string | undefined;
+          const avatarUrl = item.metadata?.author_avatar_url as string | undefined;
+          const avatarType = (item.metadata?.author_avatar_type as string | undefined) ?? "artist_cat";
+          const catTypes = ["artist_cat", "technologist_cat", "scientist_cat"];
+          return (
+            <div className="mt-10 flex items-start gap-4 rounded-xl border border-white/10 bg-white/3 p-5">
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt={authorName}
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover ring-2 ring-cyan-300/30 shrink-0"
+                />
+              ) : catTypes.includes(avatarType) ? (
+                <div className="size-12 rounded-full ring-2 ring-cyan-300/30 overflow-hidden shrink-0 bg-white/5 flex items-center justify-center text-xl">
+                  {avatarType === "artist_cat" ? "🎨" : avatarType === "technologist_cat" ? "💻" : "🔬"}
+                </div>
+              ) : (
+                <div className="size-12 rounded-full ring-2 ring-white/15 bg-white/10 flex items-center justify-center text-xl shrink-0">👤</div>
+              )}
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-white">{authorName}</p>
+                {authorBio ? (
+                  <p className="mt-1 text-xs leading-5 text-slate-400">{authorBio}</p>
+                ) : null}
+              </div>
+            </div>
+          );
+        })() : null}
+
         {item.external_url ? (
           <a
             href={item.external_url}
@@ -125,6 +207,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           contentId={item.id}
           currentUserId={user?.id ?? null}
         />
+        </div>
       </article>
     </PublicPageShell>
   );

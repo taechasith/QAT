@@ -1,29 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
 
 type Props = {
   value: string;
   onChange: (url: string) => void;
+  label?: string;
 };
 
-function isVideoUrl(url: string) {
+export function isVideoUrl(url: string) {
   return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url);
 }
 
-export function CoverUpload({ value, onChange }: Props) {
+export function CoverUpload({ value, onChange, label }: Props) {
   const tr = useTr();
   const [uploading, setUploading] = useState(false);
-  const [isVideo, setIsVideo] = useState(() => isVideoUrl(value));
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setIsVideo(isVideoUrl(value));
-  }, [value]);
+  const showAsVideo = Boolean(value) && isVideoUrl(value);
 
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
@@ -36,14 +34,12 @@ export function CoverUpload({ value, onChange }: Props) {
     }
     setError("");
     setUploading(true);
-    const fileIsVideo = file.type.startsWith("video/");
     const { url, error: uploadErr } = await clientUploadMedia(file);
     setUploading(false);
 
     if (uploadErr || !url) {
       setError(uploadErr ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
-      setIsVideo(fileIsVideo);
       onChange(url);
     }
   }
@@ -62,9 +58,9 @@ export function CoverUpload({ value, onChange }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-slate-200">
-        {tr.admin.form.cover}
-      </label>
+      {label !== undefined && (
+        <label className="text-sm font-medium text-slate-200">{label}</label>
+      )}
 
       {/* 16:9 container */}
       <div
@@ -75,7 +71,7 @@ export function CoverUpload({ value, onChange }: Props) {
       >
         {value ? (
           <>
-            {isVideo ? (
+            {showAsVideo ? (
               <video
                 src={value}
                 autoPlay
@@ -83,7 +79,7 @@ export function CoverUpload({ value, onChange }: Props) {
                 muted
                 playsInline
                 preload="metadata"
-                className="absolute inset-0 h-full w-full object-cover"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (
               <Image

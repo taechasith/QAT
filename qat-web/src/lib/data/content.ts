@@ -28,6 +28,7 @@ export type ContentItem = {
   start_at: string | null;
   end_at: string | null;
   published_at: string | null;
+  updated_at: string | null;
   sort_order: number;
   metadata: Record<string, unknown> | null;
 };
@@ -63,6 +64,7 @@ const publicContentSelect = `
   start_at,
   end_at,
   published_at,
+  updated_at,
   sort_order,
   metadata
 `;

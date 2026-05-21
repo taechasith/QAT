@@ -27,12 +27,16 @@ export async function POST(request: Request) {
 
   const fields: {
     full_name?: string;
+    bio?: string | null;
     avatar_type?: AvatarType;
     avatar_url?: string | null;
   } = {};
 
   if (typeof body.full_name === "string") {
     fields.full_name = body.full_name.trim().slice(0, 80);
+  }
+  if (body.bio !== undefined) {
+    fields.bio = typeof body.bio === "string" ? body.bio.trim().slice(0, 300) || null : null;
   }
   if (body.avatar_type != null) {
     if (!VALID_AVATAR_TYPES.includes(body.avatar_type)) {
@@ -69,7 +73,7 @@ export async function POST(request: Request) {
     .from("profiles")
     .update({ ...fields, updated_at: new Date().toISOString() })
     .eq("id", user.id)
-    .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
+    .select("id, email, full_name, bio, avatar_url, avatar_type, wants_update_email")
     .maybeSingle();
 
   if (updateError) {

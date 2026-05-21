@@ -58,6 +58,8 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           excerpt_th: (item.metadata as Record<string, string> | null)?.excerpt_th ?? "",
           body_md_th: (item.metadata as Record<string, string> | null)?.body_md_th ?? "",
           cover_image_url_th: (item.metadata as Record<string, string> | null)?.cover_image_url_th ?? "",
+          author_name: (item.metadata as Record<string, string> | null)?.author_name ?? "",
+          author_bio: (item.metadata as Record<string, string> | null)?.author_bio ?? "",
         }}
       />
     </AdminShell>

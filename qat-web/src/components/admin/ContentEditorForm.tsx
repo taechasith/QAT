@@ -311,6 +311,7 @@ export function ContentEditorForm({
               <CoverUpload
                 value={watched.cover_image_url ?? ""}
                 onChange={(url) => setValue("cover_image_url", url)}
+                label=""
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -323,11 +324,43 @@ export function ContentEditorForm({
               <CoverUpload
                 value={watched.cover_image_url_th ?? ""}
                 onChange={(url) => setValue("cover_image_url_th", url)}
+                label=""
               />
             </div>
           </div>
         </div>
 
+
+        {/* Author */}
+        <div className="rounded-xl border border-white/10 bg-white/3 p-4 flex flex-col gap-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+            Author — overrides account name · avatar always from account
+          </p>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="author_name" className="text-xs font-medium text-slate-300">
+              Display name
+            </label>
+            <input
+              id="author_name"
+              type="text"
+              {...register("author_name")}
+              placeholder="Leave blank to use account name"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="author_bio" className="text-xs font-medium text-slate-300">
+              Bio <span className="text-slate-500">(optional)</span>
+            </label>
+            <textarea
+              id="author_bio"
+              rows={2}
+              {...register("author_bio")}
+              placeholder="Short bio shown on this content…"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+            />
+          </div>
+        </div>
 
         {/* External URL */}
         <div className="flex flex-col gap-1.5">

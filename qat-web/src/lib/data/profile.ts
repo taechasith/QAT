@@ -6,6 +6,7 @@ export type Profile = {
   id: string;
   email: string;
   full_name: string | null;
+  bio: string | null;
   avatar_url: string | null;
   avatar_type: AvatarType;
   wants_update_email: boolean;
@@ -16,7 +17,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
     const supabase = await createClient();
     const { data } = await supabase
       .from("profiles")
-      .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
+      .select("id, email, full_name, bio, avatar_url, avatar_type, wants_update_email")
       .eq("id", userId)
       .maybeSingle();
     if (!data) return null;
@@ -42,6 +43,7 @@ export async function updateProfile(
   userId: string,
   fields: {
     full_name?: string;
+    bio?: string | null;
     avatar_type?: AvatarType;
     avatar_url?: string;
   },
@@ -51,7 +53,7 @@ export async function updateProfile(
     .from("profiles")
     .update({ ...fields, updated_at: new Date().toISOString() })
     .eq("id", userId)
-    .select("id, email, full_name, avatar_url, avatar_type, wants_update_email")
+    .select("id, email, full_name, bio, avatar_url, avatar_type, wants_update_email")
     .maybeSingle();
 
   if (error) return { error: error.message };

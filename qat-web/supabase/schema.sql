@@ -44,7 +44,9 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text not null,
   full_name text,
+  bio text,
   avatar_url text,
+  avatar_type text not null default 'artist_cat',
   wants_update_email boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

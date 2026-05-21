@@ -10,6 +10,7 @@ import { getTranslations } from "@/lib/i18n/locale";
 import { NotificationPreferences } from "@/components/auth/NotificationPreferences";
 import { AvatarPicker } from "@/components/profile/AvatarPicker";
 import { AchievementList } from "@/components/profile/AchievementList";
+import { ProfileBioForm } from "@/components/profile/ProfileBioForm";
 import { ProfileNameForm } from "@/components/profile/ProfileNameForm";
 import { ProfileAvatarDisplay } from "@/components/profile/ProfileAvatarDisplay";
 
@@ -61,6 +62,12 @@ export default async function ProfilePage() {
               <ProfileNameForm
                 key={profile?.full_name ?? ""}
                 initialName={profile?.full_name ?? ""}
+              />
+            </div>
+            <div className="mt-5 border-t border-white/8 pt-5">
+              <ProfileBioForm
+                key={profile?.bio ?? ""}
+                initialBio={profile?.bio ?? ""}
               />
             </div>
           </section>
