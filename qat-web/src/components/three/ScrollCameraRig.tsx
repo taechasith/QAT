@@ -101,6 +101,8 @@ export function ScrollCameraRig({ reducedMotion }: { reducedMotion: boolean }) {
   const fovRef     = useRef(INITIAL.fov);
   const lookYRef   = useRef(INITIAL.lookY);
 
+  // R3F camera updates are imperative inside the render loop.
+  // eslint-disable-next-line react-hooks/immutability
   useFrame((_, dt) => {
     const sample = sampleOrbit(reducedMotion ? 0 : scroll);
 
@@ -121,8 +123,10 @@ export function ScrollCameraRig({ reducedMotion }: { reducedMotion: boolean }) {
     camera.lookAt(TARGET);
 
     if ("fov" in camera) {
+      /* eslint-disable react-hooks/immutability */
       (camera as THREE.PerspectiveCamera).fov = fovRef.current;
       (camera as THREE.PerspectiveCamera).updateProjectionMatrix();
+      /* eslint-enable react-hooks/immutability */
     }
   });
 

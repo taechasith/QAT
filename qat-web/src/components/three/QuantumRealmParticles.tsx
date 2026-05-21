@@ -9,6 +9,11 @@ const LITE_COUNT = 120;
 const MAX_RADIUS = 14;
 const DEPTH = 22;
 
+function seededUnit(index: number, salt: number) {
+  const x = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 export function QuantumRealmParticles({ mobile = false }: { mobile?: boolean }) {
   const ref = useRef<THREE.Points>(null);
   const count = mobile ? LITE_COUNT : FULL_COUNT;
@@ -18,10 +23,10 @@ export function QuantumRealmParticles({ mobile = false }: { mobile?: boolean }) 
     const positions = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      const radius = Math.sqrt(Math.random()) * MAX_RADIUS;
-      const theta = Math.random() * Math.PI * 2;
+      const radius = Math.sqrt(seededUnit(i, 1)) * MAX_RADIUS;
+      const theta = seededUnit(i, 2) * Math.PI * 2;
       positions[i * 3] = Math.cos(theta) * radius;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * DEPTH;
+      positions[i * 3 + 1] = (seededUnit(i, 3) - 0.5) * DEPTH;
       positions[i * 3 + 2] = Math.sin(theta) * radius;
     }
 

@@ -41,28 +41,28 @@ export function SplashScreen() {
   const [pct, setPct] = useState(0);
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
     const interval = setInterval(() => {
       setPct((prev) => {
         const next = prev + 100 / (3000 / 50);
         if (next >= 100) {
           clearInterval(interval);
-          setReady(true);
-          setTimeout(() => setVisible(false), 700);
           return 100;
         }
         return next;
       });
     }, 50);
 
-    return () => clearInterval(interval);
-  }, []);
+    const readyTimer = window.setTimeout(() => setReady(true), 3000);
+    const hideTimer = window.setTimeout(() => setVisible(false), 3700);
 
-  if (!mounted) return null;
+    return () => {
+      clearInterval(interval);
+      window.clearTimeout(readyTimer);
+      window.clearTimeout(hideTimer);
+    };
+  }, []);
 
   return (
     <div

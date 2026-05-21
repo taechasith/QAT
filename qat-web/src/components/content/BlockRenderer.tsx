@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { Block, TextAlign } from "@/lib/types/blocks";
 
 function alignClass(align: TextAlign) {
