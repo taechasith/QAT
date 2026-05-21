@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, Bell, Settings, Plus } from "lucide-react";
+import { FileText, Bell, Settings, Plus, LayoutTemplate } from "lucide-react";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
 
@@ -15,6 +15,12 @@ const quickLinks = [
     icon: FileText,
     label: "All content",
     desc: "Manage published and draft items",
+  },
+  {
+    href: "/admin/layout",
+    icon: LayoutTemplate,
+    label: "Page layouts",
+    desc: "Edit public page sections",
   },
   {
     href: "/admin/notifications",

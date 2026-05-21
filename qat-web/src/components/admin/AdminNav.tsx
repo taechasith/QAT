@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   FileText,
+  LayoutTemplate,
   Bell,
   Settings,
 } from "lucide-react";
@@ -9,6 +10,7 @@ import {
 const links = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/content", label: "Content", icon: FileText },
+  { href: "/admin/layout", label: "Page Layouts", icon: LayoutTemplate },
   { href: "/admin/notifications", label: "Notifications", icon: Bell },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
