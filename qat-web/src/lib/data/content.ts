@@ -39,6 +39,7 @@ export function localizeItem(item: ContentItem, locale: string): ContentItem {
     title: (item.metadata?.title_th as string | undefined) || item.title,
     excerpt: (item.metadata?.excerpt_th as string | undefined) || item.excerpt,
     body_md: (item.metadata?.body_md_th as string | undefined) || item.body_md,
+    cover_image_url: (item.metadata?.cover_image_url_th as string | undefined) || item.cover_image_url,
   };
 }
 

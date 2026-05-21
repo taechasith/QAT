@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
 
@@ -11,14 +11,19 @@ type Props = {
 };
 
 function isVideoUrl(url: string) {
-  return /\.(mp4|webm|mov|ogg)(\?|$)/i.test(url);
+  return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url);
 }
 
 export function CoverUpload({ value, onChange }: Props) {
   const tr = useTr();
   const [uploading, setUploading] = useState(false);
+  const [isVideo, setIsVideo] = useState(() => isVideoUrl(value));
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setIsVideo(isVideoUrl(value));
+  }, [value]);
 
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
@@ -31,12 +36,14 @@ export function CoverUpload({ value, onChange }: Props) {
     }
     setError("");
     setUploading(true);
+    const fileIsVideo = file.type.startsWith("video/");
     const { url, error: uploadErr } = await clientUploadMedia(file);
     setUploading(false);
 
     if (uploadErr || !url) {
       setError(uploadErr ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
+      setIsVideo(fileIsVideo);
       onChange(url);
     }
   }
@@ -68,13 +75,14 @@ export function CoverUpload({ value, onChange }: Props) {
       >
         {value ? (
           <>
-            {isVideoUrl(value) ? (
+            {isVideo ? (
               <video
                 src={value}
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="metadata"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             ) : (

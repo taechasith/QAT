@@ -255,6 +255,45 @@ export function ContentEditorForm({
             </div>
           </div>
 
+          {/* Body content EN + TH */}
+          <div className="grid gap-4 xl:grid-cols-2">
+            {/* English body */}
+            <div className="flex flex-col gap-1.5 rounded-lg border border-white/10 bg-white/3 p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
+                <span className="text-[10px] text-slate-400">body content</span>
+              </div>
+              <textarea
+                rows={8}
+                {...register("body_md")}
+                placeholder="Body text (Markdown supported)"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </div>
+
+            {/* Thai body */}
+            <div className={`flex flex-col gap-1.5 rounded-lg border p-4 transition ${
+              watched.body_md_th
+                ? "border-amber-400/30 bg-amber-400/5"
+                : "border-dashed border-white/10 bg-white/3"
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
+                {!watched.body_md_th ? (
+                  <span className="text-[10px] text-slate-400">เนื้อหาภาษาไทย · แนะนำ</span>
+                ) : (
+                  <span className="text-[10px] text-emerald-400">✓ filled</span>
+                )}
+              </div>
+              <textarea
+                rows={8}
+                {...register("body_md_th")}
+                placeholder="เนื้อหาภาษาไทย (รองรับ Markdown)"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+              />
+            </div>
+          </div>
+
           {/* Publish warning when TH missing */}
           {watched.status === "published" && !watched.title_th && (
             <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-300">
@@ -263,11 +302,31 @@ export function ContentEditorForm({
           )}
         </div>
 
-        {/* Cover — 16:9 direct upload */}
-        <CoverUpload
-          value={watched.cover_image_url ?? ""}
-          onChange={(url) => setValue("cover_image_url", url)}
-        />
+        {/* Cover — separate EN / TH */}
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium text-slate-200">{tr.admin.form.cover}</p>
+          <div className="grid gap-4 xl:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
+              <CoverUpload
+                value={watched.cover_image_url ?? ""}
+                onChange={(url) => setValue("cover_image_url", url)}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
+                {!watched.cover_image_url_th && (
+                  <span className="text-[10px] text-slate-400">ใช้รูป EN ถ้าไม่ได้ตั้งค่า</span>
+                )}
+              </div>
+              <CoverUpload
+                value={watched.cover_image_url_th ?? ""}
+                onChange={(url) => setValue("cover_image_url_th", url)}
+              />
+            </div>
+          </div>
+        </div>
 
 
         {/* External URL */}

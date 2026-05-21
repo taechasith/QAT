@@ -42,6 +42,8 @@ export const contentSchema = z.object({
   sort_order: z.number().int(),
   title_th: z.string().max(255).optional(),
   excerpt_th: z.string().max(500).optional(),
+  body_md_th: z.string().optional(),
+  cover_image_url_th: urlOrEmpty.optional(),
 }).refine(
   (data) => !!(data.title?.trim() || data.title_th?.trim()),
   { message: "At least one title (EN or TH) is required", path: ["title"] },

@@ -68,10 +68,12 @@ export async function createContent(
 ): Promise<{ id?: string; error?: string }> {
   const supabase = createAdminClient();
 
-  const { title_th, excerpt_th, ...rest } = values;
+  const { title_th, excerpt_th, body_md_th, cover_image_url_th, ...rest } = values;
   const metadata: Record<string, string> = {};
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
+  if (body_md_th?.trim()) metadata.body_md_th = body_md_th.trim();
+  if (cover_image_url_th?.trim()) metadata.cover_image_url_th = cover_image_url_th.trim();
 
   // DB title is NOT NULL — fall back to TH title if EN not provided
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
@@ -123,13 +125,17 @@ export async function updateContent(
       ? new Date().toISOString()
       : (existing.data?.published_at ?? null);
 
-  const { title_th, excerpt_th, ...rest } = values;
+  const { title_th, excerpt_th, body_md_th, cover_image_url_th, ...rest } = values;
   const existingMeta = (existing.data?.metadata as Record<string, string>) ?? {};
   const metadata: Record<string, string> = { ...existingMeta };
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   else delete metadata.title_th;
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
   else delete metadata.excerpt_th;
+  if (body_md_th?.trim()) metadata.body_md_th = body_md_th.trim();
+  else delete metadata.body_md_th;
+  if (cover_image_url_th?.trim()) metadata.cover_image_url_th = cover_image_url_th.trim();
+  else delete metadata.cover_image_url_th;
 
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
 

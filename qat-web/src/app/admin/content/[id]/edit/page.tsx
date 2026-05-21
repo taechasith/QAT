@@ -56,6 +56,8 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           sort_order: item.sort_order,
           title_th: (item.metadata as Record<string, string> | null)?.title_th ?? "",
           excerpt_th: (item.metadata as Record<string, string> | null)?.excerpt_th ?? "",
+          body_md_th: (item.metadata as Record<string, string> | null)?.body_md_th ?? "",
+          cover_image_url_th: (item.metadata as Record<string, string> | null)?.cover_image_url_th ?? "",
         }}
       />
     </AdminShell>
