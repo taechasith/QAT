@@ -22,20 +22,18 @@ function shouldUseWebGL() {
   if (typeof window === "undefined") return false;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const desktopViewport = window.matchMedia("(min-width: 1024px)").matches;
   const nav = navigator as Navigator & {
     connection?: NavigatorConnection;
     deviceMemory?: number;
   };
 
-  const lowMemory = typeof nav.deviceMemory === "number" && nav.deviceMemory < 6;
+  const lowMemory = typeof nav.deviceMemory === "number" && nav.deviceMemory < 2;
   const slowConnection =
     nav.connection?.saveData === true ||
     nav.connection?.effectiveType === "slow-2g" ||
-    nav.connection?.effectiveType === "2g" ||
-    nav.connection?.effectiveType === "3g";
+    nav.connection?.effectiveType === "2g";
 
-  return desktopViewport && !reduceMotion && !lowMemory && !slowConnection;
+  return !reduceMotion && !lowMemory && !slowConnection;
 }
 
 export function QuantumHeroClient() {
