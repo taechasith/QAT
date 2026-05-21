@@ -40,6 +40,10 @@ export default async function AdminPage() {
   const publishedCount = typedItems.filter(i => i.status === "published").length;
   const draftCount = typedItems.filter(i => i.status === "draft").length;
   const totalViews = typedItems.reduce((sum, item) => sum + (item.view_count || 0), 0);
+  const categoryGuides = tr.admin.form.categoryGuides as Record<
+    string,
+    { label: string }
+  >;
 
   // Take the 5 most recently updated items
   const recentItems = typedItems.slice(0, 5);
@@ -135,9 +139,8 @@ export default async function AdminPage() {
 
   return (
     <AdminShell>
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div className="space-y-6">
+        <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
               {tr.admin.title}
@@ -157,35 +160,8 @@ export default async function AdminPage() {
           </div>
         </div>
 
-        {/* Stats Grid - Full Width at Top */}
-        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s) => {
-            const Icon = s.icon;
-            return (
-              <div
-                key={s.label}
-                className={`glass-panel flex flex-col justify-between rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 ${s.hoverColor}`}
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{s.label}</p>
-                  <div className={`flex size-10 items-center justify-center rounded-xl ${s.iconBg}`}>
-                    <Icon className="size-5" />
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                    {typeof s.value === "number" ? s.value.toLocaleString() : s.value}
-                  </h3>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* 2-Column Grid for Recent Activity Table and Sidebar */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Main Column (Recent Activity Table) - 2/3 Width */}
-          <div className="lg:col-span-2">
+        <div className="grid gap-6 xl:grid-cols-12">
+          <div className="xl:col-span-8">
             <div className="glass-panel rounded-2xl p-6 h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -233,7 +209,7 @@ export default async function AdminPage() {
                               </div>
                             </td>
                             <td className="py-3.5 pr-4 hidden sm:table-cell text-slate-300 font-mono text-xs">
-                              {(tr.admin.form.categoryGuides as any)[item.content_type]?.label || item.content_type}
+                              {categoryGuides[item.content_type]?.label || item.content_type}
                             </td>
                             <td className="py-3.5 pr-4">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(item.status)}`}>
@@ -265,10 +241,40 @@ export default async function AdminPage() {
             </div>
           </div>
 
-          {/* Right Column (Sidebar Modules) - 1/3 Width */}
-          <div className="space-y-6 flex flex-col justify-between h-full">
-            {/* Quick Actions Card */}
-            <div className="glass-panel rounded-2xl p-6 flex-1">
+          <div className="grid gap-6 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-1">
+            <div className="glass-panel rounded-2xl p-5 sm:col-span-2 sm:p-6 xl:col-span-1">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-white">
+                  {tr.admin.dashboard.stats.total}
+                </h2>
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-cyan-200">
+                  {tr.admin.dashboard.title}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {stats.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <div
+                      key={s.label}
+                      className={`rounded-xl border p-4 transition-all duration-300 ${s.color} ${s.hoverColor}`}
+                    >
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{s.label}</p>
+                        <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${s.iconBg}`}>
+                          <Icon className="size-4" />
+                        </div>
+                      </div>
+                      <h3 className="text-2xl font-extrabold tracking-tight text-white">
+                        {typeof s.value === "number" ? s.value.toLocaleString() : s.value}
+                      </h3>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="glass-panel rounded-2xl p-5 sm:p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {tr.admin.dashboard.quickActions}
               </h2>
@@ -297,7 +303,7 @@ export default async function AdminPage() {
             </div>
 
             {/* Profile Info Card */}
-            <div className="glass-panel rounded-2xl p-6">
+            <div className="glass-panel rounded-2xl p-5 sm:p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {tr.admin.dashboard.adminProfile}
               </h2>
@@ -322,4 +328,3 @@ export default async function AdminPage() {
     </AdminShell>
   );
 }
-

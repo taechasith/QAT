@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getLocale } from "@/lib/i18n/locale";
 
 export type ContentType =
   | "event"
@@ -37,6 +38,7 @@ export function localizeItem(item: ContentItem, locale: string): ContentItem {
     ...item,
     title: (item.metadata?.title_th as string | undefined) || item.title,
     excerpt: (item.metadata?.excerpt_th as string | undefined) || item.excerpt,
+    body_md: (item.metadata?.body_md_th as string | undefined) || item.body_md,
   };
 }
 
@@ -81,7 +83,9 @@ export async function getPublishedContentByType(
       return { items: [], error: error.message };
     }
 
-    return { items: (data ?? []) as ContentItem[] };
+    const locale = await getLocale();
+    const localized = (data ?? []).map((item) => localizeItem(item as ContentItem, locale));
+    return { items: localized };
   } catch (error) {
     return {
       items: [],
@@ -104,7 +108,9 @@ export async function getPublishedContentBySlug(slug: string) {
       return { item: null, error: error.message };
     }
 
-    return { item: data as ContentItem | null };
+    if (!data) return { item: null };
+    const locale = await getLocale();
+    return { item: localizeItem(data as ContentItem, locale) };
   } catch (error) {
     return {
       item: null,
@@ -129,7 +135,9 @@ export async function getFeaturedPublishedContent() {
       return { items: [], error: error.message };
     }
 
-    return { items: (data ?? []) as ContentItem[] };
+    const locale = await getLocale();
+    const localized = (data ?? []).map((item) => localizeItem(item as ContentItem, locale));
+    return { items: localized };
   } catch (error) {
     return {
       items: [],
