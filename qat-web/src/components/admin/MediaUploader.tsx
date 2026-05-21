@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Upload, X } from "lucide-react";
+import { useTr } from "@/lib/i18n/context";
 
 type MediaUploaderProps = {
   value: string;
@@ -9,13 +10,14 @@ type MediaUploaderProps = {
 };
 
 export function MediaUploader({ value, onChange }: MediaUploaderProps) {
+  const tr = useTr();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
-      setError("Only image files are supported.");
+      setError(tr.locale === "th" ? "รองรับเฉพาะไฟล์รูปภาพเท่านั้น" : "Only image files are supported.");
       return;
     }
     setUploading(true);
@@ -28,7 +30,7 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
     const json = await res.json().catch(() => ({}));
 
     if (!res.ok || !json.url) {
-      setError(json.error ?? "Upload failed.");
+      setError(json.error ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
       onChange(json.url);
     }
@@ -51,7 +53,7 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
             type="button"
             onClick={() => onChange("")}
             className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
-            aria-label="Remove image"
+            aria-label={tr.locale === "th" ? "ลบรูปภาพ" : "Remove image"}
           >
             <X className="size-4" />
           </button>
@@ -70,9 +72,9 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
               disabled={uploading}
               className="text-cyan-200 underline underline-offset-2 hover:text-white disabled:opacity-50"
             >
-              {uploading ? "Uploading…" : "Choose a file"}
+              {uploading ? tr.admin.form.uploading : (tr.locale === "th" ? "เลือกไฟล์" : "Choose a file")}
             </button>{" "}
-            or drag and drop
+            {tr.locale === "th" ? "หรือลากและวางไฟล์ที่นี่" : "or drag and drop"}
           </div>
           <input
             ref={inputRef}
@@ -90,3 +92,4 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
     </div>
   );
 }
+

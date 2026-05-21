@@ -4,26 +4,30 @@ import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { ContentTable } from "@/components/admin/ContentTable";
 import { listAllContent } from "@/lib/data/admin-content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 export default async function AdminContentPage() {
   await requireAdmin();
   const { items, error } = await listAllContent();
+  const tr = await getTranslations();
 
   return (
     <AdminShell>
       <div className="flex items-center justify-between">
         <div>
           <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-            Admin CMS
+            {tr.admin.title}
           </p>
-          <h1 className="mt-1 text-3xl font-semibold text-white">All content</h1>
+          <h1 className="mt-1 text-3xl font-semibold text-white">
+            {tr.admin.contentList.title}
+          </h1>
         </div>
         <Link
           href="/admin/content/new"
           className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100"
         >
           <Plus className="size-4" aria-hidden="true" />
-          New
+          {tr.admin.contentList.newButton}
         </Link>
       </div>
 
@@ -40,3 +44,4 @@ export default async function AdminContentPage() {
     </AdminShell>
   );
 }
+

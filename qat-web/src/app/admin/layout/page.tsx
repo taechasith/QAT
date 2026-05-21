@@ -4,11 +4,12 @@ import { Edit, ExternalLink, LayoutTemplate, Plus } from "lucide-react";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { listAllContent } from "@/lib/data/admin-content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 type LayoutRow = {
   id: string;
   content_type: string;
-  status: string;
+  status: "draft" | "published" | "archived";
   title: string;
   slug: string;
   updated_at: string;
@@ -24,22 +25,25 @@ export default async function AdminLayoutPage() {
   await requireAdmin();
   const { items, error } = await listAllContent();
   const rows = items as LayoutRow[];
+  const tr = await getTranslations();
 
   return (
     <AdminShell>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-            Admin CMS
+            {tr.admin.title}
           </p>
-          <h1 className="mt-1 text-3xl font-semibold text-white">Page layouts</h1>
+          <h1 className="mt-1 text-3xl font-semibold text-white">
+            {tr.admin.layout.title}
+          </h1>
         </div>
         <Link
           href="/admin/content/new"
           className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100"
         >
           <Plus className="size-4" aria-hidden="true" />
-          New content
+          {tr.admin.layout.newContent}
         </Link>
       </div>
 
@@ -52,27 +56,29 @@ export default async function AdminLayoutPage() {
       <div className="mt-8 glass-panel overflow-hidden rounded-xl">
         {rows.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-sm text-slate-300">No content pages yet.</p>
+            <p className="text-sm text-slate-300">{tr.admin.layout.noContentPages}</p>
             <Link
               href="/admin/content/new"
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-cyan-200 hover:text-white"
             >
-              Create content
+              {tr.admin.layout.createContent}
             </Link>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="px-4 py-3 text-left font-medium text-slate-400">Page</th>
+                <th className="px-4 py-3 text-left font-medium text-slate-400">
+                  {tr.admin.layout.table.page}
+                </th>
                 <th className="hidden px-4 py-3 text-left font-medium text-slate-400 sm:table-cell">
-                  Type
+                  {tr.admin.layout.table.type}
                 </th>
                 <th className="hidden px-4 py-3 text-left font-medium text-slate-400 md:table-cell">
-                  Status
+                  {tr.admin.layout.table.status}
                 </th>
                 <th className="hidden px-4 py-3 text-left font-medium text-slate-400 lg:table-cell">
-                  Updated
+                  {tr.admin.layout.table.updated}
                 </th>
                 <th className="px-4 py-3" />
               </tr>
@@ -90,10 +96,10 @@ export default async function AdminLayoutPage() {
                   <td className="hidden px-4 py-3 md:table-cell">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
-                        statusColors[item.status] ?? "bg-slate-400/15 text-slate-300"
+                         statusColors[item.status] ?? "bg-slate-400/15 text-slate-300"
                       }`}
                     >
-                      {item.status}
+                      {tr.admin.form[item.status] || item.status}
                     </span>
                   </td>
                   <td className="hidden px-4 py-3 text-slate-400 lg:table-cell">
@@ -106,14 +112,14 @@ export default async function AdminLayoutPage() {
                         target="_blank"
                         rel="noreferrer"
                         className="rounded p-1.5 text-slate-400 transition hover:text-white"
-                        title="View public page"
+                        title={tr.admin.layout.table.viewPublicPage}
                       >
                         <ExternalLink className="size-4" aria-hidden="true" />
                       </Link>
                       <Link
                         href={`/admin/content/${item.id}/edit`}
                         className="rounded p-1.5 text-slate-400 transition hover:text-cyan-200"
-                        title="Edit details"
+                        title={tr.admin.layout.table.editDetails}
                       >
                         <Edit className="size-4" aria-hidden="true" />
                       </Link>
@@ -122,7 +128,7 @@ export default async function AdminLayoutPage() {
                         className="inline-flex h-9 items-center gap-2 rounded-lg bg-violet-200/10 px-3 text-xs font-semibold text-violet-100 transition hover:bg-violet-200/15"
                       >
                         <LayoutTemplate className="size-4" aria-hidden="true" />
-                        Edit layout
+                        {tr.admin.layout.table.editLayout}
                       </Link>
                     </div>
                   </td>
@@ -135,3 +141,4 @@ export default async function AdminLayoutPage() {
     </AdminShell>
   );
 }
+

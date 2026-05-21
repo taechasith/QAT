@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { useTr } from "@/lib/i18n/context";
 
 type Props = {
   value: string;
@@ -9,17 +10,18 @@ type Props = {
 };
 
 export function CoverUpload({ value, onChange }: Props) {
+  const tr = useTr();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
-      setError("Only image files (including GIF) are accepted.");
+      setError(tr.admin.form.onlyImages);
       return;
     }
     if (file.size > 20 * 1024 * 1024) {
-      setError("File must be under 20 MB.");
+      setError(tr.admin.form.maxSize);
       return;
     }
     setError("");
@@ -33,7 +35,7 @@ export function CoverUpload({ value, onChange }: Props) {
     setUploading(false);
 
     if (!res.ok || !json.url) {
-      setError(json.error ?? "Upload failed.");
+      setError(json.error ?? (tr.locale === "th" ? "อัปโหลดไม่สำเร็จ" : "Upload failed."));
     } else {
       onChange(json.url);
     }
@@ -54,7 +56,7 @@ export function CoverUpload({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-slate-200">
-        Cover (16:9 — image or GIF)
+        {tr.admin.form.cover}
       </label>
 
       {/* 16:9 container */}
@@ -78,7 +80,7 @@ export function CoverUpload({ value, onChange }: Props) {
               type="button"
               onClick={() => onChange("")}
               className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition"
-              title="Remove cover"
+              title={tr.admin.form.removeCover}
             >
               ×
             </button>
@@ -91,11 +93,11 @@ export function CoverUpload({ value, onChange }: Props) {
             className="flex h-full w-full flex-col items-center justify-center gap-2 bg-white/3 hover:bg-white/6 transition text-slate-400 hover:text-slate-200"
           >
             {uploading ? (
-              <span className="font-mono text-xs">Uploading…</span>
+              <span className="font-mono text-xs">{tr.admin.form.uploading}</span>
             ) : (
               <>
                 <span className="text-3xl">🖼</span>
-                <span className="text-sm">Click or drag to upload cover</span>
+                <span className="text-sm">{tr.admin.form.dragToUpload}</span>
                 <span className="text-xs text-slate-500">JPG · PNG · GIF · WebP · max 20 MB</span>
               </>
             )}
@@ -109,7 +111,7 @@ export function CoverUpload({ value, onChange }: Props) {
           onClick={() => inputRef.current?.click()}
           className="self-start text-xs text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
         >
-          Replace cover
+          {tr.admin.form.replaceCover}
         </button>
       )}
 
@@ -125,3 +127,4 @@ export function CoverUpload({ value, onChange }: Props) {
     </div>
   );
 }
+

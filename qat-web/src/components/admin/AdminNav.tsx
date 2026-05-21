@@ -6,16 +6,19 @@ import {
   Bell,
   Settings,
 } from "lucide-react";
+import { getTranslations } from "@/lib/i18n/locale";
 
-const links = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/content", label: "Content", icon: FileText },
-  { href: "/admin/layout", label: "Page Layouts", icon: LayoutTemplate },
-  { href: "/admin/notifications", label: "Notifications", icon: Bell },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
-];
+export async function AdminNav() {
+  const tr = await getTranslations();
 
-export function AdminNav() {
+  const links = [
+    { href: "/admin", label: tr.admin.nav.dashboard, icon: LayoutDashboard },
+    { href: "/admin/content", label: tr.admin.nav.content, icon: FileText },
+    { href: "/admin/layout", label: tr.admin.nav.layouts, icon: LayoutTemplate },
+    { href: "/admin/notifications", label: tr.admin.nav.notifications, icon: Bell },
+    { href: "/admin/settings", label: tr.admin.nav.settings, icon: Settings },
+  ];
+
   return (
     <nav
       aria-label="Admin navigation"
@@ -34,3 +37,4 @@ export function AdminNav() {
     </nav>
   );
 }
+

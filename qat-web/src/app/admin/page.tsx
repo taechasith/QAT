@@ -2,53 +2,56 @@ import Link from "next/link";
 import { FileText, Bell, Settings, Plus, LayoutTemplate } from "lucide-react";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
-
-const quickLinks = [
-  {
-    href: "/admin/content/new",
-    icon: Plus,
-    label: "New content",
-    desc: "Create a draft for any category",
-  },
-  {
-    href: "/admin/content",
-    icon: FileText,
-    label: "All content",
-    desc: "Manage published and draft items",
-  },
-  {
-    href: "/admin/layout",
-    icon: LayoutTemplate,
-    label: "Page layouts",
-    desc: "Edit public page sections",
-  },
-  {
-    href: "/admin/notifications",
-    icon: Bell,
-    label: "Send notification",
-    desc: "Notify opted-in subscribers",
-  },
-  {
-    href: "/admin/settings",
-    icon: Settings,
-    label: "Settings",
-    desc: "Homepage copy and site settings",
-  },
-];
+import { getTranslations } from "@/lib/i18n/locale";
 
 export default async function AdminPage() {
   const user = await requireAdmin();
+  const tr = await getTranslations();
+
+  const quickLinks = [
+    {
+      href: "/admin/content/new",
+      icon: Plus,
+      label: tr.admin.dashboard.quickLinks.newContent,
+      desc: tr.admin.dashboard.quickLinks.newContentDesc,
+    },
+    {
+      href: "/admin/content",
+      icon: FileText,
+      label: tr.admin.dashboard.quickLinks.allContent,
+      desc: tr.admin.dashboard.quickLinks.allContentDesc,
+    },
+    {
+      href: "/admin/layout",
+      icon: LayoutTemplate,
+      label: tr.admin.dashboard.quickLinks.pageLayouts,
+      desc: tr.admin.dashboard.quickLinks.pageLayoutsDesc,
+    },
+    {
+      href: "/admin/notifications",
+      icon: Bell,
+      label: tr.admin.dashboard.quickLinks.sendNotification,
+      desc: tr.admin.dashboard.quickLinks.sendNotificationDesc,
+    },
+    {
+      href: "/admin/settings",
+      icon: Settings,
+      label: tr.admin.dashboard.quickLinks.settings,
+      desc: tr.admin.dashboard.quickLinks.settingsDesc,
+    },
+  ];
 
   return (
     <AdminShell>
       <div>
         <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-          Admin CMS
+          {tr.admin.title}
         </p>
-        <h1 className="mt-3 text-3xl font-semibold text-white">Dashboard</h1>
+        <h1 className="mt-3 text-3xl font-semibold text-white">
+          {tr.admin.dashboard.title}
+        </h1>
         <p className="mt-2 text-sm text-slate-300">
-          Signed in as{" "}
-          <span className="font-medium text-white">{user.email}</span>
+          {tr.admin.dashboard.signedInAs(user.email || "")}
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -72,3 +75,4 @@ export default async function AdminPage() {
     </AdminShell>
   );
 }
+

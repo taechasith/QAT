@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Edit, ExternalLink, Eye, Heart, LayoutTemplate, MessageCircle } from "lucide-react";
+import { getTranslations } from "@/lib/i18n/locale";
 
 type ContentRow = {
   id: string;
   content_type: string;
-  status: string;
+  status: "draft" | "published" | "archived";
   title: string;
   slug: string;
   updated_at: string;
@@ -27,16 +28,18 @@ function n(val: number | undefined) {
   return (val ?? 0).toLocaleString();
 }
 
-export function ContentTable({ items }: ContentTableProps) {
+export async function ContentTable({ items }: ContentTableProps) {
+  const tr = await getTranslations();
+
   if (items.length === 0) {
     return (
       <div className="glass-panel rounded-xl p-8 text-center">
-        <p className="text-slate-300">No content yet.</p>
+        <p className="text-slate-300">{tr.admin.contentList.noContentYet}</p>
         <Link
           href="/admin/content/new"
           className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-cyan-200 hover:text-white"
         >
-          Create the first item
+          {tr.admin.contentList.createFirstItem}
         </Link>
       </div>
     );
@@ -47,11 +50,11 @@ export function ContentTable({ items }: ContentTableProps) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/10">
-            <th className="px-4 py-3 text-left font-medium text-slate-400">Title</th>
-            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 sm:table-cell">Type</th>
-            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 md:table-cell">Status</th>
-            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 xl:table-cell">Stats</th>
-            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 lg:table-cell">Updated</th>
+            <th className="px-4 py-3 text-left font-medium text-slate-400">{tr.admin.contentList.table.title}</th>
+            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 sm:table-cell">{tr.admin.contentList.table.type}</th>
+            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 md:table-cell">{tr.admin.contentList.table.status}</th>
+            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 xl:table-cell">{tr.admin.contentList.table.stats}</th>
+            <th className="hidden px-4 py-3 text-left font-medium text-slate-400 lg:table-cell">{tr.admin.contentList.table.updated}</th>
             <th className="px-4 py-3" />
           </tr>
         </thead>
@@ -71,7 +74,7 @@ export function ContentTable({ items }: ContentTableProps) {
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${statusColors[item.status] ?? "bg-slate-400/15 text-slate-300"}`}
                   >
-                    {item.status}
+                    {tr.admin.form[item.status] || item.status}
                   </span>
                 </td>
                 <td className="hidden px-4 py-3 xl:table-cell">
@@ -100,21 +103,21 @@ export function ContentTable({ items }: ContentTableProps) {
                       target="_blank"
                       rel="noreferrer"
                       className="rounded p-1.5 text-slate-400 transition hover:text-white"
-                      title="View public page"
+                      title={tr.admin.contentList.table.viewPublicPage}
                     >
                       <ExternalLink className="size-4" aria-hidden="true" />
                     </Link>
                     <Link
                       href={`/admin/content/${item.id}/blocks`}
                       className="rounded p-1.5 text-slate-400 transition hover:text-violet-300"
-                      title="Edit page content (blocks)"
+                      title={tr.admin.contentList.table.editPageContent}
                     >
                       <LayoutTemplate className="size-4" aria-hidden="true" />
                     </Link>
                     <Link
                       href={`/admin/content/${item.id}/edit`}
                       className="rounded p-1.5 text-slate-400 transition hover:text-cyan-200"
-                      title="Edit metadata"
+                      title={tr.admin.contentList.table.editMetadata}
                     >
                       <Edit className="size-4" aria-hidden="true" />
                     </Link>
@@ -128,3 +131,4 @@ export function ContentTable({ items }: ContentTableProps) {
     </div>
   );
 }
+

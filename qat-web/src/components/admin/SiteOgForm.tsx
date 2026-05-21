@@ -2,34 +2,36 @@
 
 import { useState } from "react";
 import type { SiteOgSettings } from "@/lib/data/site-settings";
+import { useTr } from "@/lib/i18n/context";
 
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
 export function SiteOgForm({ initial }: { initial: SiteOgSettings }) {
+  const tr = useTr();
   const [imageUrl, setImageUrl] = useState(initial.imageUrl);
   const [description, setDescription] = useState(initial.description);
   const [saving, setSaving] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState<"idle" | "saved" | "failed">("idle");
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setMsg("");
+    setMsg("idle");
     const res = await fetch("/api/admin/settings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ key: "og", value: { imageUrl, description } }),
     });
     setSaving(false);
-    setMsg(res.ok ? "Saved!" : "Save failed.");
+    setMsg(res.ok ? "saved" : "failed");
   }
 
   return (
     <form onSubmit={save} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-slate-200">
-          Default OG image URL
+          {tr.admin.settings.ogImageLabel}
         </label>
         <input
           type="url"
@@ -39,7 +41,7 @@ export function SiteOgForm({ initial }: { initial: SiteOgSettings }) {
           className={inputCls}
         />
         <p className="text-xs text-slate-500">
-          Used as the preview image when sharing any page without a cover photo.
+          {tr.admin.settings.ogImageDesc}
         </p>
         {imageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -54,13 +56,13 @@ export function SiteOgForm({ initial }: { initial: SiteOgSettings }) {
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-slate-200">
-          Default description
+          {tr.admin.settings.ogDescLabel}
         </label>
         <textarea
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Shown in link previews for pages without specific content"
+          placeholder={tr.admin.settings.ogDescPlaceholder}
           className={inputCls + " resize-none"}
         />
       </div>
@@ -71,11 +73,11 @@ export function SiteOgForm({ initial }: { initial: SiteOgSettings }) {
           disabled={saving}
           className="inline-flex h-9 items-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
         >
-          {saving ? "Saving…" : "Save"}
+          {saving ? tr.admin.settings.saving : tr.admin.settings.saveBtn}
         </button>
-        {msg && (
-          <p className={`text-sm ${msg === "Saved!" ? "text-cyan-300" : "text-red-300"}`}>
-            {msg}
+        {msg !== "idle" && (
+          <p className={`text-sm ${msg === "saved" ? "text-cyan-300" : "text-red-300"}`}>
+            {msg === "saved" ? tr.admin.settings.saved : tr.admin.settings.saveFailed}
           </p>
         )}
       </div>

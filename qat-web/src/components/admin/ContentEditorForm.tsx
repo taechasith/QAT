@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useTr, useLocale } from "@/lib/i18n/context";
 
 function parseLocalDate(dateStr: string | undefined | null): Date | undefined {
   if (!dateStr) return undefined;
@@ -59,6 +60,8 @@ export function ContentEditorForm({
   itemId,
   defaultValues,
 }: ContentEditorFormProps) {
+  const tr = useTr();
+  const locale = useLocale();
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -107,7 +110,7 @@ export function ContentEditorForm({
     const json = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      setServerError(json.error ?? "Save failed. Please try again.");
+      setServerError(json.error ?? (locale === "th" ? "บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง" : "Save failed. Please try again."));
       setSubmitting(false);
       return;
     }
@@ -126,7 +129,7 @@ export function ContentEditorForm({
         {/* Category */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="content_type" className="text-sm font-medium text-slate-200">
-            Category
+            {tr.admin.form.category}
           </label>
           <select
             id="content_type"
@@ -135,7 +138,7 @@ export function ContentEditorForm({
           >
             {CONTENT_TYPES.map((t) => (
               <option key={t} value={t} className="bg-slate-900">
-                {CONTENT_TYPE_LABELS[t]}
+                {tr.admin.form.categoryGuides[t]?.label || CONTENT_TYPE_LABELS[t]}
               </option>
             ))}
           </select>
@@ -146,7 +149,9 @@ export function ContentEditorForm({
 
         {/* Language tabs */}
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-slate-400">Language:</span>
+          <span className="text-xs font-medium text-slate-400">
+            {locale === "th" ? "ภาษา:" : "Language:"}
+          </span>
           <div className="flex rounded-lg border border-white/15 bg-white/5 p-0.5">
             <button
               type="button"
@@ -166,7 +171,9 @@ export function ContentEditorForm({
             >
               TH
               {!watched.title_th && (
-                <span className="rounded-full bg-amber-400/20 px-1.5 py-0.5 text-[10px] text-amber-300">recommended</span>
+                <span className="rounded-full bg-amber-400/20 px-1.5 py-0.5 text-[10px] text-amber-300">
+                  {locale === "th" ? "แนะนำ" : "recommended"}
+                </span>
               )}
             </button>
           </div>
@@ -178,30 +185,34 @@ export function ContentEditorForm({
             {lang === "en" ? (
               <>
                 <label htmlFor="title" className="text-sm font-medium text-slate-200">
-                  Title <span className="text-red-400">*</span>
+                  {tr.admin.form.title} <span className="text-red-400">*</span>
                 </label>
                 <input
                   id="title"
                   type="text"
                   {...register("title", { onChange: handleTitleChange })}
-                  placeholder="Enter a clear, descriptive title"
+                  placeholder={tr.admin.form.titlePlaceholder}
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
                 />
                 {errors.title ? (
-                  <p className="text-xs text-red-400">{errors.title.message}</p>
+                  <p className="text-xs text-red-400">
+                    {errors.title.message === "Title is required" ? tr.admin.form.titleRequired : errors.title.message}
+                  </p>
                 ) : null}
               </>
             ) : (
               <>
                 <label htmlFor="title_th" className="text-sm font-medium text-slate-200">
-                  Title (Thai)
-                  <span className="ml-2 text-xs font-normal text-amber-300">recommended</span>
+                  {locale === "th" ? "ชื่อหัวข้อเรื่อง (ภาษาไทย)" : "Title (Thai)"}
+                  <span className="ml-2 text-xs font-normal text-amber-300">
+                    {locale === "th" ? "แนะนำ" : "recommended"}
+                  </span>
                 </label>
                 <input
                   id="title_th"
                   type="text"
                   {...register("title_th")}
-                  placeholder="ชื่อเนื้อหาภาษาไทย"
+                  placeholder={locale === "th" ? "ระบุชื่อหัวข้อเรื่องภาษาไทย" : "Thai title"}
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
                 />
               </>
@@ -210,17 +221,23 @@ export function ContentEditorForm({
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="slug" className="text-sm font-medium text-slate-200">
-              Slug <span className="text-red-400">*</span>
+              {tr.admin.form.slug} <span className="text-red-400">*</span>
             </label>
             <input
               id="slug"
               type="text"
               {...register("slug")}
-              placeholder="url-friendly-slug"
+              placeholder={tr.admin.form.slugPlaceholder}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />
             {errors.slug ? (
-              <p className="text-xs text-red-400">{errors.slug.message}</p>
+              <p className="text-xs text-red-400">
+                {errors.slug.message === "Slug is required"
+                  ? tr.admin.form.slugRequired
+                  : errors.slug.message === "Slug must be lowercase letters, numbers, and hyphens"
+                    ? (locale === "th" ? "สลักลิงก์ต้องประกอบด้วยตัวอักษรภาษาอังกฤษตัวเล็ก ตัวเลข และเครื่องหมายขีดกลางเท่านั้น" : errors.slug.message)
+                    : errors.slug.message}
+              </p>
             ) : null}
           </div>
         </div>
@@ -230,27 +247,29 @@ export function ContentEditorForm({
           {lang === "en" ? (
             <>
               <label htmlFor="excerpt" className="text-sm font-medium text-slate-200">
-                Excerpt
+                {tr.admin.form.excerpt}
               </label>
               <textarea
                 id="excerpt"
                 rows={2}
                 {...register("excerpt")}
-                placeholder="Short summary shown on cards (max 500 chars)"
+                placeholder={tr.admin.form.excerptPlaceholder}
                 className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
               />
             </>
           ) : (
             <>
               <label htmlFor="excerpt_th" className="text-sm font-medium text-slate-200">
-                Excerpt (Thai)
-                <span className="ml-2 text-xs font-normal text-amber-300">recommended</span>
+                {locale === "th" ? "คำโปรยสั้น (ภาษาไทย)" : "Excerpt (Thai)"}
+                <span className="ml-2 text-xs font-normal text-amber-300">
+                  {locale === "th" ? "แนะนำ" : "recommended"}
+                </span>
               </label>
               <textarea
                 id="excerpt_th"
                 rows={2}
                 {...register("excerpt_th")}
-                placeholder="สรุปย่อภาษาไทย แสดงบนการ์ด"
+                placeholder={locale === "th" ? "สรุปเนื้อความภาษาไทยสำหรับแสดงผลบนการ์ด" : "Thai excerpt"}
                 className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
               />
             </>
@@ -267,13 +286,13 @@ export function ContentEditorForm({
         {/* External URL */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="external_url" className="text-sm font-medium text-slate-200">
-            External URL
+            {tr.admin.form.externalUrl}
           </label>
           <input
             id="external_url"
             type="text"
             {...register("external_url")}
-            placeholder="https://… if content lives elsewhere"
+            placeholder={tr.admin.form.externalUrlPlaceholder}
             className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
           />
         </div>
@@ -282,19 +301,19 @@ export function ContentEditorForm({
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="location" className="text-sm font-medium text-slate-200">
-              Location
+              {tr.admin.form.location}
             </label>
             <input
               id="location"
               type="text"
               {...register("location")}
-              placeholder="Venue or city"
+              placeholder={tr.admin.form.locationPlaceholder}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-slate-200">
-              Start date
+              {tr.admin.form.startDate}
             </label>
             <input type="hidden" {...register("start_at")} />
             <Popover>
@@ -331,7 +350,7 @@ export function ContentEditorForm({
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-slate-200">
-              End date
+              {tr.admin.form.endDate}
             </label>
             <input type="hidden" {...register("end_at")} />
             <Popover>
@@ -382,27 +401,36 @@ export function ContentEditorForm({
         <div className="glass-panel rounded-xl p-5 flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="status" className="text-sm font-medium text-slate-200">
-              Status
+              {tr.admin.form.status}
             </label>
             <select
               id="status"
               {...register("status")}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             >
-              {CONTENT_STATUSES.map((s) => (
-                <option key={s} value={s} className="bg-slate-900 capitalize">
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
-                </option>
-              ))}
+              {CONTENT_STATUSES.map((s) => {
+                const label = s === "draft"
+                  ? tr.admin.form.draft
+                  : s === "published"
+                    ? tr.admin.form.published
+                    : s === "archived"
+                      ? tr.admin.form.archived
+                      : s;
+                return (
+                  <option key={s} value={s} className="bg-slate-900 capitalize">
+                    {label}
+                  </option>
+                );
+              })}
             </select>
             <p className="text-xs text-slate-400">
-              Only published content is visible to the public.
+              {tr.admin.form.statusDesc}
             </p>
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="sort_order" className="text-sm font-medium text-slate-200">
-              Sort order
+              {tr.admin.form.sortOrder}
             </label>
             <input
               id="sort_order"
@@ -410,7 +438,9 @@ export function ContentEditorForm({
               {...register("sort_order", { valueAsNumber: true })}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />
-            <p className="text-xs text-slate-400">Lower numbers appear first.</p>
+            <p className="text-xs text-slate-400">
+              {tr.admin.form.sortOrderDesc}
+            </p>
           </div>
 
           <button
@@ -419,10 +449,10 @@ export function ContentEditorForm({
             className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-lg bg-cyan-200 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
           >
             {submitting
-              ? "Saving…"
+              ? tr.admin.editContent.saving
               : mode === "create"
-                ? "Create content"
-                : "Save changes"}
+                ? tr.admin.form.createContent
+                : tr.admin.form.saveChanges}
           </button>
         </div>
       </div>

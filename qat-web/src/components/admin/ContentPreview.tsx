@@ -1,14 +1,22 @@
+"use client";
+
 import type { ContentFormData } from "@/lib/validation/content";
+import { useTr } from "@/lib/i18n/context";
 
 type ContentPreviewProps = {
   values: Partial<ContentFormData>;
 };
 
 export function ContentPreview({ values }: ContentPreviewProps) {
+  const tr = useTr();
+
+  const statusKey = values.status as "draft" | "published" | "archived" | undefined;
+  const statusLabel = statusKey ? (tr.admin.form[statusKey] || statusKey) : tr.admin.form.draft;
+
   return (
     <div className="glass-panel rounded-xl p-5">
       <p className="font-mono text-xs uppercase tracking-widest text-slate-400">
-        Preview
+        {tr.admin.form.preview}
       </p>
       {values.cover_image_url ? (
         <div className="mt-3 aspect-video overflow-hidden rounded-lg border border-white/10 bg-black/30">
@@ -21,7 +29,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
         </div>
       ) : (
         <div className="mt-3 flex aspect-video items-center justify-center rounded-lg border border-white/10 bg-white/5">
-          <p className="text-xs text-slate-500">No cover image</p>
+          <p className="text-xs text-slate-500">{tr.admin.form.noCoverImage}</p>
         </div>
       )}
       <div className="mt-4">
@@ -31,7 +39,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
           </p>
         ) : null}
         <h2 className="mt-2 text-xl font-semibold text-white">
-          {values.title || "Untitled"}
+          {values.title || tr.admin.form.untitled}
         </h2>
         {values.excerpt ? (
           <p className="mt-2 text-sm leading-6 text-slate-300">{values.excerpt}</p>
@@ -45,9 +53,10 @@ export function ContentPreview({ values }: ContentPreviewProps) {
                 : "bg-amber-400/15 text-amber-300"
           }`}
         >
-          {values.status ?? "draft"}
+          {statusLabel}
         </p>
       </div>
     </div>
   );
 }
+
