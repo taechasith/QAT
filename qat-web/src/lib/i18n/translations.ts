@@ -297,7 +297,7 @@ export const t = {
 
   th: {
     locale: "th" as Locale,
-    logo: { name: "QAT Assoc.", tagline: "ควอนตัมอาร์ตไทยแลนด์" },
+    logo: { name: "QAT Assoc.", tagline: "Quantum Art Thailand" },
     nav: {
       atlas: "แผนที่",
       game: "เกม",
@@ -475,7 +475,7 @@ export const t = {
         {
           title: "ข่าว",
           description:
-            "อัปเดต ประกาศ และเรื่องราวล่าสุดจากควอนตัมอาร์ตไทยแลนด์",
+            "อัปเดต ประกาศ และเรื่องราวล่าสุดจาก Quantum Art Thailand",
         },
         {
           title: "บรรยาย",

@@ -7,8 +7,7 @@ export type HomepageSettings = {
 
 const defaultHomepageSettings: HomepageSettings = {
   upcomingTitle: "Upcoming events and projects",
-  emptyState:
-    "New QAT programs will appear here after the CMS is connected.",
+  emptyState: "New content will appear here once published.",
 };
 
 export async function getHomepageSettings() {
