@@ -415,8 +415,8 @@ export const t = {
       disabled: "ปิดการรับอีเมลอัปเดตแล้ว",
     },
     hero: {
-      eyebrow: "โครงการระดับสากลของ CreativeLabTH Group",
-      title: "สมาคมควอนตัมอาร์ตไทยแลนด์",
+      eyebrow: "CreativeLabTH Group International Initiative",
+      title: "Quantum Art Thailand Association",
       description:
         "แพลตฟอร์มสาธารณะที่เชื่อมโยงวิทยาศาสตร์ควอนตัม ศิลปะ การปฏิสัมพันธ์ และวัฒนธรรมอนาคต — ที่ซึ่งแนวคิดที่ยากที่สุดกลายเป็นสิ่งที่มนุษย์เข้าใจได้",
       discoverMission: "ค้นพบพันธกิจ",

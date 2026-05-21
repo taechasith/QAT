@@ -50,7 +50,7 @@
 :root {
   --font-app-sans: var(--font-ibm-plex-thai), var(--font-manrope), Arial,
     Helvetica, sans-serif;
-  --font-app-mono: var(--font-jetbrains-mono), "Courier New", Courier,
+  --font-app-mono: var(--font-jetbrains-mono), var(--font-ibm-plex-thai), "Courier New", Courier,
     monospace;
   --background: oklch(0.115 0.035 262);
   --foreground: oklch(0.965 0.02 240);
