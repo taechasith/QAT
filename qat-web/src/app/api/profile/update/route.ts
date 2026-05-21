@@ -42,11 +42,13 @@ export async function POST(request: Request) {
 
   const upsertResult = await upsertProfile(user.id, user.email ?? "");
   if (upsertResult.error) {
+    console.error("[profile/update] upsert error:", upsertResult.error);
     return NextResponse.json({ error: upsertResult.error }, { status: 500 });
   }
 
   const result = await updateProfile(user.id, fields);
   if (result.error) {
+    console.error("[profile/update] update error:", result.error);
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
