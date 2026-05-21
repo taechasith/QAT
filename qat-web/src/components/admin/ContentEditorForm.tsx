@@ -11,6 +11,29 @@ import type { ContentType } from "@/lib/data/content";
 import { CategoryGuide } from "./CategoryGuide";
 import { ContentPreview } from "./ContentPreview";
 import { CoverUpload } from "./CoverUpload";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { CalendarDays } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+
+function parseLocalDate(dateStr: string | undefined | null): Date | undefined {
+  if (!dateStr) return undefined;
+  const justDate = dateStr.includes("T") ? dateStr.split("T")[0] : dateStr;
+  const parts = justDate.split("-");
+  if (parts.length === 3) {
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+      return new Date(year, month, day);
+    }
+  }
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? undefined : date;
+}
+
 
 type ContentEditorFormProps = {
   mode: "create" | "edit";
@@ -58,6 +81,8 @@ export function ContentEditorForm({
   });
 
   const watched = watch();
+  const startAtDate = parseLocalDate(watched.start_at);
+  const endAtDate = parseLocalDate(watched.end_at);
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (mode === "create" && !watched.slug) {
@@ -203,28 +228,78 @@ export function ContentEditorForm({
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="start_at" className="text-sm font-medium text-slate-200">
+            <label className="text-sm font-medium text-slate-200">
               Start date
             </label>
-            <input
-              id="start_at"
-              type="datetime-local"
-              lang="en"
-              {...register("start_at")}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-            />
+            <input type="hidden" {...register("start_at")} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
+                    watched.start_at ? "text-white" : "text-slate-500"
+                  )}
+                >
+                  <CalendarDays className="mr-2 h-4 w-4 text-white" />
+                  {startAtDate ? (
+                    format(startAtDate, "yyyy-MM-dd")
+                  ) : (
+                    <span>yyyy-mm-dd</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                <Calendar
+                  mode="single"
+                  selected={startAtDate}
+                  onSelect={(date) => {
+                    setValue(
+                      "start_at",
+                      date ? format(date, "yyyy-MM-dd") : ""
+                    );
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="end_at" className="text-sm font-medium text-slate-200">
+            <label className="text-sm font-medium text-slate-200">
               End date
             </label>
-            <input
-              id="end_at"
-              type="datetime-local"
-              lang="en"
-              {...register("end_at")}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-            />
+            <input type="hidden" {...register("end_at")} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
+                    watched.end_at ? "text-white" : "text-slate-500"
+                  )}
+                >
+                  <CalendarDays className="mr-2 h-4 w-4 text-white" />
+                  {endAtDate ? (
+                    format(endAtDate, "yyyy-MM-dd")
+                  ) : (
+                    <span>yyyy-mm-dd</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                <Calendar
+                  mode="single"
+                  selected={endAtDate}
+                  onSelect={(date) => {
+                    setValue(
+                      "end_at",
+                      date ? format(date, "yyyy-MM-dd") : ""
+                    );
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 

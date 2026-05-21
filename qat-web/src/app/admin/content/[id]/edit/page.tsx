@@ -47,8 +47,8 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
           cover_image_url: item.cover_image_url ?? "",
           external_url: item.external_url ?? "",
           location: item.location ?? "",
-          start_at: item.start_at ? item.start_at.slice(0, 16) : "",
-          end_at: item.end_at ? item.end_at.slice(0, 16) : "",
+          start_at: item.start_at ? item.start_at.slice(0, 10) : "",
+          end_at: item.end_at ? item.end_at.slice(0, 10) : "",
           sort_order: item.sort_order,
         }}
       />
