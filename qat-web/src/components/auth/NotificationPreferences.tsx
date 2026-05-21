@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 
+import { useTr } from "@/lib/i18n/context";
+
 type NotificationPreferencesProps = {
   userId: string;
   initialValue: boolean;
@@ -11,6 +13,8 @@ export function NotificationPreferences({
   userId,
   initialValue,
 }: NotificationPreferencesProps) {
+  const tr = useTr();
+  const n = tr.notifications;
   const [checked, setChecked] = useState(initialValue);
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -28,9 +32,9 @@ export function NotificationPreferences({
       });
       if (!res.ok) {
         setChecked(!next);
-        setMessage("Update failed. Please try again.");
+        setMessage(n.failed);
       } else {
-        setMessage(next ? "You will receive update emails." : "Update emails disabled.");
+        setMessage(next ? n.enabled : n.disabled);
       }
     });
   }
@@ -49,9 +53,7 @@ export function NotificationPreferences({
             className={`pointer-events-none inline-block size-5 rounded-full bg-white shadow-lg transition-transform ${checked ? "translate-x-5" : "translate-x-0"}`}
           />
         </button>
-        <span className="text-sm text-slate-200">
-          Receive email updates about QAT events and news
-        </span>
+        <span className="text-sm text-slate-200">{n.toggle}</span>
       </div>
       {message ? (
         <p className="text-xs text-slate-400">{message}</p>

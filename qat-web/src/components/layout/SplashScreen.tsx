@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-// primary = oklch(0.82 0.15 210) ≈ #22d3ee  accent = oklch(0.67 0.2 292) ≈ #a78bfa
+import { useTr } from "@/lib/i18n/context";
+
 const C_CYAN   = "#22d3ee";
 const C_VIOLET = "#a78bfa";
 
@@ -36,6 +37,7 @@ function Particles() {
 }
 
 export function SplashScreen() {
+  const tr = useTr();
   const [pct, setPct] = useState(0);
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -73,13 +75,11 @@ export function SplashScreen() {
         pointerEvents: visible ? "all" : "none",
       }}
     >
-      {/* Radial glow */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{ background: `radial-gradient(ellipse at center, rgba(34,211,238,0.06) 0%, transparent 70%)` }}
       />
 
-      {/* Grid overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-[0.025]"
         style={{
@@ -88,7 +88,6 @@ export function SplashScreen() {
         }}
       />
 
-      {/* Spinning rings */}
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
         <div
           className="max-h-[800px] max-w-[800px] size-[60vw] rounded-full"
@@ -104,13 +103,9 @@ export function SplashScreen() {
         />
       </div>
 
-      {/* Particles */}
       <Particles />
 
-      {/* Content */}
       <div className="relative z-10 flex w-full max-w-5xl flex-col items-center px-5 md:px-20">
-
-        {/* Logo */}
         <div
           className="relative mb-16 flex size-40 items-center justify-center rounded-full md:size-52"
           style={{
@@ -140,17 +135,16 @@ export function SplashScreen() {
           />
         </div>
 
-        {/* Progress panel */}
         <div className="glass-panel flex w-full max-w-md flex-col items-center gap-6 rounded-xl p-6">
           <div className="flex flex-col items-center gap-2 text-center">
             <p
               className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-primary"
               style={!ready ? { animation: "pulse 2s cubic-bezier(0.4,0,0.6,1) infinite" } : undefined}
             >
-              {ready ? "SYSTEM READY" : "Initializing Quantum Realm"}
+              {ready ? tr.splash.ready : tr.splash.initializing}
             </p>
             <p className="font-mono text-[12px] tracking-[0.05em] text-muted-foreground">
-              {ready ? "Interface connection established" : "Preparing artistic-scientific interface"}
+              {ready ? tr.splash.interfaceReady : tr.splash.preparing}
             </p>
           </div>
 

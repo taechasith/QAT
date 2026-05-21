@@ -3,27 +3,28 @@ import Link from "next/link";
 import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 
 import type { ContentItem } from "@/lib/data/content";
+import { getLocale } from "@/lib/i18n/locale";
+import { t } from "@/lib/i18n/translations";
 
 type ContentCardProps = {
   item: ContentItem;
 };
 
-function formatDate(value: string | null) {
-  if (!value) {
-    return null;
-  }
-
-  return new Intl.DateTimeFormat("en", {
+async function formatDate(value: string | null, locale: string) {
+  if (!value) return null;
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(new Date(value));
 }
 
-export function ContentCard({ item }: ContentCardProps) {
+export async function ContentCard({ item }: ContentCardProps) {
+  const locale = await getLocale();
+  const tr = t[locale];
+  const date = await formatDate(item.start_at ?? item.published_at, locale);
   const href = item.external_url || `/content/${item.slug}`;
   const external = Boolean(item.external_url);
-  const date = formatDate(item.start_at ?? item.published_at);
 
   return (
     <article className="glass-panel overflow-hidden rounded-lg">
@@ -44,9 +45,7 @@ export function ContentCard({ item }: ContentCardProps) {
         </p>
         <h2 className="mt-3 text-xl font-semibold text-white">{item.title}</h2>
         {item.excerpt ? (
-          <p className="mt-3 text-sm leading-6 text-slate-300">
-            {item.excerpt}
-          </p>
+          <p className="mt-3 text-sm leading-6 text-slate-300">{item.excerpt}</p>
         ) : null}
         <div className="mt-5 flex flex-wrap gap-3 text-xs text-slate-400">
           {date ? (
@@ -68,7 +67,7 @@ export function ContentCard({ item }: ContentCardProps) {
           rel={external ? "noreferrer" : undefined}
           className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
         >
-          Read more
+          {tr.card.readMore}
           <ArrowUpRight className="size-4" aria-hidden="true" />
         </Link>
       </div>

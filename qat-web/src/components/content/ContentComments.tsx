@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
 
+import { useTr } from "@/lib/i18n/context";
+
 type Comment = {
   id: string;
   user_id: string;
@@ -28,6 +30,8 @@ function timeAgo(iso: string) {
 }
 
 export function ContentComments({ contentId, currentUserId }: Props) {
+  const tr = useTr();
+  const c = tr.comments;
   const [comments, setComments] = useState<Comment[]>([]);
   const [body, setBody] = useState("");
   const [posting, setPosting] = useState(false);
@@ -64,7 +68,7 @@ export function ContentComments({ contentId, currentUserId }: Props) {
   }
 
   async function deleteComment(id: string) {
-    setComments((prev) => prev.filter((c) => c.id !== id));
+    setComments((prev) => prev.filter((cm) => cm.id !== id));
     await fetch(`/api/content/${contentId}/comments`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -76,7 +80,7 @@ export function ContentComments({ contentId, currentUserId }: Props) {
     <section className="mt-10 border-t border-white/10 pt-8">
       <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
         <MessageCircle className="size-5 text-cyan-300" aria-hidden="true" />
-        Comments
+        {c.heading}
         {comments.length > 0 && (
           <span className="ml-1 text-sm font-normal text-slate-500">
             ({comments.length})
@@ -84,40 +88,38 @@ export function ContentComments({ contentId, currentUserId }: Props) {
         )}
       </h2>
 
-      {/* Comment list */}
       {comments.length > 0 ? (
         <ul className="mt-6 flex flex-col gap-4">
-          {comments.map((c) => (
-            <li key={c.id} className="glass-panel rounded-xl p-4">
+          {comments.map((cm) => (
+            <li key={cm.id} className="glass-panel rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <span className="text-sm font-medium text-white">
-                    {c.user_display_name ?? "Member"}
+                    {cm.user_display_name ?? tr.contentDetail.member}
                   </span>
-                  <span className="ml-2 text-xs text-slate-500">{timeAgo(c.created_at)}</span>
+                  <span className="ml-2 text-xs text-slate-500">{timeAgo(cm.created_at)}</span>
                 </div>
-                {currentUserId === c.user_id && (
+                {currentUserId === cm.user_id && (
                   <button
                     type="button"
-                    onClick={() => deleteComment(c.id)}
+                    onClick={() => deleteComment(cm.id)}
                     className="shrink-0 text-slate-600 transition hover:text-red-400"
-                    aria-label="Delete comment"
+                    aria-label={c.deleteLabel}
                   >
                     <Trash2 className="size-3.5" aria-hidden="true" />
                   </button>
                 )}
               </div>
               <p className="mt-2 text-sm leading-6 text-slate-300 whitespace-pre-wrap">
-                {c.body}
+                {cm.body}
               </p>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-4 text-sm text-slate-500">No comments yet. Be the first.</p>
+        <p className="mt-4 text-sm text-slate-500">{c.noComments}</p>
       )}
 
-      {/* Post form */}
       {currentUserId ? (
         <form onSubmit={submit} className="mt-6 flex flex-col gap-3">
           <textarea
@@ -126,29 +128,29 @@ export function ContentComments({ contentId, currentUserId }: Props) {
             onChange={(e) => setBody(e.target.value)}
             rows={3}
             maxLength={1000}
-            placeholder="Add a comment…"
+            placeholder={c.placeholder}
             className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30 resize-none"
           />
           {error && (
             <p className="text-xs text-red-400">{error}</p>
           )}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-600">{body.length}/1000</span>
+            <span className="text-xs text-slate-600">{body.length}{c.charLimit}</span>
             <button
               type="submit"
               disabled={!body.trim() || posting}
               className="inline-flex h-9 items-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
             >
-              {posting ? "Posting…" : "Post"}
+              {posting ? c.posting : c.post}
             </button>
           </div>
         </form>
       ) : (
         <p className="mt-6 text-sm text-slate-500">
           <Link href="/login" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
-            Sign in
+            {c.signIn}
           </Link>{" "}
-          to leave a comment.
+          {c.signInPrompt}
         </p>
       )}
     </section>

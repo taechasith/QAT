@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useTr } from "@/lib/i18n/context";
+
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
@@ -12,6 +14,8 @@ export function ProfileNameForm({
   userId: string;
   initialName: string;
 }) {
+  const tr = useTr();
+  const p = tr.profileName;
   const [name, setName] = useState(initialName);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
@@ -28,14 +32,14 @@ export function ProfileNameForm({
     });
 
     setSaving(false);
-    setMsg(res.ok ? "Saved!" : "Save failed. Try again.");
+    setMsg(res.ok ? p.saved : p.failed);
   }
 
   return (
     <form onSubmit={save} className="flex flex-col gap-3 sm:flex-row sm:items-end">
       <div className="flex-1">
         <label htmlFor="display-name" className="mb-1.5 block text-xs font-medium text-slate-300">
-          Display name
+          {p.displayName}
         </label>
         <input
           id="display-name"
@@ -43,7 +47,7 @@ export function ProfileNameForm({
           value={name}
           maxLength={80}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
+          placeholder={p.placeholder}
           className={inputCls}
         />
       </div>
@@ -53,10 +57,10 @@ export function ProfileNameForm({
           disabled={saving}
           className="inline-flex h-10 items-center rounded-full bg-cyan-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
         >
-          {saving ? "Saving…" : "Save"}
+          {saving ? p.saving : p.save}
         </button>
         {msg && (
-          <p className={`text-xs ${msg === "Saved!" ? "text-cyan-300" : "text-red-300"}`}>{msg}</p>
+          <p className={`text-xs ${msg === p.saved ? "text-cyan-300" : "text-red-300"}`}>{msg}</p>
         )}
       </div>
     </form>

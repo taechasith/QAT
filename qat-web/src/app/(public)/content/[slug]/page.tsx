@@ -7,41 +7,39 @@ import { ContentEngagement } from "@/components/content/ContentEngagement";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { createClient } from "@/lib/supabase/server";
 import { getPublishedContentBySlug } from "@/lib/data/content";
+import { getLocale, getTranslations } from "@/lib/i18n/locale";
 import type { Block } from "@/lib/types/blocks";
 
 type ContentDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function formatDate(value: string | null) {
-  if (!value) return null;
-  return new Intl.DateTimeFormat("en", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(value));
-}
-
 export default async function ContentDetailPage({ params }: ContentDetailPageProps) {
   const { slug } = await params;
-  const [{ item }, supabase] = await Promise.all([
+  const [{ item }, supabase, tr, locale] = await Promise.all([
     getPublishedContentBySlug(slug),
     createClient(),
+    getTranslations(),
+    getLocale(),
   ]);
 
   if (!item) notFound();
 
   const { data: { user } } = await supabase.auth.getUser();
-  const date = formatDate(item.start_at ?? item.published_at);
+
+  const date = item.start_at ?? item.published_at
+    ? new Intl.DateTimeFormat(locale, { month: "long", day: "numeric", year: "numeric" }).format(
+        new Date((item.start_at ?? item.published_at)!)
+      )
+    : null;
 
   return (
     <PublicPageShell
       eyebrow={item.content_type.replace("_", " ")}
       title={item.title}
-      description={item.excerpt ?? "Published QAT content."}
+      description={item.excerpt ?? ""}
     >
       <article className="glass-panel rounded-lg p-6 sm:p-8">
-        {/* Meta row */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-4 text-sm text-slate-300">
             {date ? (
@@ -65,7 +63,6 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           />
         </div>
 
-        {/* Body */}
         {Array.isArray(item.body_blocks) && item.body_blocks.length > 0 ? (
           <div className="mt-8">
             <BlockRenderer blocks={item.body_blocks as Block[]} />
@@ -76,7 +73,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           </div>
         ) : (
           <p className="mt-8 text-base leading-8 text-slate-300">
-            More details will be added by the QAT team.
+            {tr.contentDetail.noContent}
           </p>
         )}
 
@@ -87,12 +84,11 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
             rel="noreferrer"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
           >
-            Open related link
+            {tr.contentDetail.openLink}
             <ExternalLink className="size-4" aria-hidden="true" />
           </a>
         ) : null}
 
-        {/* Comments */}
         <ContentComments
           contentId={item.id}
           currentUserId={user?.id ?? null}

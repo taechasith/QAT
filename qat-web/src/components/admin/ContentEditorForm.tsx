@@ -209,6 +209,7 @@ export function ContentEditorForm({
             <input
               id="start_at"
               type="datetime-local"
+              lang="en"
               {...register("start_at")}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />
@@ -220,6 +221,7 @@ export function ContentEditorForm({
             <input
               id="end_at"
               type="datetime-local"
+              lang="en"
               {...register("end_at")}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />

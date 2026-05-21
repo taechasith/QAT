@@ -48,7 +48,7 @@
 }
 
 :root {
-  --font-app-sans: var(--font-manrope), var(--font-ibm-plex-thai), Arial,
+  --font-app-sans: var(--font-ibm-plex-thai), var(--font-manrope), Arial,
     Helvetica, sans-serif;
   --font-app-mono: var(--font-jetbrains-mono), "Courier New", Courier,
     monospace;

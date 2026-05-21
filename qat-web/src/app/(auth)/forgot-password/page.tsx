@@ -5,12 +5,15 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { LogoMark } from "@/components/layout/LogoMark";
+import { useTr } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
 function ForgotPasswordForm() {
+  const tr = useTr();
+  const a = tr.auth.forgotPassword;
   const searchParams = useSearchParams();
   const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [loading, setLoading] = useState(false);
@@ -47,30 +50,26 @@ function ForgotPasswordForm() {
         {sent ? (
           <div className="mt-8 text-center">
             <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
-              Check your inbox
+              {a.checkInbox}
             </p>
-            <h1 className="mt-3 text-2xl font-semibold text-white">Reset link sent</h1>
+            <h1 className="mt-3 text-2xl font-semibold text-white">{a.resetLinkSent}</h1>
             <p className="mt-4 text-sm leading-7 text-slate-300">
-              A password reset link was sent to{" "}
-              <span className="font-medium text-white">{email}</span>.{" "}
-              Click the link in that email to set a new password.
+              {a.sentMessage(email)}
             </p>
-            <p className="mt-3 text-xs text-slate-500">
-              Didn&apos;t receive it? Check your spam folder or try again.
-            </p>
+            <p className="mt-3 text-xs text-slate-500">{a.spamNote}</p>
             <div className="mt-8 flex flex-col items-center gap-3">
               <button
                 type="button"
                 onClick={() => setSent(false)}
                 className="text-sm text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
               >
-                Send again
+                {a.sendAgain}
               </button>
               <Link
                 href="/login"
                 className="text-sm text-slate-400 underline underline-offset-4 hover:text-slate-200"
               >
-                Back to sign in
+                {a.backToSignIn}
               </Link>
             </div>
           </div>
@@ -78,18 +77,16 @@ function ForgotPasswordForm() {
           <>
             <div className="mt-8 text-center">
               <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
-                Password reset
+                {a.eyebrow}
               </p>
-              <h1 className="mt-3 text-2xl font-semibold text-white">Forgot your password?</h1>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Enter your email and we&apos;ll send a secure reset link.
-              </p>
+              <h1 className="mt-3 text-2xl font-semibold text-white">{a.heading}</h1>
+              <p className="mt-2 text-sm leading-6 text-slate-400">{a.description}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
               <div>
                 <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-200">
-                  Email
+                  {a.email}
                 </label>
                 <input
                   id="email"
@@ -98,7 +95,7 @@ function ForgotPasswordForm() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={a.emailPlaceholder}
                   className={inputCls}
                 />
               </div>
@@ -114,7 +111,7 @@ function ForgotPasswordForm() {
                 disabled={loading}
                 className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
               >
-                {loading ? "Sending…" : "Send reset link"}
+                {loading ? a.sending : a.sendResetLink}
               </button>
             </form>
 
@@ -123,7 +120,7 @@ function ForgotPasswordForm() {
                 href="/login"
                 className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
               >
-                Back to sign in
+                {a.backToSignIn}
               </Link>
             </p>
           </>

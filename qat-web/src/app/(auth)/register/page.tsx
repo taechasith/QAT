@@ -6,22 +6,15 @@ import { useState } from "react";
 
 import { LogoMark } from "@/components/layout/LogoMark";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import { useTr } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
   "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
 
-function friendlySignUpError(msg: string): string {
-  if (msg.toLowerCase().includes("already registered") || msg.toLowerCase().includes("already been registered")) {
-    return "An account with this email already exists. Sign in instead.";
-  }
-  if (msg.toLowerCase().includes("invalid email")) {
-    return "Please enter a valid email address.";
-  }
-  return msg;
-}
-
 export default function RegisterPage() {
+  const tr = useTr();
+  const a = tr.auth.register;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,14 +22,27 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  function friendlySignUpError(msg: string): string {
+    if (
+      msg.toLowerCase().includes("already registered") ||
+      msg.toLowerCase().includes("already been registered")
+    ) {
+      return a.alreadyExists;
+    }
+    if (msg.toLowerCase().includes("invalid email")) {
+      return a.invalidEmail;
+    }
+    return msg;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password !== confirm) {
-      setErrorMsg("Passwords do not match.");
+      setErrorMsg(a.passwordsMismatch);
       return;
     }
     if (password.length < 8) {
-      setErrorMsg("Password must be at least 8 characters.");
+      setErrorMsg(a.passwordTooShort);
       return;
     }
     setLoading(true);
@@ -51,10 +57,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // Redirect to login regardless of email confirmation state.
-    // If Supabase email confirmation is ON, the user must confirm before they
-    // can sign in — but we do not show that screen here. Disable confirmation
-    // in Supabase Dashboard → Authentication → Email → "Enable email confirmations".
     router.push("/login?registered=1");
   }
 
@@ -66,14 +68,14 @@ export default function RegisterPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">Join QAT</p>
-          <h1 className="mt-3 text-2xl font-semibold text-white">Create account</h1>
+          <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">{a.eyebrow}</p>
+          <h1 className="mt-3 text-2xl font-semibold text-white">{a.heading}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
           <div>
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-200">
-              Email
+              {a.email}
             </label>
             <input
               id="email"
@@ -82,14 +84,14 @@ export default function RegisterPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={a.emailPlaceholder}
               className={inputCls}
             />
           </div>
 
           <div>
             <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-200">
-              Password
+              {a.password}
             </label>
             <PasswordInput
               id="password"
@@ -97,14 +99,14 @@ export default function RegisterPage() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min. 8 characters"
+              placeholder={a.passwordPlaceholder}
               className={inputCls}
             />
           </div>
 
           <div>
             <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-slate-200">
-              Confirm password
+              {a.confirmPassword}
             </label>
             <PasswordInput
               id="confirm"
@@ -112,7 +114,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              placeholder="Repeat password"
+              placeholder={a.confirmPlaceholder}
               className={inputCls}
             />
           </div>
@@ -120,12 +122,12 @@ export default function RegisterPage() {
           {errorMsg && (
             <div className="rounded-lg border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-300">
               {errorMsg}
-              {errorMsg.includes("already exists") && (
+              {errorMsg === a.alreadyExists && (
                 <Link
                   href="/login"
                   className="ml-2 underline underline-offset-4 hover:text-red-100"
                 >
-                  Sign in →
+                  {a.signIn} →
                 </Link>
               )}
             </div>
@@ -136,14 +138,14 @@ export default function RegisterPage() {
             disabled={loading}
             className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
           >
-            {loading ? "Creating…" : "Create account"}
+            {loading ? a.creating : a.createAccount}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-400">
-          Already have an account?{" "}
+          {a.alreadyHaveAccount}{" "}
           <Link href="/login" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
-            Sign in
+            {a.signIn}
           </Link>
         </p>
       </div>

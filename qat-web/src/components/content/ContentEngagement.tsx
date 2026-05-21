@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Heart, Eye } from "lucide-react";
 
+import { useTr } from "@/lib/i18n/context";
+
 type Props = {
   contentId: string;
   initialViews: number;
@@ -10,16 +12,15 @@ type Props = {
 };
 
 export function ContentEngagement({ contentId, initialViews, isLoggedIn }: Props) {
+  const tr = useTr();
+  const e = tr.engagement;
   const [views] = useState(initialViews);
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
   const [liking, setLiking] = useState(false);
 
   useEffect(() => {
-    // Track view
     fetch(`/api/content/${contentId}/view`, { method: "POST" }).catch(() => {});
-
-    // Load like state
     fetch(`/api/content/${contentId}/like`)
       .then((r) => r.json())
       .then(({ count, liked }) => {
@@ -59,7 +60,7 @@ export function ContentEngagement({ contentId, initialViews, isLoggedIn }: Props
         type="button"
         onClick={toggleLike}
         disabled={!isLoggedIn || liking}
-        title={isLoggedIn ? (liked ? "Unlike" : "Like") : "Sign in to like"}
+        title={isLoggedIn ? (liked ? e.unlike : e.like) : e.signInToLike}
         className={[
           "inline-flex items-center gap-1.5 transition-colors",
           liked ? "text-red-400" : "hover:text-red-300",

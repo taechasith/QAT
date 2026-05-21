@@ -1,22 +1,9 @@
-"use client";
-
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-
 import type { ContentItem } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
-import { ThreeErrorBoundary } from "@/components/three/ThreeErrorBoundary";
-
+import { QuantumHeroClient } from "./QuantumHeroClient";
 import { FinalPortal } from "./FinalPortal";
 import { MissionSection } from "./MissionSection";
-
-const QuantumHeroScene = dynamic(
-  () =>
-    import("@/components/three/QuantumHeroScene").then(
-      (m) => m.QuantumHeroScene,
-    ),
-  { ssr: false },
-);
 
 type QuantumLandingProps = {
   featuredItems: ContentItem[];
@@ -25,27 +12,24 @@ type QuantumLandingProps = {
   emptyState: string;
 };
 
-export function QuantumLanding({
+export async function QuantumLanding({
   featuredItems,
   featuredError,
   upcomingTitle,
   emptyState,
 }: QuantumLandingProps) {
+  const tr = await getTranslations();
+  const h = tr.hero;
+
   return (
     <div className="relative text-foreground">
-      {/* 3D scene — fixed full-page background */}
       <div
         className="pointer-events-none fixed inset-0 -z-20"
         aria-hidden="true"
       >
-        <ThreeErrorBoundary fallback={null}>
-          <Suspense fallback={null}>
-            <QuantumHeroScene />
-          </Suspense>
-        </ThreeErrorBoundary>
+        <QuantumHeroClient />
       </div>
 
-      {/* ambient gradient over 3D + bottom fade into dark */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
         aria-hidden="true"
@@ -54,53 +38,48 @@ export function QuantumLanding({
         <div className="absolute bottom-0 left-0 right-0 h-[55vh] bg-gradient-to-t from-background via-background/80 to-transparent" />
       </div>
 
-      {/* hero — transparent, text over 3D */}
       <section
         aria-label="Hero"
         className="relative flex min-h-svh flex-col items-center justify-center px-5 py-28 text-center sm:px-8 lg:px-10"
       >
         <div className="max-w-4xl">
           <p className="font-mono text-xs font-semibold tracking-[0.32em] text-cyan-200">
-            CreativeLabTH Group International Initiative
+            {h.eyebrow}
           </p>
           <h1 className="mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Quantum Art Thailand Association
+            {h.title}
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            A public platform connecting quantum science, art, interaction, and
-            future culture — where the hardest ideas become the most human.
+            {h.description}
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#mission"
               className="inline-flex h-11 items-center rounded-full bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition-all duration-200 hover:bg-cyan-100 hover:scale-[1.04] hover:shadow-[0_0_32px_rgba(34,211,238,0.45)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
-              Discover the mission
+              {h.discoverMission}
             </a>
             <a
               href="#portal"
               className="inline-flex h-11 items-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/12 hover:border-white/35 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
-              Explore destinations
+              {h.exploreDestinations}
             </a>
           </div>
         </div>
 
-        {/* scroll hint */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
           <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-300">
-            Scroll to explore
+            {h.scrollHint}
           </span>
           <div className="h-8 w-px bg-gradient-to-b from-slate-300 to-transparent" />
         </div>
       </section>
 
-      {/* mission */}
       <div className="relative">
         <MissionSection />
       </div>
 
-      {/* portal */}
       <div className="relative">
         <FinalPortal
           featuredItems={featuredItems}

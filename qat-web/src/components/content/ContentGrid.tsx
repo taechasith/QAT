@@ -1,6 +1,7 @@
 import { ContentCard } from "@/components/content/ContentCard";
 import { EmptyContentState } from "@/components/content/EmptyContentState";
 import type { ContentItem } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 type ContentGridProps = {
   items: ContentItem[];
@@ -9,18 +10,20 @@ type ContentGridProps = {
   error?: string;
 };
 
-export function ContentGrid({
+export async function ContentGrid({
   items,
   emptyTitle,
   emptyDescription,
   error,
 }: ContentGridProps) {
+  const tr = await getTranslations();
+
   if (items.length === 0) {
     return (
       <EmptyContentState
         title={emptyTitle}
         description={emptyDescription}
-        note={error ? "Content temporarily unavailable" : "Check back soon"}
+        note={error ? tr.empty.errorNote : tr.empty.note}
       />
     );
   }

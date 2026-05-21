@@ -9,6 +9,7 @@ type PortalCardProps = {
   icon: LucideIcon;
   external?: boolean;
   badge?: string;
+  actionLabel: string;
 };
 
 export function PortalCard({
@@ -18,6 +19,7 @@ export function PortalCard({
   icon: Icon,
   external,
   badge,
+  actionLabel,
 }: PortalCardProps) {
   return (
     <Link
@@ -41,7 +43,7 @@ export function PortalCard({
         <p className="mt-1.5 text-sm leading-6 text-slate-400">{description}</p>
       </div>
       <div className="flex items-center gap-1.5 text-sm font-medium text-cyan-100 transition-all duration-200 group-hover:gap-2 group-hover:text-white">
-        {external ? "Visit" : "Explore"}
+        {actionLabel}
         <ArrowUpRight
           className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           aria-hidden="true"

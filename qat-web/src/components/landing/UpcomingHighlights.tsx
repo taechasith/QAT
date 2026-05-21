@@ -1,5 +1,6 @@
 import { ContentGrid } from "@/components/content/ContentGrid";
 import type { ContentItem } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 type UpcomingHighlightsProps = {
   items: ContentItem[];
@@ -8,16 +9,18 @@ type UpcomingHighlightsProps = {
   emptyState: string;
 };
 
-export function UpcomingHighlights({
+export async function UpcomingHighlights({
   items,
   error,
   upcomingTitle,
   emptyState,
 }: UpcomingHighlightsProps) {
+  const tr = await getTranslations();
+
   return (
     <div>
       <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
-        What&apos;s happening
+        {tr.portal.whatsHappening}
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
         {upcomingTitle}
@@ -26,7 +29,7 @@ export function UpcomingHighlights({
         <ContentGrid
           items={items}
           error={error}
-          emptyTitle="No events or projects published yet"
+          emptyTitle={tr.locale === "th" ? "ยังไม่มีกิจกรรมหรือโครงการ" : "No events or projects published yet"}
           emptyDescription={emptyState}
         />
       </div>
