@@ -140,6 +140,7 @@ export default async function AdminPage() {
   return (
     <AdminShell>
       <div className="space-y-6">
+        {/* Header */}
         <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
@@ -160,120 +161,112 @@ export default async function AdminPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-12">
-          <div className="xl:col-span-8">
-            <div className="glass-panel rounded-2xl p-6 h-full flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="size-4 text-cyan-400" />
-                    <h2 className="text-lg font-semibold text-white">
-                      {tr.admin.dashboard.recentActivity}
-                    </h2>
+        {/* Stats — full width at top for instant visibility */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {stats.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div
+                key={s.label}
+                className={`rounded-xl border p-4 transition-all duration-300 ${s.color} ${s.hoverColor}`}
+              >
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{s.label}</p>
+                  <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${s.iconBg}`}>
+                    <Icon className="size-4" />
                   </div>
-                  <Link
-                    href="/admin/content"
-                    className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition"
-                  >
-                    {tr.admin.dashboard.quickLinks.allContent} <ArrowRight className="size-3" />
-                  </Link>
                 </div>
-
-                {recentItems.length === 0 ? (
-                  <div className="py-12 text-center text-sm text-slate-500">
-                    {locale === "th" ? "ไม่มีความเคลื่อนไหวล่าสุดในระบบ" : "No recent activity recorded."}
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-sm">
-                      <thead>
-                        <tr className="border-b border-white/5 text-slate-400 text-xs uppercase tracking-wider">
-                          <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.title}</th>
-                          <th className="py-3 font-semibold pr-4 hidden sm:table-cell">{tr.admin.contentList.table.type}</th>
-                          <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.status}</th>
-                          <th className="py-3 font-semibold text-right pr-4 hidden md:table-cell">{tr.admin.contentList.table.stats}</th>
-                          <th className="py-3 font-semibold text-right">{tr.admin.contentList.table.updated}</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/5">
-                        {recentItems.map((item) => (
-                          <tr key={item.id} className="group hover:bg-white/[0.01] transition-colors">
-                            <td className="py-3.5 pr-4 max-w-[200px] sm:max-w-[300px]">
-                              <div className="flex items-center gap-3">
-                                <Link
-                                  href={`/admin/content/${item.id}/edit`}
-                                  className="font-medium text-white group-hover:text-cyan-300 transition line-clamp-1"
-                                >
-                                  {item.title || tr.admin.form.untitled}
-                                </Link>
-                              </div>
-                            </td>
-                            <td className="py-3.5 pr-4 hidden sm:table-cell text-slate-300 font-mono text-xs">
-                              {categoryGuides[item.content_type]?.label || item.content_type}
-                            </td>
-                            <td className="py-3.5 pr-4">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(item.status)}`}>
-                                {getStatusLabel(item.status)}
-                              </span>
-                            </td>
-                            <td className="py-3.5 text-right pr-4 hidden md:table-cell text-slate-400 font-mono text-xs">
-                              {item.view_count || 0} {locale === "th" ? "ครั้ง" : "views"}
-                            </td>
-                            <td className="py-3.5 text-right text-slate-400 font-mono text-xs">
-                              <div className="flex items-center justify-end gap-3">
-                                <span>{formatDate(item.updated_at)}</span>
-                                <Link
-                                  href={`/admin/content/${item.id}/edit`}
-                                  className="opacity-0 group-hover:opacity-100 flex size-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white transition"
-                                  title="Edit"
-                                >
-                                  <Edit2 className="size-3.5" />
-                                </Link>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                <h3 className="text-2xl font-extrabold tracking-tight text-white">
+                  {typeof s.value === "number" ? s.value.toLocaleString() : s.value}
+                </h3>
               </div>
+            );
+          })}
+        </div>
+
+        {/* Main grid — Recent Activity + Right panel */}
+        <div className="grid gap-6 xl:grid-cols-12">
+          {/* Recent Activity */}
+          <div className="xl:col-span-8">
+            <div className="glass-panel rounded-2xl p-6 h-full">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="size-4 text-cyan-400" />
+                  <h2 className="text-lg font-semibold text-white">
+                    {tr.admin.dashboard.recentActivity}
+                  </h2>
+                </div>
+                <Link
+                  href="/admin/content"
+                  className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition"
+                >
+                  {tr.admin.dashboard.quickLinks.allContent} <ArrowRight className="size-3" />
+                </Link>
+              </div>
+
+              {recentItems.length === 0 ? (
+                <div className="py-12 text-center text-sm text-slate-500">
+                  {locale === "th" ? "ไม่มีความเคลื่อนไหวล่าสุดในระบบ" : "No recent activity recorded."}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-white/5 text-slate-400 text-xs uppercase tracking-wider">
+                        <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.title}</th>
+                        <th className="py-3 font-semibold pr-4 hidden sm:table-cell">{tr.admin.contentList.table.type}</th>
+                        <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.status}</th>
+                        <th className="py-3 font-semibold text-right pr-4 hidden md:table-cell">{tr.admin.contentList.table.stats}</th>
+                        <th className="py-3 font-semibold text-right">{tr.admin.contentList.table.updated}</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {recentItems.map((item) => (
+                        <tr key={item.id} className="group hover:bg-white/[0.01] transition-colors">
+                          <td className="py-3.5 pr-4 max-w-[200px] sm:max-w-[300px]">
+                            <div className="flex items-center gap-3">
+                              <Link
+                                href={`/admin/content/${item.id}/edit`}
+                                className="font-medium text-white group-hover:text-cyan-300 transition line-clamp-1"
+                              >
+                                {item.title || tr.admin.form.untitled}
+                              </Link>
+                            </div>
+                          </td>
+                          <td className="py-3.5 pr-4 hidden sm:table-cell text-slate-300 font-mono text-xs">
+                            {categoryGuides[item.content_type]?.label || item.content_type}
+                          </td>
+                          <td className="py-3.5 pr-4">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(item.status)}`}>
+                              {getStatusLabel(item.status)}
+                            </span>
+                          </td>
+                          <td className="py-3.5 text-right pr-4 hidden md:table-cell text-slate-400 font-mono text-xs">
+                            {item.view_count || 0} {locale === "th" ? "ครั้ง" : "views"}
+                          </td>
+                          <td className="py-3.5 text-right text-slate-400 font-mono text-xs">
+                            <div className="flex items-center justify-end gap-3">
+                              <span>{formatDate(item.updated_at)}</span>
+                              <Link
+                                href={`/admin/content/${item.id}/edit`}
+                                className="opacity-0 group-hover:opacity-100 flex size-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white transition"
+                                title="Edit"
+                              >
+                                <Edit2 className="size-3.5" />
+                              </Link>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-1">
-            <div className="glass-panel rounded-2xl p-5 sm:col-span-2 sm:p-6 xl:col-span-1">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-white">
-                  {tr.admin.dashboard.stats.total}
-                </h2>
-                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-cyan-200">
-                  {tr.admin.dashboard.title}
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {stats.map((s) => {
-                  const Icon = s.icon;
-                  return (
-                    <div
-                      key={s.label}
-                      className={`rounded-xl border p-4 transition-all duration-300 ${s.color} ${s.hoverColor}`}
-                    >
-                      <div className="mb-4 flex items-center justify-between gap-3">
-                        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{s.label}</p>
-                        <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${s.iconBg}`}>
-                          <Icon className="size-4" />
-                        </div>
-                      </div>
-                      <h3 className="text-2xl font-extrabold tracking-tight text-white">
-                        {typeof s.value === "number" ? s.value.toLocaleString() : s.value}
-                      </h3>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
+          {/* Right panel — Quick Actions + Profile stacked */}
+          <div className="flex flex-col gap-6 xl:col-span-4">
             <div className="glass-panel rounded-2xl p-5 sm:p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {tr.admin.dashboard.quickActions}
@@ -285,7 +278,7 @@ export default async function AdminPage() {
                     <Link
                       key={action.href}
                       href={action.href}
-                      className="group flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.06] hover:border-violet-500/20"
+                      className="group flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.06] hover:border-violet-500/20 cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex size-9 items-center justify-center rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 group-hover:bg-violet-500/20 transition-all">
@@ -302,7 +295,6 @@ export default async function AdminPage() {
               </div>
             </div>
 
-            {/* Profile Info Card */}
             <div className="glass-panel rounded-2xl p-5 sm:p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {tr.admin.dashboard.adminProfile}

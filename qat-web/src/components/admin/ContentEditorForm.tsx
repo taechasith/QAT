@@ -124,35 +124,32 @@ export function ContentEditorForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_360px]">
-      <div className="flex flex-col gap-6">
-        {/* Category */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="content_type" className="text-sm font-medium text-slate-200">
-            {tr.admin.form.category}
-          </label>
-          <select
-            id="content_type"
-            {...register("content_type")}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          >
-            {CONTENT_TYPES.map((t) => (
-              <option key={t} value={t} className="bg-slate-900">
-                {tr.admin.form.categoryGuides[t]?.label || CONTENT_TYPE_LABELS[t]}
-              </option>
-            ))}
-          </select>
-          {watched.content_type ? (
-            <CategoryGuide contentType={watched.content_type} />
-          ) : null}
-        </div>
+      <div className="flex flex-col gap-5">
 
-        {/* Bilingual title + excerpt — both always visible */}
-        <div className="rounded-xl border border-white/10 bg-white/3 p-4 flex flex-col gap-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Content — at least one language required · both recommended for best UX
+        {/* Section 1 — Identity */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            1 · Identity
           </p>
-
-          {/* Slug (shared, above both columns) */}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="content_type" className="text-sm font-medium text-slate-200">
+              {tr.admin.form.category}
+            </label>
+            <select
+              id="content_type"
+              {...register("content_type")}
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+            >
+              {CONTENT_TYPES.map((t) => (
+                <option key={t} value={t} className="bg-slate-900">
+                  {tr.admin.form.categoryGuides[t]?.label || CONTENT_TYPE_LABELS[t]}
+                </option>
+              ))}
+            </select>
+            {watched.content_type ? (
+              <CategoryGuide contentType={watched.content_type} />
+            ) : null}
+          </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="slug" className="text-sm font-medium text-slate-200">
               {tr.admin.form.slug} <span className="text-red-400">*</span>
@@ -174,11 +171,17 @@ export function ContentEditorForm({
               </p>
             ) : null}
           </div>
+        </div>
 
-          {/* EN + TH side by side */}
+        {/* Section 2 — Content (bilingual title + excerpt + body) */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            2 · Content — at least one language required
+          </p>
+
+          {/* Title + Excerpt EN / TH */}
           <div className="grid gap-4 xl:grid-cols-2">
-            {/* English */}
-            <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/3 p-4">
+            <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
                 <span className="text-[10px] text-slate-400">required if TH empty</span>
@@ -214,11 +217,10 @@ export function ContentEditorForm({
               </div>
             </div>
 
-            {/* Thai */}
             <div className={`flex flex-col gap-3 rounded-lg border p-4 transition ${
               watched.title_th
                 ? "border-amber-400/30 bg-amber-400/5"
-                : "border-dashed border-white/10 bg-white/3"
+                : "border-dashed border-white/10 bg-white/[0.03]"
             }`}>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
@@ -255,13 +257,12 @@ export function ContentEditorForm({
             </div>
           </div>
 
-          {/* Body content EN + TH */}
+          {/* Body EN / TH */}
           <div className="grid gap-4 xl:grid-cols-2">
-            {/* English body */}
-            <div className="flex flex-col gap-1.5 rounded-lg border border-white/10 bg-white/3 p-4">
+            <div className="flex flex-col gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
-                <span className="text-[10px] text-slate-400">body content</span>
+                <span className="text-[10px] text-slate-400">body · Markdown supported</span>
               </div>
               <textarea
                 rows={8}
@@ -271,11 +272,10 @@ export function ContentEditorForm({
               />
             </div>
 
-            {/* Thai body */}
             <div className={`flex flex-col gap-1.5 rounded-lg border p-4 transition ${
               watched.body_md_th
                 ? "border-amber-400/30 bg-amber-400/5"
-                : "border-dashed border-white/10 bg-white/3"
+                : "border-dashed border-white/10 bg-white/[0.03]"
             }`}>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
@@ -294,7 +294,6 @@ export function ContentEditorForm({
             </div>
           </div>
 
-          {/* Publish warning when TH missing */}
           {watched.status === "published" && !watched.title_th && (
             <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-300">
               Thai version is empty — Thai-language users will see the English version as fallback.
@@ -302,9 +301,11 @@ export function ContentEditorForm({
           )}
         </div>
 
-        {/* Cover — separate EN / TH */}
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-slate-200">{tr.admin.form.cover}</p>
+        {/* Section 3 — Cover image */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            3 · Cover image
+          </p>
           <div className="grid gap-4 xl:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
@@ -330,139 +331,129 @@ export function ContentEditorForm({
           </div>
         </div>
 
-
-        {/* Author */}
-        <div className="rounded-xl border border-white/10 bg-white/3 p-4 flex flex-col gap-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Author — overrides account name · avatar always from account
+        {/* Section 4 — Event details */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            4 · Details
           </p>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="author_name" className="text-xs font-medium text-slate-300">
-              Display name
+            <label htmlFor="external_url" className="text-sm font-medium text-slate-200">
+              {tr.admin.form.externalUrl}
             </label>
             <input
-              id="author_name"
+              id="external_url"
               type="text"
-              {...register("author_name")}
-              placeholder="Leave blank to use account name"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="author_bio" className="text-xs font-medium text-slate-300">
-              Bio <span className="text-slate-500">(optional)</span>
-            </label>
-            <textarea
-              id="author_bio"
-              rows={2}
-              {...register("author_bio")}
-              placeholder="Short bio shown on this content…"
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-            />
-          </div>
-        </div>
-
-        {/* External URL */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="external_url" className="text-sm font-medium text-slate-200">
-            {tr.admin.form.externalUrl}
-          </label>
-          <input
-            id="external_url"
-            type="text"
-            {...register("external_url")}
-            placeholder={tr.admin.form.externalUrlPlaceholder}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
-          />
-        </div>
-
-        {/* Location + dates */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="location" className="text-sm font-medium text-slate-200">
-              {tr.admin.form.location}
-            </label>
-            <input
-              id="location"
-              type="text"
-              {...register("location")}
-              placeholder={tr.admin.form.locationPlaceholder}
+              {...register("external_url")}
+              placeholder={tr.admin.form.externalUrlPlaceholder}
               className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
             />
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-200">
-              {tr.admin.form.startDate}
-            </label>
-            <input type="hidden" {...register("start_at")} />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
-                    watched.start_at ? "text-white" : "text-slate-500"
-                  )}
-                >
-                  <CalendarDays className="mr-2 h-4 w-4 text-white" />
-                  {startAtDate ? (
-                    format(startAtDate, "yyyy-MM-dd")
-                  ) : (
-                    <span>yyyy-mm-dd</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
-                <Calendar
-                  mode="single"
-                  selected={startAtDate}
-                  onSelect={(date) => {
-                    setValue(
-                      "start_at",
-                      date ? format(date, "yyyy-MM-dd") : ""
-                    );
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="location" className="text-sm font-medium text-slate-200">
+                {tr.admin.form.location}
+              </label>
+              <input
+                id="location"
+                type="text"
+                {...register("location")}
+                placeholder={tr.admin.form.locationPlaceholder}
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-slate-200">
+                {tr.admin.form.startDate}
+              </label>
+              <input type="hidden" {...register("start_at")} />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
+                      watched.start_at ? "text-white" : "text-slate-500"
+                    )}
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-white" />
+                    {startAtDate ? format(startAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={startAtDate}
+                    onSelect={(date) => {
+                      setValue("start_at", date ? format(date, "yyyy-MM-dd") : "");
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-slate-200">
+                {tr.admin.form.endDate}
+              </label>
+              <input type="hidden" {...register("end_at")} />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
+                      watched.end_at ? "text-white" : "text-slate-500"
+                    )}
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-white" />
+                    {endAtDate ? format(endAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={endAtDate}
+                    onSelect={(date) => {
+                      setValue("end_at", date ? format(date, "yyyy-MM-dd") : "");
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-200">
-              {tr.admin.form.endDate}
-            </label>
-            <input type="hidden" {...register("end_at")} />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
-                    watched.end_at ? "text-white" : "text-slate-500"
-                  )}
-                >
-                  <CalendarDays className="mr-2 h-4 w-4 text-white" />
-                  {endAtDate ? (
-                    format(endAtDate, "yyyy-MM-dd")
-                  ) : (
-                    <span>yyyy-mm-dd</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
-                <Calendar
-                  mode="single"
-                  selected={endAtDate}
-                  onSelect={(date) => {
-                    setValue(
-                      "end_at",
-                      date ? format(date, "yyyy-MM-dd") : ""
-                    );
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
+        </div>
+
+        {/* Section 5 — Author */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            5 · Author — overrides account name
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="author_name" className="text-xs font-medium text-slate-300">
+                Display name
+              </label>
+              <input
+                id="author_name"
+                type="text"
+                {...register("author_name")}
+                placeholder="Leave blank to use account name"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="author_bio" className="text-xs font-medium text-slate-300">
+                Bio <span className="text-slate-500">(optional)</span>
+              </label>
+              <textarea
+                id="author_bio"
+                rows={2}
+                {...register("author_bio")}
+                placeholder="Short bio shown on this content…"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              />
+            </div>
           </div>
         </div>
 
@@ -525,7 +516,7 @@ export function ContentEditorForm({
           <button
             type="submit"
             disabled={submitting}
-            className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-lg bg-cyan-200 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
+            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-cyan-200 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 cursor-pointer"
           >
             {submitting
               ? tr.admin.editContent.saving

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
@@ -82,12 +81,11 @@ export function CoverUpload({ value, onChange, label }: Props) {
                 style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={value}
                 alt="Cover"
-                fill
-                unoptimized
-                className="object-cover"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
               />
             )}
             <button
