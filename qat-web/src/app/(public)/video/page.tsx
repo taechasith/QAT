@@ -1,22 +1,18 @@
 import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 export default async function VideoPage() {
-  const { items, error } = await getPublishedContentByType("video");
+  const [{ items, error }, tr] = await Promise.all([
+    getPublishedContentByType("video"),
+    getTranslations(),
+  ]);
+  const p = tr.pages.video;
 
   return (
-    <PublicPageShell
-      eyebrow="Archive"
-      title="Video"
-      description="Filmed documentation of exhibitions, performances, and educational programs produced under the QAT initiative."
-    >
-      <ContentGrid
-        items={items}
-        error={error}
-        emptyTitle="No videos yet"
-        emptyDescription="Video documentation and short films will appear here once published."
-      />
+    <PublicPageShell eyebrow={p.eyebrow} title={p.title} description={p.description}>
+      <ContentGrid items={items} error={error} emptyTitle={p.emptyTitle} emptyDescription={p.emptyDescription} />
     </PublicPageShell>
   );
 }

@@ -2,7 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { Block } from "@/lib/types/blocks";
 
-const adminSelect = `
+const adminSelectBase = `
   id,
   content_type,
   status,
@@ -16,28 +16,45 @@ const adminSelect = `
   end_at,
   published_at,
   sort_order,
-  view_count,
   created_at,
-  updated_at,
+  updated_at
+`;
+
+const adminSelectEngagement = `
+  ${adminSelectBase},
+  view_count,
   content_likes(count),
   content_comments(count)
 `;
 
+// Keep adminSelect pointing at the engagement version for getContentById
+const adminSelect = adminSelectEngagement;
+
 export async function listAllContent() {
   const supabase = createAdminClient();
+
+  // Try with engagement columns first; fall back if migration not yet run
   const { data, error } = await supabase
     .from("content_items")
-    .select(adminSelect)
+    .select(adminSelectEngagement)
     .order("updated_at", { ascending: false });
 
-  return { items: data ?? [], error: error?.message };
+  if (error) {
+    const { data: fallback, error: fallbackError } = await supabase
+      .from("content_items")
+      .select(adminSelectBase)
+      .order("updated_at", { ascending: false });
+    return { items: fallback ?? [], error: fallbackError?.message };
+  }
+
+  return { items: data ?? [], error: undefined };
 }
 
 export async function getContentById(id: string) {
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("content_items")
-    .select(`${adminSelect}, body_md, body_blocks, metadata`)
+    .select(`${adminSelectBase}, view_count, body_md, body_blocks, metadata`)
     .eq("id", id)
     .maybeSingle();
 

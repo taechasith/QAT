@@ -1,22 +1,18 @@
 import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 export default async function NewsPage() {
-  const { items, error } = await getPublishedContentByType("news");
+  const [{ items, error }, tr] = await Promise.all([
+    getPublishedContentByType("news"),
+    getTranslations(),
+  ]);
+  const p = tr.pages.news;
 
   return (
-    <PublicPageShell
-      eyebrow="Dispatch"
-      title="News"
-      description="Updates from the quantum art frontier — events, partnerships, grants, and announcements from QAT Assoc."
-    >
-      <ContentGrid
-        items={items}
-        error={error}
-        emptyTitle="No news yet"
-        emptyDescription="Announcements and updates will appear here as they are published."
-      />
+    <PublicPageShell eyebrow={p.eyebrow} title={p.title} description={p.description}>
+      <ContentGrid items={items} error={error} emptyTitle={p.emptyTitle} emptyDescription={p.emptyDescription} />
     </PublicPageShell>
   );
 }

@@ -1,22 +1,18 @@
 import { ContentGrid } from "@/components/content/ContentGrid";
 import { PublicPageShell } from "@/components/content/PublicPageShell";
 import { getPublishedContentByType } from "@/lib/data/content";
+import { getTranslations } from "@/lib/i18n/locale";
 
 export default async function ExperimentPage() {
-  const { items, error } = await getPublishedContentByType("experiment");
+  const [{ items, error }, tr] = await Promise.all([
+    getPublishedContentByType("experiment"),
+    getTranslations(),
+  ]);
+  const p = tr.pages.experiment;
 
   return (
-    <PublicPageShell
-      eyebrow="Field Work"
-      title="Experiment"
-      description="Live experiments, prototypes, and works-in-progress — open research from QAT's ongoing creative investigations."
-    >
-      <ContentGrid
-        items={items}
-        error={error}
-        emptyTitle="No experiments yet"
-        emptyDescription="Experimental works and prototypes will be shared here as they develop."
-      />
+    <PublicPageShell eyebrow={p.eyebrow} title={p.title} description={p.description}>
+      <ContentGrid items={items} error={error} emptyTitle={p.emptyTitle} emptyDescription={p.emptyDescription} />
     </PublicPageShell>
   );
 }

@@ -28,9 +28,10 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
         </div>
         <Link
           href={`/admin/content/${id}/blocks`}
-          className="inline-flex h-10 items-center gap-2 rounded-lg border border-cyan-300/30 px-5 text-sm font-medium text-cyan-300 transition hover:border-cyan-300/60 hover:bg-cyan-300/5"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
         >
-          Edit page content →
+          <span>Edit page layout</span>
+          <span aria-hidden="true">→</span>
         </Link>
       </div>
       <ContentEditorForm

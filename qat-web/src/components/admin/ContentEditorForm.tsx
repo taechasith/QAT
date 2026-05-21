@@ -87,7 +87,7 @@ export function ContentEditorForm({
     }
 
     if (mode === "create" && json.id) {
-      router.push(`/admin/content/${json.id}/edit`);
+      router.push(`/admin/content/${json.id}/blocks`);
     } else {
       router.refresh();
     }

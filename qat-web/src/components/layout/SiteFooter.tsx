@@ -1,30 +1,31 @@
 /* Hallmark · genre: atmospheric · macrostructure: 3-Col · design-system: design.md · designed-as-app */
 import { getSocialLinks } from "@/lib/social-links";
+import { getTranslations } from "@/lib/i18n/locale";
 
 import { LogoMark } from "./LogoMark";
 import { SocialPanel } from "./SocialPanel";
 
-export function SiteFooter() {
-  const socialLinks = getSocialLinks();
+export async function SiteFooter() {
+  const [socialLinks, tr] = await Promise.all([
+    Promise.resolve(getSocialLinks()),
+    getTranslations(),
+  ]);
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-white/10 bg-[#030711]/95">
       <div className="mx-auto w-full max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
         <div className="grid gap-12 md:grid-cols-[1fr_auto] md:gap-16 lg:gap-24">
-          {/* Brand column */}
           <div className="max-w-xs">
-            <LogoMark />
+            <LogoMark locale={tr.locale} />
             <p className="mt-4 text-sm leading-6 text-slate-400">
-              Connecting quantum science, art, education, and public imagination
-              across Thailand and beyond.
+              {tr.footer.tagline}
             </p>
             <p className="mt-6 text-xs text-slate-600">
-              &copy; {year} QAT Assoc. · CreativeLabTH Group
+              {tr.footer.copyright(year)}
             </p>
           </div>
 
-          {/* Social column */}
           <SocialPanel links={socialLinks} />
         </div>
       </div>

@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { t, type Locale } from "@/lib/i18n/translations";
 
-export function LogoMark() {
+export function LogoMark({ locale = "en" }: { locale?: Locale }) {
+  const tr = t[locale].logo;
+
   return (
     <Link
       href="/"
@@ -18,10 +21,10 @@ export function LogoMark() {
       />
       <span className="flex flex-col leading-none">
         <span className="text-sm font-semibold tracking-[0.18em] text-white">
-          QAT Assoc.
+          {tr.name}
         </span>
         <span className="mt-0.5 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-cyan-100/70">
-          Quantum Art Thailand
+          {tr.tagline}
         </span>
       </span>
     </Link>

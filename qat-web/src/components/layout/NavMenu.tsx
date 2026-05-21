@@ -11,21 +11,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { t, type Locale } from "@/lib/i18n/translations";
 
-const navItems = [
-  { label: "Atlas", href: "https://qatatlas.creativelabth.com" },
-  { label: "Game", href: "/game" },
-  { label: "Course", href: "/course" },
-  { label: "Exhibition", href: "/exhibition" },
-  { label: "Research", href: "/research" },
-  { label: "News", href: "/news" },
-  { label: "Talk", href: "/talk" },
-  { label: "Experiment", href: "/experiment" },
-  { label: "Video", href: "/video" },
-];
-
-export function NavMenu() {
+export function NavMenu({ locale = "en" }: { locale?: Locale }) {
   const [open, setOpen] = useState(false);
+  const nav = t[locale].nav;
+
+  const navItems = [
+    { label: nav.atlas, href: "https://qatatlas.creativelabth.com" },
+    { label: nav.game, href: "/game" },
+    { label: nav.course, href: "/course" },
+    { label: nav.exhibition, href: "/exhibition" },
+    { label: nav.research, href: "/research" },
+    { label: nav.news, href: "/news" },
+    { label: nav.talk, href: "/talk" },
+    { label: nav.experiment, href: "/experiment" },
+    { label: nav.video, href: "/video" },
+  ];
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -49,7 +51,7 @@ export function NavMenu() {
             const external = item.href.startsWith("http");
             return (
               <Link
-                key={item.label}
+                key={item.href}
                 href={item.href}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}

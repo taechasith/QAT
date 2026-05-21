@@ -4,7 +4,9 @@ import Link from "next/link";
 
 import { AuthButton } from "@/components/auth/AuthButton";
 import { Button } from "@/components/ui/button";
+import { getLocale } from "@/lib/i18n/locale";
 
+import { LanguageToggle } from "./LanguageToggle";
 import { LogoMark } from "./LogoMark";
 import { NavMenu } from "./NavMenu";
 
@@ -20,17 +22,20 @@ function AuthFallback() {
   );
 }
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const locale = await getLocale();
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030711]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-10">
-        <LogoMark />
+        <LogoMark locale={locale} />
 
         <div className="flex items-center gap-3">
+          <LanguageToggle current={locale} />
           <Suspense fallback={<AuthFallback />}>
             <AuthButton />
           </Suspense>
-          <NavMenu />
+          <NavMenu locale={locale} />
         </div>
       </div>
     </header>

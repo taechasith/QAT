@@ -112,7 +112,7 @@ export function SplashScreen() {
 
         {/* Logo */}
         <div
-          className="relative mb-16 rounded-full p-8"
+          className="relative mb-16 flex size-40 items-center justify-center rounded-full md:size-52"
           style={{
             background: "rgba(255,255,255,0.03)",
             backdropFilter: "blur(12px)",
@@ -133,9 +133,9 @@ export function SplashScreen() {
           <Image
             src="/brand/QAT_Logo.png"
             alt="QAT"
-            width={192}
-            height={192}
-            className="relative z-10 size-32 object-contain md:size-48"
+            width={128}
+            height={128}
+            className="relative z-10 size-20 object-contain md:size-28"
             priority
           />
         </div>
