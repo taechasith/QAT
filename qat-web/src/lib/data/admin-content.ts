@@ -73,8 +73,12 @@ export async function createContent(
   if (title_th?.trim()) metadata.title_th = title_th.trim();
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
 
+  // DB title is NOT NULL — fall back to TH title if EN not provided
+  const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
+
   const payload = {
     ...rest,
+    title: resolvedTitle,
     cover_image_url: rest.cover_image_url || null,
     external_url: rest.external_url || null,
     excerpt: rest.excerpt || null,
@@ -127,8 +131,11 @@ export async function updateContent(
   if (excerpt_th?.trim()) metadata.excerpt_th = excerpt_th.trim();
   else delete metadata.excerpt_th;
 
+  const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
+
   const payload = {
     ...rest,
+    title: resolvedTitle,
     cover_image_url: rest.cover_image_url || null,
     external_url: rest.external_url || null,
     excerpt: rest.excerpt || null,

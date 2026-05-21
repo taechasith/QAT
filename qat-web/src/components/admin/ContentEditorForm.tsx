@@ -149,7 +149,7 @@ export function ContentEditorForm({
         {/* Bilingual title + excerpt — both always visible */}
         <div className="rounded-xl border border-white/10 bg-white/3 p-4 flex flex-col gap-5">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Content — fill at least one language, both recommended
+            Content — at least one language required · both recommended for best UX
           </p>
 
           {/* Slug (shared, above both columns) */}
@@ -181,11 +181,11 @@ export function ContentEditorForm({
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/3 p-4">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
-                <span className="text-[10px] text-red-400">required</span>
+                <span className="text-[10px] text-slate-400">required if TH empty</span>
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="title" className="text-xs font-medium text-slate-300">
-                  {tr.admin.form.title} <span className="text-red-400">*</span>
+                  {tr.admin.form.title}
                 </label>
                 <input
                   id="title"
@@ -223,9 +223,7 @@ export function ContentEditorForm({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
                 {!watched.title_th ? (
-                  <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[10px] text-amber-300">
-                    แนะนำ · recommended
-                  </span>
+                  <span className="text-[10px] text-slate-400">required if EN empty · แนะนำ</span>
                 ) : (
                   <span className="text-[10px] text-emerald-400">✓ filled</span>
                 )}

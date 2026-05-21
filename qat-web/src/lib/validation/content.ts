@@ -23,7 +23,7 @@ const urlOrEmpty = z.union([
 export const contentSchema = z.object({
   content_type: z.enum(CONTENT_TYPES),
   status: z.enum(CONTENT_STATUSES),
-  title: z.string().min(1, "Title is required").max(255),
+  title: z.string().max(255).optional(),
   slug: z
     .string()
     .min(1, "Slug is required")
@@ -42,7 +42,10 @@ export const contentSchema = z.object({
   sort_order: z.number().int(),
   title_th: z.string().max(255).optional(),
   excerpt_th: z.string().max(500).optional(),
-});
+}).refine(
+  (data) => !!(data.title?.trim() || data.title_th?.trim()),
+  { message: "At least one title (EN or TH) is required", path: ["title"] },
+);
 
 export type ContentFormData = z.infer<typeof contentSchema>;
 
