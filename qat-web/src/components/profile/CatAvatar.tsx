@@ -340,8 +340,10 @@ export function CatAvatar({ type, size = 120 }: { type: CatType; size?: number }
   return (
     <Canvas
       camera={{ position: [0, -0.08, 3.4], fov: 44 }}
+      dpr={[1, 1]}
+      frameloop="demand"
       style={{ width: size, height: size, display: "block" }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
     >
       <ambientLight intensity={0.60} />
       <directionalLight position={[3, 5, 4]} intensity={1.3} />

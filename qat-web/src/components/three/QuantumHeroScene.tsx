@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -33,14 +32,18 @@ export function QuantumHeroScene() {
   return (
     <Canvas
       camera={{ position: [0, -6.0, 8.5], fov: 42 }}
-      dpr={mobile ? [1, 1] : [1, 1.5]}
-      gl={{ antialias: !mobile, alpha: true }}
+      dpr={[1, 1.25]}
+      gl={{
+        antialias: false,
+        alpha: true,
+        powerPreference: "high-performance",
+        preserveDrawingBuffer: false,
+      }}
       style={{ background: "transparent" }}
     >
       <SceneLights mobile={mobile} />
       <Suspense fallback={null}>
         <QuantumComputerModel />
-        {!mobile && <Environment preset="night" />}
       </Suspense>
       <QuantumRealmParticles mobile={mobile} />
       <ScrollCameraRig reducedMotion={reducedMotion} />

@@ -4,8 +4,8 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const FULL_COUNT = 800;
-const LITE_COUNT = 300;
+const FULL_COUNT = 240;
+const LITE_COUNT = 120;
 const MAX_RADIUS = 14;
 const DEPTH = 22;
 
@@ -44,7 +44,7 @@ export function QuantumRealmParticles({ mobile = false }: { mobile?: boolean }) 
 
   useFrame((_, dt) => {
     if (ref.current) {
-      ref.current.rotation.y += dt * 0.018;
+      ref.current.rotation.y += dt * 0.01;
     }
   });
 
