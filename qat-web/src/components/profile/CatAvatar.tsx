@@ -341,7 +341,7 @@ export function CatAvatar({ type, size = 120 }: { type: CatType; size?: number }
     <Canvas
       camera={{ position: [0, -0.08, 3.4], fov: 44 }}
       dpr={[1, 1]}
-      frameloop="demand"
+      frameloop="always"
       style={{ width: size, height: size, display: "block" }}
       gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
     >
