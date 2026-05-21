@@ -34,6 +34,7 @@ export async function ContentCard({ item }: ContentCardProps) {
             src={item.cover_image_url}
             alt=""
             fill
+            unoptimized
             className="object-cover"
             sizes="(min-width: 1024px) 33vw, 100vw"
           />
