@@ -19,6 +19,8 @@ export type ContentItem = {
   title: string;
   excerpt: string | null;
   body_md: string | null;
+  body_blocks: unknown[] | null;
+  view_count: number | null;
   cover_image_url: string | null;
   external_url: string | null;
   location: string | null;
@@ -40,6 +42,8 @@ const publicContentSelect = `
   title,
   excerpt,
   body_md,
+  body_blocks,
+  view_count,
   cover_image_url,
   external_url,
   location,

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { Block } from "@/lib/types/blocks";
 
@@ -16,12 +16,15 @@ const adminSelect = `
   end_at,
   published_at,
   sort_order,
+  view_count,
   created_at,
-  updated_at
+  updated_at,
+  content_likes(count),
+  content_comments(count)
 `;
 
 export async function listAllContent() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("content_items")
     .select(adminSelect)
@@ -31,7 +34,7 @@ export async function listAllContent() {
 }
 
 export async function getContentById(id: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("content_items")
     .select(`${adminSelect}, body_md, body_blocks, metadata`)
@@ -46,7 +49,7 @@ export async function createContent(
   values: ContentFormData,
   bodyBlocks: Block[] = [],
 ): Promise<{ id?: string; error?: string }> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const payload = {
     ...values,
@@ -78,7 +81,7 @@ export async function updateContent(
   values: ContentFormData,
   bodyBlocks: Block[] = [],
 ): Promise<{ error?: string }> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const existing = await supabase
     .from("content_items")
@@ -116,7 +119,7 @@ export async function updateContent(
 }
 
 export async function deleteContent(id: string): Promise<{ error?: string }> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { error } = await supabase.from("content_items").delete().eq("id", id);
   return error ? { error: error.message } : {};
 }
