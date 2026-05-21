@@ -14,6 +14,9 @@ export const t = {
       talk: "Talk",
       experiment: "Experiment",
       video: "Video",
+      login: "Login",
+      myAccount: "My Account",
+      signOut: "Sign out",
     },
     footer: {
       tagline:
@@ -308,6 +311,9 @@ export const t = {
       talk: "บรรยาย",
       experiment: "ทดลอง",
       video: "วิดีโอ",
+      login: "เข้าสู่ระบบ",
+      myAccount: "บัญชีของฉัน",
+      signOut: "ออกจากระบบ",
     },
     footer: {
       tagline:

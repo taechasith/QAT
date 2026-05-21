@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createBrowserClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +16,9 @@ import {
 } from "@/components/ui/sheet";
 import { t, type Locale } from "@/lib/i18n/translations";
 
-export function NavMenu({ locale = "en" }: { locale?: Locale }) {
+export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User | null }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const nav = t[locale].nav;
 
   const navItems = [
@@ -28,6 +32,17 @@ export function NavMenu({ locale = "en" }: { locale?: Locale }) {
     { label: nav.experiment, href: "/experiment" },
     { label: nav.video, href: "/video" },
   ];
+
+  async function handleSignOut() {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+    await supabase.auth.signOut();
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -62,6 +77,34 @@ export function NavMenu({ locale = "en" }: { locale?: Locale }) {
               </Link>
             );
           })}
+
+          <div className="my-2 border-t border-white/10" />
+
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-cyan-200 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              >
+                {nav.myAccount}
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="rounded-lg px-4 py-3 text-left text-sm font-medium text-slate-400 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              >
+                {nav.signOut}
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-4 py-3 text-sm font-medium text-cyan-200 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+            >
+              {nav.login}
+            </Link>
+          )}
         </nav>
       </SheetContent>
     </Sheet>
