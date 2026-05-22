@@ -24,8 +24,8 @@ export async function ContentCard({ item }: ContentCardProps) {
   const locale = await getLocale();
   const tr = t[locale];
   const date = await formatDate(item.start_at ?? item.published_at, locale);
-  const href = item.external_url || `/content/${item.slug}`;
-  const external = Boolean(item.external_url);
+  const href = `/content/${item.slug}`;
+  const external = false;
 
   return (
     <article className="glass-panel overflow-hidden rounded-lg">
