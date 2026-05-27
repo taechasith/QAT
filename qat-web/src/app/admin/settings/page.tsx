@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/components/admin/AdminGuard";
+﻿import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { SiteOgForm } from "@/components/admin/SiteOgForm";
 import { HomepageSettingsForm } from "@/components/admin/HomepageSettingsForm";
@@ -14,13 +14,13 @@ export default async function AdminSettingsPage() {
   return (
     <AdminShell>
       <div>
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
           {tr.admin.title}
         </p>
         <h1 className="mt-1 text-3xl font-semibold text-white">
           {tr.admin.settings.title}
         </h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-muted-foreground">
           {tr.admin.settings.subtitle}
         </p>
       </div>
@@ -32,7 +32,7 @@ export default async function AdminSettingsPage() {
           <h2 className="text-base font-semibold text-white">
             {tr.admin.settings.socialSharing}
           </h2>
-          <p className="mt-1 mb-5 text-sm text-slate-400">
+          <p className="mt-1 mb-5 text-sm text-muted-foreground">
             {tr.admin.settings.socialSharingDesc}
           </p>
           <SiteOgForm initial={og} />
@@ -43,7 +43,7 @@ export default async function AdminSettingsPage() {
           <h2 className="text-base font-semibold text-white">
             {tr.admin.settings.homepageTitle}
           </h2>
-          <p className="mt-1 mb-5 text-sm text-slate-400">
+          <p className="mt-1 mb-5 text-sm text-muted-foreground">
             {tr.admin.settings.homepageDesc}
           </p>
           <HomepageSettingsForm initial={homepage} />
@@ -56,7 +56,7 @@ export default async function AdminSettingsPage() {
         <h2 className="text-base font-semibold text-white">
           {tr.admin.settings.adminAccess}
         </h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-muted-foreground">
           {tr.admin.settings.adminAccessDesc}
         </p>
       </section>

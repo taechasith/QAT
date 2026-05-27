@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
@@ -36,7 +36,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 lg:py-16">
-      <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+      <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-primary">
         {a.eyebrow}
       </p>
       <h1 className="mt-2 text-3xl font-semibold text-white">
@@ -55,7 +55,7 @@ export default async function ProfilePage() {
                 <h2 className="truncate text-base font-semibold text-white">
                   {profile?.full_name ?? a.unnamedExplorer}
                 </h2>
-                <p className="truncate text-xs text-slate-400">{user.email}</p>
+                <p className="truncate text-xs text-muted-foreground">{user.email}</p>
               </div>
             </div>
             <div className="mt-5 border-t border-white/8 pt-5">
@@ -75,19 +75,19 @@ export default async function ProfilePage() {
           <section className="glass-panel rounded-xl p-6">
             <h2 className="text-base font-semibold text-white">{a.settings}</h2>
             <div className="mt-5">
-              <h3 className="mb-1 text-sm font-medium text-slate-200">{a.emailUpdates}</h3>
-              <p className="mb-3 text-xs text-slate-400">{a.emailUpdatesDesc}</p>
+              <h3 className="mb-1 text-sm font-medium text-foreground/85">{a.emailUpdates}</h3>
+              <p className="mb-3 text-xs text-muted-foreground">{a.emailUpdatesDesc}</p>
               <NotificationPreferences
                 userId={user.id}
                 initialValue={profile?.wants_update_email ?? false}
               />
             </div>
             <div className="mt-5 border-t border-white/8 pt-5">
-              <h3 className="mb-1 text-sm font-medium text-slate-200">{a.password}</h3>
-              <p className="mb-3 text-xs text-slate-400">{a.passwordDesc}</p>
+              <h3 className="mb-1 text-sm font-medium text-foreground/85">{a.password}</h3>
+              <p className="mb-3 text-xs text-muted-foreground">{a.passwordDesc}</p>
               <Link
                 href="/forgot-password"
-                className="inline-flex h-9 items-center rounded-full border border-white/15 px-4 text-sm text-slate-300 transition hover:bg-white/8 hover:text-white"
+                className="inline-flex h-9 items-center rounded-full border border-white/15 px-4 text-sm text-foreground/70 transition hover:bg-white/8 hover:text-white"
               >
                 {a.changePassword}
               </Link>

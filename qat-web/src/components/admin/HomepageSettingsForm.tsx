@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { HomepageSettings } from "@/lib/data/site-settings";
 import { useTr } from "@/lib/i18n/context";
 
 const inputCls =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
+  "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 export function HomepageSettingsForm({ initial }: { initial: HomepageSettings }) {
   const tr = useTr();
@@ -30,7 +30,7 @@ export function HomepageSettingsForm({ initial }: { initial: HomepageSettings })
   return (
     <form onSubmit={save} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-slate-200">
+        <label className="text-sm font-medium text-foreground/85">
           {tr.admin.settings.featuredHeadingLabel}
         </label>
         <input
@@ -43,7 +43,7 @@ export function HomepageSettingsForm({ initial }: { initial: HomepageSettings })
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-slate-200">
+        <label className="text-sm font-medium text-foreground/85">
           {tr.admin.settings.emptyStateLabel}
         </label>
         <input
@@ -53,7 +53,7 @@ export function HomepageSettingsForm({ initial }: { initial: HomepageSettings })
           placeholder={tr.admin.settings.emptyStatePlaceholder}
           className={inputCls}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted-foreground/70">
           {tr.admin.settings.emptyStateDesc}
         </p>
       </div>
@@ -62,12 +62,12 @@ export function HomepageSettingsForm({ initial }: { initial: HomepageSettings })
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex h-9 items-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
+          className="inline-flex h-9 items-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50"
         >
           {saving ? tr.admin.settings.saving : tr.admin.settings.saveBtn}
         </button>
         {msg !== "idle" && (
-          <p className={`text-sm ${msg === "saved" ? "text-cyan-300" : "text-red-300"}`}>
+          <p className={`text-sm ${msg === "saved" ? "text-primary" : "text-red-300"}`}>
             {msg === "saved" ? tr.admin.settings.saved : tr.admin.settings.saveFailed}
           </p>
         )}

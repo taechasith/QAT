@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -63,8 +63,8 @@ function AlignBtn({
       title={`Align ${align}`}
       className={`rounded px-1.5 py-0.5 text-xs transition ${
         current === align
-          ? "bg-cyan-300/20 text-cyan-300"
-          : "text-slate-500 hover:text-slate-200"
+          ? "bg-primary/20 text-primary"
+          : "text-muted-foreground/70 hover:text-foreground"
       }`}
     >
       {icons[align]}
@@ -93,8 +93,8 @@ function SizeControls({
           title={`Text size ${label}`}
           className={`rounded px-1.5 py-0.5 text-[10px] font-semibold transition ${
             active === value
-              ? "bg-cyan-300/20 text-cyan-300"
-              : "text-slate-500 hover:text-slate-200"
+              ? "bg-primary/20 text-primary"
+              : "text-muted-foreground/70 hover:text-foreground"
           }`}
         >
           {label}
@@ -121,7 +121,7 @@ function Toggle({
       onClick={onClick}
       title={title}
       className={`rounded px-1.5 py-0.5 text-xs font-bold transition ${
-        on ? "bg-cyan-300/20 text-cyan-300" : "text-slate-500 hover:text-slate-200"
+        on ? "bg-primary/20 text-primary" : "text-muted-foreground/70 hover:text-foreground"
       }`}
     >
       {label}
@@ -152,8 +152,8 @@ function HeadingEditor({
             onClick={() => patch({ level })}
             className={`rounded px-2 py-0.5 text-xs font-bold transition ${
               block.level === level
-                ? "bg-violet-400/20 text-violet-300"
-                : "text-slate-500 hover:text-slate-200"
+                ? "bg-accent/20 text-accent"
+                : "text-muted-foreground/70 hover:text-foreground"
             }`}
           >
             H{level}
@@ -187,7 +187,7 @@ function HeadingEditor({
           fontWeight: block.bold ? 700 : block.level === 1 ? 700 : block.level === 2 ? 600 : 500,
           fontSize: editorFontSize(block.size, fallbackSize),
         }}
-        className="w-full bg-transparent text-white placeholder:text-slate-600 outline-none"
+        className="w-full bg-transparent text-white placeholder:text-muted-foreground/50 outline-none"
       />
     </div>
   );
@@ -233,7 +233,7 @@ function ParagraphEditor({
           fontStyle: block.italic ? "italic" : "normal",
           fontSize: editorFontSize(block.size, "md"),
         }}
-        className="w-full resize-y bg-transparent text-slate-200 placeholder:text-slate-600 outline-none"
+        className="w-full resize-y bg-transparent text-foreground/85 placeholder:text-muted-foreground/50 outline-none"
       />
     </div>
   );
@@ -307,7 +307,7 @@ function ImageBlockEditor({
             const file = event.dataTransfer.files?.[0];
             if (file) handleFile(file);
           }}
-          className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-white/20 text-sm text-slate-500 transition hover:border-white/40 hover:text-slate-300"
+          className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-white/20 text-sm text-muted-foreground/70 transition hover:border-white/40 hover:text-foreground/80"
         >
           {uploading ? "Uploading..." : "Click or drag image here"}
         </button>
@@ -320,14 +320,14 @@ function ImageBlockEditor({
         value={block.alt}
         onChange={(event) => patch({ alt: event.target.value })}
         placeholder="Alt text"
-        className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-300 placeholder:text-slate-600 outline-none focus:border-white/25"
+        className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-foreground/70 placeholder:text-muted-foreground/50 outline-none focus:border-white/25"
       />
       <input
         type="text"
         value={block.caption}
         onChange={(event) => patch({ caption: event.target.value })}
         placeholder="Caption"
-        className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-400 placeholder:text-slate-600 outline-none focus:border-white/25"
+        className="w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-muted-foreground placeholder:text-muted-foreground/50 outline-none focus:border-white/25"
       />
 
       <input
@@ -349,7 +349,7 @@ function DividerEditor() {
   return (
     <div className="flex items-center gap-3 py-1">
       <div className="h-px flex-1 bg-white/15" />
-      <span className="text-xs text-slate-600">divider</span>
+      <span className="text-xs text-muted-foreground/50">divider</span>
       <div className="h-px flex-1 bg-white/15" />
     </div>
   );
@@ -364,7 +364,7 @@ function SpacerEditor({
 }) {
   return (
     <div className="flex items-center gap-2 py-1">
-      <span className="text-xs text-slate-500">Space:</span>
+      <span className="text-xs text-muted-foreground/70">Space:</span>
       {(["sm", "md", "lg"] as const).map((size) => (
         <button
           key={size}
@@ -372,8 +372,8 @@ function SpacerEditor({
           onClick={() => patch({ size })}
           className={`rounded px-2 py-0.5 text-xs transition ${
             block.size === size
-              ? "bg-white/15 text-slate-200"
-              : "text-slate-500 hover:text-slate-300"
+              ? "bg-white/15 text-foreground/85"
+              : "text-muted-foreground/70 hover:text-foreground/80"
           }`}
         >
           {size.toUpperCase()}
@@ -398,7 +398,7 @@ function AddBlockButton({ onAdd }: { onAdd: (type: BlockType) => void }) {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="h-6 rounded-full border border-white/15 bg-slate-950 px-3 text-xs text-slate-500 transition hover:border-cyan-300/40 hover:text-cyan-300"
+        className="h-6 rounded-full border border-white/15 bg-background px-3 text-xs text-muted-foreground/70 transition hover:border-primary/40 hover:text-primary"
       >
         + Add block
       </button>
@@ -414,7 +414,7 @@ function AddBlockButton({ onAdd }: { onAdd: (type: BlockType) => void }) {
                   onAdd(type);
                   setOpen(false);
                 }}
-                className="flex min-w-[52px] flex-col items-center gap-0.5 rounded-lg px-3 py-2 text-xs text-slate-400 transition hover:bg-white/8 hover:text-white"
+                className="flex min-w-[52px] flex-col items-center gap-0.5 rounded-lg px-3 py-2 text-xs text-muted-foreground transition hover:bg-white/8 hover:text-white"
               >
                 <span className="text-base leading-none">{icon}</span>
                 <span>{label}</span>
@@ -466,7 +466,7 @@ export function BlockEditor({ value, onChange }: Props) {
                 onClick={() => move(block.id, -1)}
                 disabled={idx === 0}
                 title="Move up"
-                className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-slate-200 disabled:opacity-20"
+                className="flex size-6 items-center justify-center rounded text-xs text-muted-foreground/70 transition hover:text-foreground disabled:opacity-20"
               >
                 Up
               </button>
@@ -475,7 +475,7 @@ export function BlockEditor({ value, onChange }: Props) {
                 onClick={() => move(block.id, 1)}
                 disabled={idx === value.length - 1}
                 title="Move down"
-                className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-slate-200 disabled:opacity-20"
+                className="flex size-6 items-center justify-center rounded text-xs text-muted-foreground/70 transition hover:text-foreground disabled:opacity-20"
               >
                 Dn
               </button>
@@ -483,7 +483,7 @@ export function BlockEditor({ value, onChange }: Props) {
                 type="button"
                 onClick={() => remove(block.id)}
                 title="Delete block"
-                className="flex size-6 items-center justify-center rounded text-xs text-slate-500 transition hover:text-red-400"
+                className="flex size-6 items-center justify-center rounded text-xs text-muted-foreground/70 transition hover:text-red-400"
               >
                 X
               </button>
@@ -509,7 +509,7 @@ export function BlockEditor({ value, onChange }: Props) {
       ))}
 
       {value.length === 0 && (
-        <p className="py-4 text-center text-xs text-slate-600">
+        <p className="py-4 text-center text-xs text-muted-foreground/50">
           No blocks yet. Add one above.
         </p>
       )}

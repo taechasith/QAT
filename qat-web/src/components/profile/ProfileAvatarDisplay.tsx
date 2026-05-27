@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { CatAvatar, type CatType } from "./CatAvatar";
@@ -22,7 +22,7 @@ export function ProfileAvatarDisplay({
         alt="Profile"
         width={size}
         height={size}
-        className="rounded-full object-cover ring-2 ring-cyan-300/30"
+        className="rounded-full object-cover ring-2 ring-primary/30"
         style={{ width: size, height: size }}
       />
     );
@@ -30,7 +30,7 @@ export function ProfileAvatarDisplay({
 
   if ((CAT_TYPES as string[]).includes(avatarType)) {
     return (
-      <div className="rounded-full ring-2 ring-cyan-300/30 overflow-hidden" style={{ width: size, height: size }}>
+      <div className="rounded-full ring-2 ring-primary/30 overflow-hidden" style={{ width: size, height: size }}>
         <CatAvatar type={avatarType as CatType} size={size} />
       </div>
     );

@@ -18,7 +18,7 @@ export async function SiteHeader() {
   const nav = t[locale].nav;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030711]/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-10">
         <LogoMark locale={locale} />
 
@@ -29,14 +29,14 @@ export async function SiteHeader() {
               {isAdminEmail(user.email) && (
                 <Link
                   href="/admin"
-                  className="rounded-full px-3 py-2 text-sm font-medium text-violet-300 transition hover:bg-white/8 hover:text-violet-200"
+                  className="rounded-full px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/10 hover:text-primary"
                 >
                   Admin
                 </Link>
               )}
               <Button
                 variant="outline"
-                className="border-cyan-200/30 bg-cyan-200/8 text-cyan-50 hover:bg-cyan-200/14 hover:text-white"
+                className="border-primary/30 bg-primary/8 text-foreground hover:bg-primary/14 hover:text-primary"
                 asChild
               >
                 <Link href="/account">{nav.myAccount}</Link>
@@ -46,7 +46,7 @@ export async function SiteHeader() {
           ) : (
             <Button
               variant="outline"
-              className="hidden border-cyan-200/30 bg-cyan-200/8 text-cyan-50 hover:bg-cyan-200/14 hover:text-white sm:inline-flex"
+              className="hidden border-primary/30 bg-primary/8 text-foreground hover:bg-primary/14 hover:text-primary sm:inline-flex"
               asChild
             >
               <Link href="/login">{nav.login}</Link>

@@ -1,4 +1,4 @@
-import type { Block, TextAlign, TextSize } from "@/lib/types/blocks";
+﻿import type { Block, TextAlign, TextSize } from "@/lib/types/blocks";
 
 function alignClass(align: TextAlign) {
   if (align === "center") return "text-center";
@@ -60,7 +60,7 @@ export function BlockRenderer({ blocks }: Props) {
                 key={block.id}
                 className={[
                   textSizeClass(block.size, "md"),
-                  "text-slate-200",
+                  "text-foreground/85",
                   alignClass(block.align),
                   block.bold ? "font-semibold" : "",
                   block.italic ? "italic" : "",
@@ -84,7 +84,7 @@ export function BlockRenderer({ blocks }: Props) {
                   />
                 </div>
                 {block.caption ? (
-                  <figcaption className="mt-2 text-center text-xs text-slate-500">
+                  <figcaption className="mt-2 text-center text-xs text-muted-foreground/70">
                     {block.caption}
                   </figcaption>
                 ) : null}

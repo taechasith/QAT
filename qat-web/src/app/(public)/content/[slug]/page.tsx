@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock, ExternalLink, MapPin, User } from "lucide-react";
@@ -101,31 +101,31 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
 
         <div className="p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-foreground/70">
             {date ? (
               <span className="inline-flex items-center gap-2">
-                <CalendarDays className="size-4 text-cyan-200" aria-hidden="true" />
+                <CalendarDays className="size-4 text-primary" aria-hidden="true" />
                 {date}
               </span>
             ) : null}
             {item.location ? (
               <span className="inline-flex items-center gap-2">
-                <MapPin className="size-4 text-cyan-200" aria-hidden="true" />
+                <MapPin className="size-4 text-primary" aria-hidden="true" />
                 {item.location}
               </span>
             ) : null}
             {(item.metadata?.author_name as string | undefined) ? (
               <span className="inline-flex items-center gap-2">
-                <User className="size-4 text-cyan-200" aria-hidden="true" />
+                <User className="size-4 text-primary" aria-hidden="true" />
                 {item.metadata!.author_name as string}
               </span>
             ) : null}
             {item.published_at ? (
-              <span className="inline-flex items-center gap-2 text-slate-400">
+              <span className="inline-flex items-center gap-2 text-muted-foreground">
                 <Clock className="size-4" aria-hidden="true" />
                 {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(new Date(item.published_at))}
                 {item.updated_at && item.updated_at !== item.published_at ? (
-                  <span className="text-slate-500">
+                  <span className="text-muted-foreground/70">
                     · {locale === "th" ? "แก้ไขล่าสุด" : "updated"}{" "}
                     {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(new Date(item.updated_at))}
                   </span>
@@ -148,7 +148,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
         ) : null}
 
         {!(Array.isArray(item.body_blocks) && item.body_blocks.length > 0) ? (
-          <p className="mt-8 text-base leading-8 text-slate-300">
+          <p className="mt-8 text-base leading-8 text-foreground/70">
             {tr.contentDetail.noContent}
           </p>
         ) : null}
@@ -167,10 +167,10 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
                   alt={authorName}
                   width={48}
                   height={48}
-                  className="rounded-full object-cover ring-2 ring-cyan-300/30 shrink-0"
+                  className="rounded-full object-cover ring-2 ring-primary/30 shrink-0"
                 />
               ) : catTypes.includes(avatarType) ? (
-                <div className="size-12 rounded-full ring-2 ring-cyan-300/30 overflow-hidden shrink-0 bg-white/5 flex items-center justify-center text-xl">
+                <div className="size-12 rounded-full ring-2 ring-primary/30 overflow-hidden shrink-0 bg-white/5 flex items-center justify-center text-xl">
                   {avatarType === "artist_cat" ? "🎨" : avatarType === "technologist_cat" ? "💻" : "🔬"}
                 </div>
               ) : (
@@ -179,7 +179,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-white">{authorName}</p>
                 {authorBio ? (
-                  <p className="mt-1 text-xs leading-5 text-slate-400">{authorBio}</p>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{authorBio}</p>
                 ) : null}
               </div>
             </div>
@@ -191,7 +191,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
             href={item.external_url}
             target="_blank"
             rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             {tr.contentDetail.openLink}
             <ExternalLink className="size-4" aria-hidden="true" />

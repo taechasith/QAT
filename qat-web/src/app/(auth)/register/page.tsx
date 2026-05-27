@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { useTr } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
+  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 export default function RegisterPage() {
   const tr = useTr();
@@ -68,13 +68,13 @@ export default function RegisterPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">{a.eyebrow}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">{a.eyebrow}</p>
           <h1 className="mt-3 text-2xl font-semibold text-white">{a.heading}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-200">
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground/85">
               {a.email}
             </label>
             <input
@@ -90,7 +90,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-200">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-foreground/85">
               {a.password}
             </label>
             <PasswordInput
@@ -105,7 +105,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-slate-200">
+            <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-foreground/85">
               {a.confirmPassword}
             </label>
             <PasswordInput
@@ -136,15 +136,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+            className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             {loading ? a.creating : a.createAccount}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           {a.alreadyHaveAccount}{" "}
-          <Link href="/login" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
+          <Link href="/login" className="text-primary underline underline-offset-4 hover:text-primary">
             {a.signIn}
           </Link>
         </p>

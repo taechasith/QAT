@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Plus } from "lucide-react";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -15,7 +15,7 @@ export default async function AdminContentPage() {
     <AdminShell>
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
             {tr.admin.title}
           </p>
           <h1 className="mt-1 text-3xl font-semibold text-white">
@@ -24,7 +24,7 @@ export default async function AdminContentPage() {
         </div>
         <Link
           href="/admin/content/new"
-          className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-slate-950 transition hover:bg-primary/90"
         >
           <Plus className="size-4" aria-hidden="true" />
           {tr.admin.contentList.newButton}

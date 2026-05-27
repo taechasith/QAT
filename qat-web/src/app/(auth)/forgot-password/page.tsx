@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Suspense, useState } from "react";
@@ -9,7 +9,7 @@ import { useTr } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
+  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 function ForgotPasswordForm() {
   const tr = useTr();
@@ -49,25 +49,25 @@ function ForgotPasswordForm() {
 
         {sent ? (
           <div className="mt-8 text-center">
-            <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
+            <p className="font-mono text-xs uppercase tracking-widest text-primary">
               {a.checkInbox}
             </p>
             <h1 className="mt-3 text-2xl font-semibold text-white">{a.resetLinkSent}</h1>
-            <p className="mt-4 text-sm leading-7 text-slate-300">
+            <p className="mt-4 text-sm leading-7 text-foreground/70">
               {a.sentMessage(email)}
             </p>
-            <p className="mt-3 text-xs text-slate-500">{a.spamNote}</p>
+            <p className="mt-3 text-xs text-muted-foreground/70">{a.spamNote}</p>
             <div className="mt-8 flex flex-col items-center gap-3">
               <button
                 type="button"
                 onClick={() => setSent(false)}
-                className="text-sm text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+                className="text-sm text-primary underline underline-offset-4 hover:text-primary"
               >
                 {a.sendAgain}
               </button>
               <Link
                 href="/login"
-                className="text-sm text-slate-400 underline underline-offset-4 hover:text-slate-200"
+                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
                 {a.backToSignIn}
               </Link>
@@ -76,16 +76,16 @@ function ForgotPasswordForm() {
         ) : (
           <>
             <div className="mt-8 text-center">
-              <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
+              <p className="font-mono text-xs uppercase tracking-widest text-primary">
                 {a.eyebrow}
               </p>
               <h1 className="mt-3 text-2xl font-semibold text-white">{a.heading}</h1>
-              <p className="mt-2 text-sm leading-6 text-slate-400">{a.description}</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{a.description}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
               <div>
-                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-200">
+                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground/85">
                   {a.email}
                 </label>
                 <input
@@ -109,16 +109,16 @@ function ForgotPasswordForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {loading ? a.sending : a.sendResetLink}
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-slate-400">
+            <p className="mt-6 text-center text-sm text-muted-foreground">
               <Link
                 href="/login"
-                className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+                className="text-primary underline underline-offset-4 hover:text-primary"
               >
                 {a.backToSignIn}
               </Link>

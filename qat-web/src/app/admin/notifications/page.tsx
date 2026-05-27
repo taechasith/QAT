@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/components/admin/AdminGuard";
+﻿import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { SendNotificationDialog } from "@/components/admin/SendNotificationDialog";
 import { env } from "@/lib/env";
@@ -13,13 +13,13 @@ export default async function AdminNotificationsPage() {
   return (
     <AdminShell>
       <div>
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
           {tr.admin.title}
         </p>
         <h1 className="mt-1 text-3xl font-semibold text-white">
           {tr.admin.notifications.title}
         </h1>
-        <p className="mt-2 text-sm text-slate-300">
+        <p className="mt-2 text-sm text-foreground/70">
           {tr.admin.notifications.subtitle}
         </p>
       </div>
@@ -29,7 +29,7 @@ export default async function AdminNotificationsPage() {
           <p className="font-semibold text-amber-200">
             {tr.admin.notifications.emailNotConfigured}
           </p>
-          <p className="mt-2 text-sm text-slate-300">
+          <p className="mt-2 text-sm text-foreground/70">
             {tr.admin.notifications.configureDesc}
           </p>
         </div>

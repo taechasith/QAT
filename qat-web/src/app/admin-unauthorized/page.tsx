@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function AdminUnauthorizedPage() {
   return (
@@ -10,7 +10,7 @@ export default function AdminUnauthorizedPage() {
         <h1 className="mt-3 text-2xl font-semibold text-white">
           Admin access required
         </h1>
-        <p className="mt-4 text-sm leading-6 text-slate-300">
+        <p className="mt-4 text-sm leading-6 text-foreground/70">
           Your account does not have admin privileges. If you believe this is a
           mistake, contact the site administrator.
         </p>

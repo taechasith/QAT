@@ -13,15 +13,15 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 bg-[#030711]/95">
+    <footer className="border-t border-border bg-background/95">
       <div className="mx-auto w-full max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
         <div className="grid gap-12 md:grid-cols-[1fr_auto] md:gap-16 lg:gap-24">
           <div className="max-w-xs">
             <LogoMark locale={tr.locale} />
-            <p className="mt-4 text-sm leading-6 text-slate-400">
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">
               {tr.footer.tagline}
             </p>
-            <p className="mt-6 text-xs text-slate-600">
+            <p className="mt-6 text-xs text-muted-foreground/50">
               {tr.footer.copyright(year)}
             </p>
           </div>

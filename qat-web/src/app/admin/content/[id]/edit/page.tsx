@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/components/admin/AdminGuard";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -22,17 +22,17 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
     <AdminShell>
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
             {tr.admin.title}
           </p>
           <h1 className="mt-1 text-3xl font-semibold text-white">
             {tr.admin.editContent.title}
           </h1>
-          <p className="mt-1 text-sm text-slate-400">ID: {id}</p>
+          <p className="mt-1 text-sm text-muted-foreground">ID: {id}</p>
         </div>
         <Link
           href={`/admin/content/${id}/blocks`}
-          className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span>{tr.admin.editContent.editPageLayout}</span>
           <span aria-hidden="true">→</span>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Heart, Eye } from "lucide-react";
@@ -50,7 +50,7 @@ export function ContentEngagement({ contentId, initialViews, isLoggedIn }: Props
   }
 
   return (
-    <div className="flex items-center gap-5 text-sm text-slate-400">
+    <div className="flex items-center gap-5 text-sm text-muted-foreground">
       <span className="inline-flex items-center gap-1.5">
         <Eye className="size-4" aria-hidden="true" />
         {(views + 1).toLocaleString()}

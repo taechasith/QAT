@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Edit, ExternalLink, LayoutTemplate, Plus } from "lucide-react";
 
 import { requireAdmin } from "@/components/admin/AdminGuard";
@@ -18,7 +18,7 @@ type LayoutRow = {
 const statusColors: Record<string, string> = {
   published: "bg-green-400/15 text-green-300",
   draft: "bg-amber-400/15 text-amber-300",
-  archived: "bg-slate-400/15 text-slate-300",
+  archived: "bg-muted/50 text-foreground/70",
 };
 
 export default async function AdminLayoutPage() {
@@ -31,7 +31,7 @@ export default async function AdminLayoutPage() {
     <AdminShell>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
             {tr.admin.title}
           </p>
           <h1 className="mt-1 text-3xl font-semibold text-white">
@@ -40,7 +40,7 @@ export default async function AdminLayoutPage() {
         </div>
         <Link
           href="/admin/content/new"
-          className="inline-flex h-10 items-center gap-2 rounded-full bg-cyan-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-slate-950 transition hover:bg-primary/90"
         >
           <Plus className="size-4" aria-hidden="true" />
           {tr.admin.layout.newContent}
@@ -56,10 +56,10 @@ export default async function AdminLayoutPage() {
       <div className="mt-8 glass-panel overflow-hidden rounded-xl">
         {rows.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-sm text-slate-300">{tr.admin.layout.noContentPages}</p>
+            <p className="text-sm text-foreground/70">{tr.admin.layout.noContentPages}</p>
             <Link
               href="/admin/content/new"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-cyan-200 hover:text-white"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-white"
             >
               {tr.admin.layout.createContent}
             </Link>
@@ -68,16 +68,16 @@ export default async function AdminLayoutPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="px-4 py-3 text-left font-medium text-slate-400">
+                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
                   {tr.admin.layout.table.page}
                 </th>
-                <th className="hidden px-4 py-3 text-left font-medium text-slate-400 sm:table-cell">
+                <th className="hidden px-4 py-3 text-left font-medium text-muted-foreground sm:table-cell">
                   {tr.admin.layout.table.type}
                 </th>
-                <th className="hidden px-4 py-3 text-left font-medium text-slate-400 md:table-cell">
+                <th className="hidden px-4 py-3 text-left font-medium text-muted-foreground md:table-cell">
                   {tr.admin.layout.table.status}
                 </th>
-                <th className="hidden px-4 py-3 text-left font-medium text-slate-400 lg:table-cell">
+                <th className="hidden px-4 py-3 text-left font-medium text-muted-foreground lg:table-cell">
                   {tr.admin.layout.table.updated}
                 </th>
                 <th className="px-4 py-3" />
@@ -88,21 +88,21 @@ export default async function AdminLayoutPage() {
                 <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.03]">
                   <td className="px-4 py-3">
                     <p className="font-medium text-white">{item.title}</p>
-                    <p className="mt-0.5 font-mono text-xs text-slate-500">/{item.slug}</p>
+                    <p className="mt-0.5 font-mono text-xs text-muted-foreground/70">/{item.slug}</p>
                   </td>
-                  <td className="hidden px-4 py-3 font-mono text-xs uppercase tracking-widest text-slate-400 sm:table-cell">
+                  <td className="hidden px-4 py-3 font-mono text-xs uppercase tracking-widest text-muted-foreground sm:table-cell">
                     {item.content_type.replace("_", " ")}
                   </td>
                   <td className="hidden px-4 py-3 md:table-cell">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
-                         statusColors[item.status] ?? "bg-slate-400/15 text-slate-300"
+                         statusColors[item.status] ?? "bg-muted/50 text-foreground/70"
                       }`}
                     >
                       {tr.admin.form[item.status] || item.status}
                     </span>
                   </td>
-                  <td className="hidden px-4 py-3 text-slate-400 lg:table-cell">
+                  <td className="hidden px-4 py-3 text-muted-foreground lg:table-cell">
                     {new Date(item.updated_at).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
@@ -111,21 +111,21 @@ export default async function AdminLayoutPage() {
                         href={`/content/${item.slug}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded p-1.5 text-slate-400 transition hover:text-white"
+                        className="rounded p-1.5 text-muted-foreground transition hover:text-white"
                         title={tr.admin.layout.table.viewPublicPage}
                       >
                         <ExternalLink className="size-4" aria-hidden="true" />
                       </Link>
                       <Link
                         href={`/admin/content/${item.id}/edit`}
-                        className="rounded p-1.5 text-slate-400 transition hover:text-cyan-200"
+                        className="rounded p-1.5 text-muted-foreground transition hover:text-primary"
                         title={tr.admin.layout.table.editDetails}
                       >
                         <Edit className="size-4" aria-hidden="true" />
                       </Link>
                       <Link
                         href={`/admin/content/${item.id}/blocks`}
-                        className="inline-flex h-9 items-center gap-2 rounded-lg bg-violet-200/10 px-3 text-xs font-semibold text-violet-100 transition hover:bg-violet-200/15"
+                        className="inline-flex h-9 items-center gap-2 rounded-lg bg-accent/10 px-3 text-xs font-semibold text-violet-100 transition hover:bg-violet-200/15"
                       >
                         <LayoutTemplate className="size-4" aria-hidden="true" />
                         {tr.admin.layout.table.editLayout}

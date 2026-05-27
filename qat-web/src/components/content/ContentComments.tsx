@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Trash2 } from "lucide-react";
@@ -79,10 +79,10 @@ export function ContentComments({ contentId, currentUserId }: Props) {
   return (
     <section className="mt-10 border-t border-white/10 pt-8">
       <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
-        <MessageCircle className="size-5 text-cyan-300" aria-hidden="true" />
+        <MessageCircle className="size-5 text-primary" aria-hidden="true" />
         {c.heading}
         {comments.length > 0 && (
-          <span className="ml-1 text-sm font-normal text-slate-500">
+          <span className="ml-1 text-sm font-normal text-muted-foreground/70">
             ({comments.length})
           </span>
         )}
@@ -97,27 +97,27 @@ export function ContentComments({ contentId, currentUserId }: Props) {
                   <span className="text-sm font-medium text-white">
                     {cm.user_display_name ?? tr.contentDetail.member}
                   </span>
-                  <span className="ml-2 text-xs text-slate-500">{timeAgo(cm.created_at)}</span>
+                  <span className="ml-2 text-xs text-muted-foreground/70">{timeAgo(cm.created_at)}</span>
                 </div>
                 {currentUserId === cm.user_id && (
                   <button
                     type="button"
                     onClick={() => deleteComment(cm.id)}
-                    className="shrink-0 text-slate-600 transition hover:text-red-400"
+                    className="shrink-0 text-muted-foreground/50 transition hover:text-red-400"
                     aria-label={c.deleteLabel}
                   >
                     <Trash2 className="size-3.5" aria-hidden="true" />
                   </button>
                 )}
               </div>
-              <p className="mt-2 text-sm leading-6 text-slate-300 whitespace-pre-wrap">
+              <p className="mt-2 text-sm leading-6 text-foreground/70 whitespace-pre-wrap">
                 {cm.body}
               </p>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-4 text-sm text-slate-500">{c.noComments}</p>
+        <p className="mt-4 text-sm text-muted-foreground/70">{c.noComments}</p>
       )}
 
       {currentUserId ? (
@@ -129,25 +129,25 @@ export function ContentComments({ contentId, currentUserId }: Props) {
             rows={3}
             maxLength={1000}
             placeholder={c.placeholder}
-            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30 resize-none"
+            className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
           />
           {error && (
             <p className="text-xs text-red-400">{error}</p>
           )}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-600">{body.length}{c.charLimit}</span>
+            <span className="text-xs text-muted-foreground/50">{body.length}{c.charLimit}</span>
             <button
               type="submit"
               disabled={!body.trim() || posting}
-              className="inline-flex h-9 items-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
+              className="inline-flex h-9 items-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50"
             >
               {posting ? c.posting : c.post}
             </button>
           </div>
         </form>
       ) : (
-        <p className="mt-6 text-sm text-slate-500">
-          <Link href="/login" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
+        <p className="mt-6 text-sm text-muted-foreground/70">
+          <Link href="/login" className="text-primary underline underline-offset-4 hover:text-primary">
             {c.signIn}
           </Link>{" "}
           {c.signInPrompt}

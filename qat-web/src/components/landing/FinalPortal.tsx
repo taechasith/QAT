@@ -1,4 +1,4 @@
-import {
+﻿import {
   BookOpen,
   FlaskConical,
   Gamepad2,
@@ -64,7 +64,7 @@ export async function FinalPortal({
       />
 
       <div className="mt-24">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-200">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
           {p.eyebrow}
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">

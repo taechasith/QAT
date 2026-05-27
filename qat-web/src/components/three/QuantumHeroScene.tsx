@@ -14,11 +14,11 @@ function SceneLights({ mobile }: { mobile: boolean }) {
   return (
     <>
       <ambientLight intensity={mobile ? 0.6 : 0.35} />
-      <directionalLight position={[5, 5, 5]} intensity={0.9} color="#22d3ee" />
+      <directionalLight position={[5, 5, 5]} intensity={0.9} color="#9FFFE8" />
       {!mobile && (
         <>
-          <directionalLight position={[-5, 3, -5]} intensity={0.45} color="#a78bfa" />
-          <pointLight position={[0, 2, 2]} intensity={1.4} color="#22d3ee" distance={16} decay={2} />
+          <directionalLight position={[-5, 3, -5]} intensity={0.45} color="#D4A832" />
+          <pointLight position={[0, 2, 2]} intensity={1.4} color="#9FFFE8" distance={16} decay={2} />
         </>
       )}
     </>

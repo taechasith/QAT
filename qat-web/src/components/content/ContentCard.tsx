@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 
@@ -53,14 +53,14 @@ export async function ContentCard({ item }: ContentCardProps) {
         </div>
       ) : null}
       <div className="p-5">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-200">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
           {item.content_type.replace("_", " ")}
         </p>
         <h2 className="mt-3 text-xl font-semibold text-white">{item.title}</h2>
         {item.excerpt ? (
-          <p className="mt-3 text-sm leading-6 text-slate-300">{item.excerpt}</p>
+          <p className="mt-3 text-sm leading-6 text-foreground/70">{item.excerpt}</p>
         ) : null}
-        <div className="mt-5 flex flex-wrap gap-3 text-xs text-slate-400">
+        <div className="mt-5 flex flex-wrap gap-3 text-xs text-muted-foreground">
           {date ? (
             <span className="inline-flex items-center gap-1.5">
               <CalendarDays className="size-3.5" aria-hidden="true" />
@@ -78,7 +78,7 @@ export async function ContentCard({ item }: ContentCardProps) {
           href={href}
           target={external ? "_blank" : undefined}
           rel={external ? "noreferrer" : undefined}
-          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           {tr.card.readMore}
           <ArrowUpRight className="size-4" aria-hidden="true" />

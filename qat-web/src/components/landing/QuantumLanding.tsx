@@ -1,4 +1,4 @@
-import type { ContentItem } from "@/lib/data/content";
+﻿import type { ContentItem } from "@/lib/data/content";
 import { getTranslations } from "@/lib/i18n/locale";
 
 import { QuantumHeroClient } from "./QuantumHeroClient";
@@ -43,25 +43,25 @@ export async function QuantumLanding({
         className="relative flex min-h-svh flex-col items-center justify-center px-5 py-28 text-center sm:px-8 lg:px-10"
       >
         <div className="max-w-4xl">
-          <p className="font-mono text-xs font-semibold tracking-[0.32em] text-cyan-200">
+          <p className="font-mono text-xs font-semibold tracking-[0.32em] text-primary">
             {h.eyebrow}
           </p>
           <h1 className="mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
             {h.title}
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
             {h.description}
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#mission"
-              className="inline-flex h-11 items-center rounded-full bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition-all duration-200 hover:bg-cyan-100 hover:scale-[1.04] hover:shadow-[0_0_32px_rgba(34,211,238,0.45)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-slate-950 transition-all duration-200 hover:bg-primary/90 hover:scale-[1.04] hover:shadow-[0_0_32px_rgba(212,168,50,0.35)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {h.discoverMission}
             </a>
             <a
               href="#portal"
-              className="inline-flex h-11 items-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/12 hover:border-white/35 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="inline-flex h-11 items-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/12 hover:border-white/35 hover:scale-[1.04] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {h.exploreDestinations}
             </a>
@@ -69,7 +69,7 @@ export async function QuantumLanding({
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-300">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-foreground/70">
             {h.scrollHint}
           </span>
           <div className="h-8 w-px bg-gradient-to-b from-slate-300 to-transparent" />

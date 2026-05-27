@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,7 +10,7 @@ import { useTr } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
+  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 const MAX_ATTEMPTS = 5;
 
@@ -71,30 +71,30 @@ function LoginForm() {
         </div>
 
         {justRegistered && (
-          <div className="mt-6 rounded-lg border border-cyan-200/25 bg-cyan-200/8 px-4 py-3 text-center text-sm text-cyan-100">
+          <div className="mt-6 rounded-lg border border-primary/25 bg-primary/8 px-4 py-3 text-center text-sm text-primary/80">
             {a.accountCreated}
           </div>
         )}
 
         <div className="mt-8 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">{a.eyebrow}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">{a.eyebrow}</p>
           <h1 className="mt-3 text-2xl font-semibold text-white">{a.heading}</h1>
         </div>
 
         {tooManyAttempts ? (
           <div className="mt-8 rounded-xl border border-amber-400/25 bg-amber-400/8 p-6 text-center">
             <p className="text-sm font-semibold text-amber-200">{a.tooManyAttempts}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{a.tooManyAttemptsDesc}</p>
+            <p className="mt-2 text-sm leading-6 text-foreground/70">{a.tooManyAttemptsDesc}</p>
             <Link
               href={`/forgot-password?email=${encodeURIComponent(email)}`}
-              className="mt-5 inline-flex h-10 items-center justify-center rounded-full bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="mt-5 inline-flex h-10 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {a.resetPassword}
             </Link>
             <button
               type="button"
               onClick={() => { setAttempts(0); setErrorMsg(""); }}
-              className="mt-4 block w-full text-xs text-slate-500 transition hover:text-slate-300"
+              className="mt-4 block w-full text-xs text-muted-foreground/70 transition hover:text-foreground/80"
             >
               {a.tryAgain}
             </button>
@@ -102,7 +102,7 @@ function LoginForm() {
         ) : (
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-200">
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground/85">
                 {a.email}
               </label>
               <input
@@ -119,12 +119,12 @@ function LoginForm() {
 
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <label htmlFor="password" className="text-sm font-medium text-slate-200">
+                <label htmlFor="password" className="text-sm font-medium text-foreground/85">
                   {a.password}
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+                  className="text-xs text-primary underline underline-offset-4 hover:text-primary"
                 >
                   {a.forgotPassword}
                 </Link>
@@ -147,11 +147,11 @@ function LoginForm() {
             )}
 
             {attempts > 0 && attempts < MAX_ATTEMPTS && (
-              <p className="text-center text-xs text-slate-500">
+              <p className="text-center text-xs text-muted-foreground/70">
                 {a.havingTrouble}{" "}
                 <Link
                   href={`/forgot-password?email=${encodeURIComponent(email)}`}
-                  className="text-cyan-400 underline underline-offset-4 hover:text-cyan-200"
+                  className="text-primary underline underline-offset-4 hover:text-primary"
                 >
                   {a.resetYourPassword}
                 </Link>
@@ -161,16 +161,16 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {loading ? a.signingIn : a.signIn}
             </button>
           </form>
         )}
 
-        <p className="mt-6 text-center text-sm text-slate-400">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           {a.noAccount}{" "}
-          <Link href="/register" className="text-cyan-300 underline underline-offset-4 hover:text-cyan-100">
+          <Link href="/register" className="text-primary underline underline-offset-4 hover:text-primary">
             {a.createOne}
           </Link>
         </p>

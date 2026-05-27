@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 
@@ -47,16 +47,16 @@ export function NotificationPreferences({
           aria-checked={checked}
           onClick={toggle}
           disabled={isPending}
-          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 ${checked ? "bg-cyan-400" : "bg-white/20"}`}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 ${checked ? "bg-primary" : "bg-white/20"}`}
         >
           <span
             className={`pointer-events-none inline-block size-5 rounded-full bg-white shadow-lg transition-transform ${checked ? "translate-x-5" : "translate-x-0"}`}
           />
         </button>
-        <span className="text-sm text-slate-200">{n.toggle}</span>
+        <span className="text-sm text-foreground/85">{n.toggle}</span>
       </div>
       {message ? (
-        <p className="text-xs text-slate-400">{message}</p>
+        <p className="text-xs text-muted-foreground">{message}</p>
       ) : null}
     </div>
   );

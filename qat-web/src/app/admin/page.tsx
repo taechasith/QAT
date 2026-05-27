@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { 
   FileText, 
   Bell, 
@@ -53,9 +53,9 @@ export default async function AdminPage() {
       label: tr.admin.dashboard.stats.total, 
       value: totalItems, 
       icon: Layers, 
-      color: "text-cyan-400 border-cyan-400/20 bg-cyan-400/5",
-      hoverColor: "hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.08)]",
-      iconBg: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+      color: "text-primary border-primary/20 bg-primary/5",
+      hoverColor: "hover:border-primary/40 hover:shadow-[0_0_30px_rgba(212,168,50,0.07)]",
+      iconBg: "bg-primary/10 text-primary border border-primary/20"
     },
     { 
       label: tr.admin.dashboard.stats.published, 
@@ -77,9 +77,9 @@ export default async function AdminPage() {
       label: tr.admin.dashboard.stats.views, 
       value: totalViews, 
       icon: Eye, 
-      color: "text-violet-400 border-violet-400/20 bg-violet-400/5",
-      hoverColor: "hover:border-violet-400/40 hover:shadow-[0_0_30px_rgba(167,139,250,0.08)]",
-      iconBg: "bg-violet-500/10 text-violet-400 border border-violet-500/20"
+      color: "text-accent border-accent/20 bg-accent/5",
+      hoverColor: "hover:border-accent/40 hover:shadow-[0_0_30px_rgba(159,255,232,0.06)]",
+      iconBg: "bg-accent/10 text-accent border border-accent/20"
     },
   ];
 
@@ -122,7 +122,7 @@ export default async function AdminPage() {
       case "draft":
         return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
       default:
-        return "bg-slate-500/10 text-slate-400 border border-slate-500/20";
+        return "bg-muted/20 text-muted-foreground border border-slate-500/20";
     }
   };
 
@@ -143,7 +143,7 @@ export default async function AdminPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-accent">
               {tr.admin.title}
             </p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -153,7 +153,7 @@ export default async function AdminPage() {
           <div className="flex items-center gap-3 self-start md:self-auto">
             <Link
               href="/admin/content/new"
-              className="glass-panel hover:bg-violet-500/25 flex items-center gap-2 rounded-xl bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-200 border-violet-500/30 transition hover:border-violet-400/50"
+              className="glass-panel hover:bg-accent/25 flex items-center gap-2 rounded-xl bg-accent/10 px-4 py-2.5 text-sm font-semibold text-accent border-accent/30 transition hover:border-accent/50"
             >
               <Plus className="size-4" />
               {tr.admin.dashboard.quickLinks.newContent}
@@ -171,7 +171,7 @@ export default async function AdminPage() {
                 className={`rounded-xl border p-4 transition-all duration-300 ${s.color} ${s.hoverColor}`}
               >
                 <div className="mb-3 flex items-center justify-between gap-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{s.label}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{s.label}</p>
                   <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${s.iconBg}`}>
                     <Icon className="size-4" />
                   </div>
@@ -191,28 +191,28 @@ export default async function AdminPage() {
             <div className="glass-panel rounded-2xl p-6 h-full">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="size-4 text-cyan-400" />
+                  <TrendingUp className="size-4 text-primary" />
                   <h2 className="text-lg font-semibold text-white">
                     {tr.admin.dashboard.recentActivity}
                   </h2>
                 </div>
                 <Link
                   href="/admin/content"
-                  className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 transition"
+                  className="flex items-center gap-1.5 text-xs text-primary hover:text-primary transition"
                 >
                   {tr.admin.dashboard.quickLinks.allContent} <ArrowRight className="size-3" />
                 </Link>
               </div>
 
               {recentItems.length === 0 ? (
-                <div className="py-12 text-center text-sm text-slate-500">
+                <div className="py-12 text-center text-sm text-muted-foreground/70">
                   {locale === "th" ? "ไม่มีความเคลื่อนไหวล่าสุดในระบบ" : "No recent activity recorded."}
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
-                      <tr className="border-b border-white/5 text-slate-400 text-xs uppercase tracking-wider">
+                      <tr className="border-b border-white/5 text-muted-foreground text-xs uppercase tracking-wider">
                         <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.title}</th>
                         <th className="py-3 font-semibold pr-4 hidden sm:table-cell">{tr.admin.contentList.table.type}</th>
                         <th className="py-3 font-semibold pr-4">{tr.admin.contentList.table.status}</th>
@@ -227,13 +227,13 @@ export default async function AdminPage() {
                             <div className="flex items-center gap-3">
                               <Link
                                 href={`/admin/content/${item.id}/edit`}
-                                className="font-medium text-white group-hover:text-cyan-300 transition line-clamp-1"
+                                className="font-medium text-white group-hover:text-primary transition line-clamp-1"
                               >
                                 {item.title || tr.admin.form.untitled}
                               </Link>
                             </div>
                           </td>
-                          <td className="py-3.5 pr-4 hidden sm:table-cell text-slate-300 font-mono text-xs">
+                          <td className="py-3.5 pr-4 hidden sm:table-cell text-foreground/70 font-mono text-xs">
                             {categoryGuides[item.content_type]?.label || item.content_type}
                           </td>
                           <td className="py-3.5 pr-4">
@@ -241,15 +241,15 @@ export default async function AdminPage() {
                               {getStatusLabel(item.status)}
                             </span>
                           </td>
-                          <td className="py-3.5 text-right pr-4 hidden md:table-cell text-slate-400 font-mono text-xs">
+                          <td className="py-3.5 text-right pr-4 hidden md:table-cell text-muted-foreground font-mono text-xs">
                             {item.view_count || 0} {locale === "th" ? "ครั้ง" : "views"}
                           </td>
-                          <td className="py-3.5 text-right text-slate-400 font-mono text-xs">
+                          <td className="py-3.5 text-right text-muted-foreground font-mono text-xs">
                             <div className="flex items-center justify-end gap-3">
                               <span>{formatDate(item.updated_at)}</span>
                               <Link
                                 href={`/admin/content/${item.id}/edit`}
-                                className="opacity-0 group-hover:opacity-100 flex size-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white transition"
+                                className="opacity-0 group-hover:opacity-100 flex size-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-foreground/70 hover:text-white transition"
                                 title="Edit"
                               >
                                 <Edit2 className="size-3.5" />
@@ -278,17 +278,17 @@ export default async function AdminPage() {
                     <Link
                       key={action.href}
                       href={action.href}
-                      className="group flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.06] hover:border-violet-500/20 cursor-pointer"
+                      className="group flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.06] hover:border-accent/20 cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex size-9 items-center justify-center rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 group-hover:bg-violet-500/20 transition-all">
+                        <div className="flex size-9 items-center justify-center rounded-lg bg-accent/10 border border-accent/20 text-accent group-hover:bg-accent/20 transition-all">
                           <Icon className="size-4" />
                         </div>
-                        <span className="text-sm font-medium text-slate-200 group-hover:text-white transition">
+                        <span className="text-sm font-medium text-foreground/85 group-hover:text-white transition">
                           {action.label}
                         </span>
                       </div>
-                      <ArrowRight className="size-3.5 text-slate-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="size-3.5 text-muted-foreground/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
                     </Link>
                   );
                 })}
@@ -300,15 +300,15 @@ export default async function AdminPage() {
                 {tr.admin.dashboard.adminProfile}
               </h2>
               <div className="flex items-center gap-4">
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-violet-400/20 bg-violet-400/10 text-violet-300">
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                   <User className="size-6" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-white truncate">
                     {user.email}
                   </p>
-                  <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
-                    <Shield className="size-3 text-cyan-400" />
+                  <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Shield className="size-3 text-primary" />
                     <span>{tr.admin.dashboard.role}</span>
                   </div>
                 </div>

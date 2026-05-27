@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import { Upload, X } from "lucide-react";
@@ -61,13 +61,13 @@ export function MediaUploader({ value, onChange }: MediaUploaderProps) {
           onDragOver={(e) => e.preventDefault()}
           className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-white/20 bg-white/5 py-8 transition hover:border-white/30"
         >
-          <Upload className="size-6 text-slate-400" aria-hidden="true" />
-          <div className="text-center text-sm text-slate-400">
+          <Upload className="size-6 text-muted-foreground" aria-hidden="true" />
+          <div className="text-center text-sm text-muted-foreground">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
               disabled={uploading}
-              className="text-cyan-200 underline underline-offset-2 hover:text-white disabled:opacity-50"
+              className="text-primary underline underline-offset-2 hover:text-white disabled:opacity-50"
             >
               {uploading ? tr.admin.form.uploading : (tr.locale === "th" ? "เลือกไฟล์" : "Choose a file")}
             </button>{" "}

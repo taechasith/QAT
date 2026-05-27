@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -128,17 +128,17 @@ export function ContentEditorForm({
 
         {/* Section 1 — Identity */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             1 · Identity
           </p>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="content_type" className="text-sm font-medium text-slate-200">
+            <label htmlFor="content_type" className="text-sm font-medium text-foreground/85">
               {tr.admin.form.category}
             </label>
             <select
               id="content_type"
               {...register("content_type")}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               {CONTENT_TYPES.map((t) => (
                 <option key={t} value={t} className="bg-slate-900">
@@ -151,7 +151,7 @@ export function ContentEditorForm({
             ) : null}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="slug" className="text-sm font-medium text-slate-200">
+            <label htmlFor="slug" className="text-sm font-medium text-foreground/85">
               {tr.admin.form.slug} <span className="text-red-400">*</span>
             </label>
             <input
@@ -159,7 +159,7 @@ export function ContentEditorForm({
               type="text"
               {...register("slug")}
               placeholder={tr.admin.form.slugPlaceholder}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 font-mono text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
             {errors.slug ? (
               <p className="text-xs text-red-400">
@@ -175,7 +175,7 @@ export function ContentEditorForm({
 
         {/* Section 2 — Content (bilingual title + excerpt + body) */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             2 · Content — at least one language required
           </p>
 
@@ -183,11 +183,11 @@ export function ContentEditorForm({
           <div className="grid gap-4 xl:grid-cols-2">
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
-                <span className="text-[10px] text-slate-400">required if TH empty</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-primary">EN</span>
+                <span className="text-[10px] text-muted-foreground">required if TH empty</span>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="title" className="text-xs font-medium text-slate-300">
+                <label htmlFor="title" className="text-xs font-medium text-foreground/70">
                   {tr.admin.form.title}
                 </label>
                 <input
@@ -195,7 +195,7 @@ export function ContentEditorForm({
                   type="text"
                   {...register("title", { onChange: handleTitleChange })}
                   placeholder={tr.admin.form.titlePlaceholder}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
                 {errors.title ? (
                   <p className="text-xs text-red-400">
@@ -204,7 +204,7 @@ export function ContentEditorForm({
                 ) : null}
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="excerpt" className="text-xs font-medium text-slate-300">
+                <label htmlFor="excerpt" className="text-xs font-medium text-foreground/70">
                   {tr.admin.form.excerpt}
                 </label>
                 <textarea
@@ -212,7 +212,7 @@ export function ContentEditorForm({
                   rows={3}
                   {...register("excerpt")}
                   placeholder={tr.admin.form.excerptPlaceholder}
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
               </div>
             </div>
@@ -225,13 +225,13 @@ export function ContentEditorForm({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
                 {!watched.title_th ? (
-                  <span className="text-[10px] text-slate-400">required if EN empty · แนะนำ</span>
+                  <span className="text-[10px] text-muted-foreground">required if EN empty · แนะนำ</span>
                 ) : (
                   <span className="text-[10px] text-emerald-400">✓ filled</span>
                 )}
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="title_th" className="text-xs font-medium text-slate-300">
+                <label htmlFor="title_th" className="text-xs font-medium text-foreground/70">
                   ชื่อหัวข้อ (Thai title)
                 </label>
                 <input
@@ -239,11 +239,11 @@ export function ContentEditorForm({
                   type="text"
                   {...register("title_th")}
                   placeholder="ชื่อเนื้อหาภาษาไทย"
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="excerpt_th" className="text-xs font-medium text-slate-300">
+                <label htmlFor="excerpt_th" className="text-xs font-medium text-foreground/70">
                   คำโปรยสั้น (Thai excerpt)
                 </label>
                 <textarea
@@ -251,7 +251,7 @@ export function ContentEditorForm({
                   rows={3}
                   {...register("excerpt_th")}
                   placeholder="สรุปย่อภาษาไทย สำหรับแสดงบนการ์ด"
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
                 />
               </div>
             </div>
@@ -261,14 +261,14 @@ export function ContentEditorForm({
           <div className="grid gap-4 xl:grid-cols-2">
             <div className="flex flex-col gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
-                <span className="text-[10px] text-slate-400">body · Markdown supported</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-primary">EN</span>
+                <span className="text-[10px] text-muted-foreground">body · Markdown supported</span>
               </div>
               <textarea
                 rows={8}
                 {...register("body_md")}
                 placeholder="Body text (Markdown supported)"
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
 
@@ -280,7 +280,7 @@ export function ContentEditorForm({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
                 {!watched.body_md_th ? (
-                  <span className="text-[10px] text-slate-400">เนื้อหาภาษาไทย · แนะนำ</span>
+                  <span className="text-[10px] text-muted-foreground">เนื้อหาภาษาไทย · แนะนำ</span>
                 ) : (
                   <span className="text-[10px] text-emerald-400">✓ filled</span>
                 )}
@@ -289,7 +289,7 @@ export function ContentEditorForm({
                 rows={8}
                 {...register("body_md_th")}
                 placeholder="เนื้อหาภาษาไทย (รองรับ Markdown)"
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-slate-500 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 font-mono text-sm text-white placeholder:text-muted-foreground/70 focus:border-amber-300/50 focus:outline-none focus:ring-2 focus:ring-amber-300/20"
               />
             </div>
           </div>
@@ -303,12 +303,12 @@ export function ContentEditorForm({
 
         {/* Section 3 — Cover image */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             3 · Cover image
           </p>
           <div className="grid gap-4 xl:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">EN</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-primary">EN</span>
               <CoverUpload
                 value={watched.cover_image_url ?? ""}
                 onChange={(url) => setValue("cover_image_url", url)}
@@ -319,7 +319,7 @@ export function ContentEditorForm({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">TH</span>
                 {!watched.cover_image_url_th && (
-                  <span className="text-[10px] text-slate-400">ใช้รูป EN ถ้าไม่ได้ตั้งค่า</span>
+                  <span className="text-[10px] text-muted-foreground">ใช้รูป EN ถ้าไม่ได้ตั้งค่า</span>
                 )}
               </div>
               <CoverUpload
@@ -333,11 +333,11 @@ export function ContentEditorForm({
 
         {/* Section 4 — Event details */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             4 · Details
           </p>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="external_url" className="text-sm font-medium text-slate-200">
+            <label htmlFor="external_url" className="text-sm font-medium text-foreground/85">
               {tr.admin.form.externalUrl}
             </label>
             <input
@@ -345,12 +345,12 @@ export function ContentEditorForm({
               type="text"
               {...register("external_url")}
               placeholder={tr.admin.form.externalUrlPlaceholder}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="location" className="text-sm font-medium text-slate-200">
+              <label htmlFor="location" className="text-sm font-medium text-foreground/85">
                 {tr.admin.form.location}
               </label>
               <input
@@ -358,11 +358,11 @@ export function ContentEditorForm({
                 type="text"
                 {...register("location")}
                 placeholder={tr.admin.form.locationPlaceholder}
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-200">
+              <label className="text-sm font-medium text-foreground/85">
                 {tr.admin.form.startDate}
               </label>
               <input type="hidden" {...register("start_at")} />
@@ -372,15 +372,15 @@ export function ContentEditorForm({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
-                      watched.start_at ? "text-white" : "text-slate-500"
+                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30",
+                      watched.start_at ? "text-white" : "text-muted-foreground/70"
                     )}
                   >
                     <CalendarDays className="mr-2 h-4 w-4 text-white" />
                     {startAtDate ? format(startAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                <PopoverContent className="w-auto p-0 border-white/10 bg-background" align="start">
                   <Calendar
                     mode="single"
                     selected={startAtDate}
@@ -392,7 +392,7 @@ export function ContentEditorForm({
               </Popover>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-200">
+              <label className="text-sm font-medium text-foreground/85">
                 {tr.admin.form.endDate}
               </label>
               <input type="hidden" {...register("end_at")} />
@@ -402,15 +402,15 @@ export function ContentEditorForm({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30",
-                      watched.end_at ? "text-white" : "text-slate-500"
+                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30",
+                      watched.end_at ? "text-white" : "text-muted-foreground/70"
                     )}
                   >
                     <CalendarDays className="mr-2 h-4 w-4 text-white" />
                     {endAtDate ? format(endAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-white/10 bg-slate-950" align="start">
+                <PopoverContent className="w-auto p-0 border-white/10 bg-background" align="start">
                   <Calendar
                     mode="single"
                     selected={endAtDate}
@@ -426,12 +426,12 @@ export function ContentEditorForm({
 
         {/* Section 5 — Author */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col gap-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             5 · Author — overrides account name
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="author_name" className="text-xs font-medium text-slate-300">
+              <label htmlFor="author_name" className="text-xs font-medium text-foreground/70">
                 Display name
               </label>
               <input
@@ -439,19 +439,19 @@ export function ContentEditorForm({
                 type="text"
                 {...register("author_name")}
                 placeholder="Leave blank to use account name"
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="author_bio" className="text-xs font-medium text-slate-300">
-                Bio <span className="text-slate-500">(optional)</span>
+              <label htmlFor="author_bio" className="text-xs font-medium text-foreground/70">
+                Bio <span className="text-muted-foreground/70">(optional)</span>
               </label>
               <textarea
                 id="author_bio"
                 rows={2}
                 {...register("author_bio")}
                 placeholder="Short bio shown on this content…"
-                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+                className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
           </div>
@@ -470,13 +470,13 @@ export function ContentEditorForm({
 
         <div className="glass-panel rounded-xl p-5 flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="status" className="text-sm font-medium text-slate-200">
+            <label htmlFor="status" className="text-sm font-medium text-foreground/85">
               {tr.admin.form.status}
             </label>
             <select
               id="status"
               {...register("status")}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               {CONTENT_STATUSES.map((s) => {
                 const label = s === "draft"
@@ -493,22 +493,22 @@ export function ContentEditorForm({
                 );
               })}
             </select>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {tr.admin.form.statusDesc}
             </p>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="sort_order" className="text-sm font-medium text-slate-200">
+            <label htmlFor="sort_order" className="text-sm font-medium text-foreground/85">
               {tr.admin.form.sortOrder}
             </label>
             <input
               id="sort_order"
               type="number"
               {...register("sort_order", { valueAsNumber: true })}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30"
+              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {tr.admin.form.sortOrderDesc}
             </p>
           </div>
@@ -516,7 +516,7 @@ export function ContentEditorForm({
           <button
             type="submit"
             disabled={submitting}
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-cyan-200 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 cursor-pointer"
+            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
           >
             {submitting
               ? tr.admin.editContent.saving

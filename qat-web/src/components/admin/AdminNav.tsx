@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   LayoutDashboard,
   FileText,
@@ -28,9 +28,9 @@ export async function AdminNav() {
         <Link
           key={href}
           href={href}
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground/70 transition hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <Icon className="size-4 shrink-0 text-cyan-200" aria-hidden="true" />
+          <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
           {label}
         </Link>
       ))}

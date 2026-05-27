@@ -47,7 +47,7 @@ export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User 
         <Button
           variant="ghost"
           size="icon"
-          className="text-slate-300 hover:bg-white/8 hover:text-white"
+          className="text-foreground/70 hover:bg-primary/10 hover:text-foreground"
           aria-label="Open navigation menu"
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -55,7 +55,7 @@ export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User 
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-72 border-white/10 bg-[#030711]/95 backdrop-blur-xl"
+        className="w-72 border-border bg-background/95 backdrop-blur-xl"
       >
         <SheetTitle className="sr-only">Navigation</SheetTitle>
         <nav className="mt-8 flex flex-col gap-1" aria-label="Primary">
@@ -68,27 +68,27 @@ export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User 
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="rounded-lg px-4 py-3 text-sm font-medium text-foreground/70 transition-all duration-200 hover:translate-x-1 hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {item.label}
               </Link>
             );
           })}
 
-          <div className="my-2 border-t border-white/10" />
+          <div className="my-2 border-t border-border" />
 
           {user ? (
             <>
               <Link
                 href="/account"
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-sm font-medium text-cyan-200 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="rounded-lg px-4 py-3 text-sm font-medium text-primary transition-all duration-200 hover:translate-x-1 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {nav.myAccount}
               </Link>
               <button
                 onClick={handleSignOut}
-                className="rounded-lg px-4 py-3 text-left text-sm font-medium text-slate-400 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="rounded-lg px-4 py-3 text-left text-sm font-medium text-muted-foreground transition-all duration-200 hover:translate-x-1 hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {nav.signOut}
               </button>
@@ -97,7 +97,7 @@ export function NavMenu({ locale = "en", user }: { locale?: Locale; user?: User 
             <Link
               href="/login"
               onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-3 text-sm font-medium text-cyan-200 transition-all duration-200 hover:translate-x-1 hover:bg-white/8 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="rounded-lg px-4 py-3 text-sm font-medium text-primary transition-all duration-200 hover:translate-x-1 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {nav.login}
             </Link>

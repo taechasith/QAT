@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { useLocale, useTr } from "@/lib/i18n/context";
 
-const C_CYAN   = "#22d3ee";
-const C_VIOLET = "#a78bfa";
+const C_CYAN   = "#9FFFE8";
+const C_VIOLET = "#F5D4F5";
 
 const BOOT_LOGS_EN = [
   { limit: 0, text: "INIT [SYS.REG]: ALLOCATING 8-QUBIT REGISTER" },
@@ -107,7 +107,7 @@ function QuantumCanvas() {
           mouseRef.current.y,
           160
         );
-        grad.addColorStop(0, "rgba(34, 211, 238, 0.06)");
+        grad.addColorStop(0, "rgba(212, 168, 50, 0.06)");
         grad.addColorStop(1, "rgba(0, 0, 0, 0)");
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
@@ -165,7 +165,7 @@ function QuantumCanvas() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = p1.color === p2.color ? p1.color : "#6366f1";
+            ctx.strokeStyle = p1.color === p2.color ? p1.color : "#D4A832";
             ctx.lineWidth = strength * 0.5;
             ctx.globalAlpha = strength * 0.12;
             ctx.stroke();
@@ -245,7 +245,7 @@ export function SplashScreen() {
 
       {/* Laser Scanning Line sweeps vertically */}
       <div 
-        className="pointer-events-none absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent shadow-[0_0_10px_#22d3ee] z-40"
+        className="pointer-events-none absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary/20 to-transparent shadow-[0_0_10px_#D4A832] z-40"
         style={{
           animation: "scan-line 6s linear infinite"
         }}
@@ -254,7 +254,7 @@ export function SplashScreen() {
       {/* Background Radial Glow */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
-        style={{ background: `radial-gradient(circle at center, rgba(34,211,238,0.08) 0%, transparent 65%)` }}
+        style={{ background: `radial-gradient(circle at center, rgba(212,168,50,0.07) 0%, transparent 65%)` }}
       />
 
       {/* Matrix-like Tech Grid */}
@@ -270,11 +270,11 @@ export function SplashScreen() {
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-70">
         <div
           className="max-h-[800px] max-w-[800px] size-[70vw] rounded-full"
-          style={{ border: `1.5px dashed rgba(34,211,238,0.08)`, animation: "spin 25s linear infinite" }}
+          style={{ border: `1.5px dashed rgba(212,168,50,0.08)`, animation: "spin 25s linear infinite" }}
         />
         <div
           className="absolute max-h-[600px] max-w-[600px] size-[55vw] rounded-full"
-          style={{ border: `1px solid rgba(167,139,250,0.06)`, animation: "spin-reverse 35s linear infinite" }}
+          style={{ border: `1px solid rgba(159,255,232,0.06)`, animation: "spin-reverse 35s linear infinite" }}
         />
       </div>
 
@@ -288,8 +288,8 @@ export function SplashScreen() {
           style={{
             background: "rgba(255,255,255,0.02)",
             backdropFilter: "blur(16px)",
-            border: "1px solid rgba(34,211,238,0.12)",
-            boxShadow: "0 8px 32px 0 rgba(0,0,0,0.37), 0 0 50px rgba(34,211,238,0.04)",
+            border: "1px solid rgba(212,168,50,0.15)",
+            boxShadow: "0 8px 32px 0 rgba(10,6,18,0.5), 0 0 50px rgba(212,168,50,0.05)",
             animation: "float 6s ease-in-out infinite",
           }}
         >
@@ -299,8 +299,8 @@ export function SplashScreen() {
             style={{
               animation: "pulse-glow 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
               transform: "scale(1.08)",
-              border: "1.5px solid rgba(34,211,238,0.25)",
-              boxShadow: "0 0 20px rgba(34,211,238,0.15), inset 0 0 12px rgba(34,211,238,0.05)",
+              border: "1.5px solid rgba(212,168,50,0.3)",
+              boxShadow: "0 0 20px rgba(212,168,50,0.15), inset 0 0 12px rgba(212,168,50,0.05)",
             }}
           />
 
@@ -312,7 +312,7 @@ export function SplashScreen() {
               cy="100"
               r="94"
               fill="none"
-              stroke="rgba(34,211,238,0.15)"
+              stroke="rgba(212,168,50,0.15)"
               strokeWidth="0.8"
               strokeDasharray="2 6"
               className="animate-spin"
@@ -324,7 +324,7 @@ export function SplashScreen() {
               cy="100"
               r="86"
               fill="none"
-              stroke="rgba(34,211,238,0.22)"
+              stroke="rgba(212,168,50,0.22)"
               strokeWidth="1.2"
               strokeDasharray="25 15 5 15"
               className="animate-spin"
@@ -336,25 +336,25 @@ export function SplashScreen() {
               cy="100"
               r="78"
               fill="none"
-              stroke="rgba(167,139,250,0.2)"
+              stroke="rgba(159,255,232,0.2)"
               strokeWidth="1"
               strokeDasharray="10 20 40 10"
               className="animate-spin"
               style={{ animationDuration: '15s', animationDirection: 'reverse' }}
             />
             {/* Concentric brackets */}
-            <path d="M 65 15 A 86 86 0 0 1 135 15" fill="none" stroke="rgba(34,211,238,0.4)" strokeWidth="1.5" />
-            <path d="M 65 185 A 86 86 0 0 0 135 185" fill="none" stroke="rgba(34,211,238,0.4)" strokeWidth="1.5" />
+            <path d="M 65 15 A 86 86 0 0 1 135 15" fill="none" stroke="rgba(212,168,50,0.4)" strokeWidth="1.5" />
+            <path d="M 65 185 A 86 86 0 0 0 135 185" fill="none" stroke="rgba(212,168,50,0.4)" strokeWidth="1.5" />
             
             {/* Compass indicators */}
-            <line x1="100" y1="12" x2="100" y2="18" stroke="rgba(34,211,238,0.5)" strokeWidth="1" />
-            <line x1="100" y1="182" x2="100" y2="188" stroke="rgba(34,211,238,0.5)" strokeWidth="1" />
-            <line x1="12" y1="100" x2="18" y2="100" stroke="rgba(34,211,238,0.5)" strokeWidth="1" />
-            <line x1="182" y1="100" x2="188" y2="100" stroke="rgba(34,211,238,0.5)" strokeWidth="1" />
+            <line x1="100" y1="12" x2="100" y2="18" stroke="rgba(212,168,50,0.5)" strokeWidth="1" />
+            <line x1="100" y1="182" x2="100" y2="188" stroke="rgba(212,168,50,0.5)" strokeWidth="1" />
+            <line x1="12" y1="100" x2="18" y2="100" stroke="rgba(212,168,50,0.5)" strokeWidth="1" />
+            <line x1="182" y1="100" x2="188" y2="100" stroke="rgba(212,168,50,0.5)" strokeWidth="1" />
             
             {/* Orbital node indicators */}
-            <circle cx="100" cy="12" r="2" fill="#22d3ee" className="animate-pulse" />
-            <circle cx="100" cy="188" r="2" fill="#22d3ee" className="animate-pulse" />
+            <circle cx="100" cy="12" r="2" fill="#D4A832" className="animate-pulse" />
+            <circle cx="100" cy="188" r="2" fill="#D4A832" className="animate-pulse" />
           </svg>
 
           {/* Logo Frame */}
@@ -364,14 +364,14 @@ export function SplashScreen() {
               alt="QAT"
               width={128}
               height={128}
-              className="size-full object-contain filter drop-shadow-[0_0_12px_rgba(34,211,238,0.35)]"
+              className="size-full object-contain filter drop-shadow-[0_0_12px_rgba(212,168,50,0.35)]"
               priority
             />
           </div>
         </div>
 
         {/* Status Dashboard Panel */}
-        <div className="glass-panel border-violet-200/10 flex w-full max-w-md flex-col items-center gap-5 rounded-2xl p-6 bg-slate-950/40 backdrop-blur-md">
+        <div className="glass-panel border-primary/10 flex w-full max-w-md flex-col items-center gap-5 rounded-2xl p-6 bg-background/40 backdrop-blur-md">
           <div className="flex flex-col items-center gap-1.5 text-center">
             <p
               className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-primary"
@@ -390,7 +390,7 @@ export function SplashScreen() {
               className="absolute left-0 top-0 h-full rounded-full bg-primary"
               style={{
                 width: `${Math.floor(pct)}%`,
-                boxShadow: `0 0 12px ${C_CYAN}, 0 0 24px rgba(34,211,238,0.5)`,
+                boxShadow: `0 0 12px ${C_CYAN}, 0 0 24px rgba(212,168,50,0.5)`,
                 transition: "width 40ms linear",
               }}
             />
@@ -403,12 +403,12 @@ export function SplashScreen() {
               return (
                 <div
                   key={log.limit}
-                  className={`flex items-start gap-2 transition-all duration-300 ${isLatest ? "text-cyan-300" : "text-slate-500/70"}`}
+                  className={`flex items-start gap-2 transition-all duration-300 ${isLatest ? "text-accent" : "text-muted-foreground/50"}`}
                 >
-                  <span className="shrink-0 text-violet-400/60">❯</span>
+                  <span className="shrink-0 text-primary/60">❯</span>
                   <span className="break-all">{log.text}</span>
                   {isLatest && !ready && (
-                    <span className="inline-block w-1 h-3 bg-cyan-300 animate-pulse shrink-0 self-center" />
+                    <span className="inline-block w-1 h-3 bg-accent animate-pulse shrink-0 self-center" />
                   )}
                 </div>
               );

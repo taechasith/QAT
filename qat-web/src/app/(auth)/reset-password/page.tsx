@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { PasswordInput } from "@/components/ui/PasswordInput";
 import { createClient } from "@/lib/supabase/client";
 
 const inputCls =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-300/30";
+  "w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -51,20 +51,20 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-cyan-200">
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">
             New password
           </p>
           <h1 className="mt-3 text-2xl font-semibold text-white">Set your password</h1>
         </div>
 
         {done ? (
-          <p className="mt-8 text-center text-sm text-slate-300">
+          <p className="mt-8 text-center text-sm text-foreground/70">
             Password updated! Redirecting to your profile…
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-200">
+              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-foreground/85">
                 New password
               </label>
               <PasswordInput
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
             </div>
 
             <div>
-              <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-slate-200">
+              <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-foreground/85">
                 Confirm password
               </label>
               <PasswordInput
@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {loading ? "Saving…" : "Save password"}
             </button>

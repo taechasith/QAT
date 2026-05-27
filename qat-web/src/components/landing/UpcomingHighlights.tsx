@@ -1,4 +1,4 @@
-import { ContentGrid } from "@/components/content/ContentGrid";
+﻿import { ContentGrid } from "@/components/content/ContentGrid";
 import type { ContentItem } from "@/lib/data/content";
 import { getTranslations } from "@/lib/i18n/locale";
 
@@ -19,7 +19,7 @@ export async function UpcomingHighlights({
 
   return (
     <div>
-      <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+      <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-primary">
         {tr.portal.whatsHappening}
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">

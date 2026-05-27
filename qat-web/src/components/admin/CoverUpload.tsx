@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
@@ -55,7 +55,7 @@ export function CoverUpload({ value, onChange, label }: Props) {
   return (
     <div className="flex flex-col gap-2">
       {label !== undefined && (
-        <label className="text-sm font-medium text-slate-200">{label}</label>
+        <label className="text-sm font-medium text-foreground/85">{label}</label>
       )}
 
       {/* 16:9 container */}
@@ -99,7 +99,7 @@ export function CoverUpload({ value, onChange, label }: Props) {
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="flex h-full w-full flex-col items-center justify-center gap-2 bg-white/3 hover:bg-white/6 transition text-slate-400 hover:text-slate-200"
+            className="flex h-full w-full flex-col items-center justify-center gap-2 bg-white/3 hover:bg-white/6 transition text-muted-foreground hover:text-foreground"
           >
             {uploading ? (
               <span className="font-mono text-xs">{tr.admin.form.uploading}</span>
@@ -107,7 +107,7 @@ export function CoverUpload({ value, onChange, label }: Props) {
               <>
                 <span className="text-3xl">🖼</span>
                 <span className="text-sm">{tr.admin.form.dragToUpload}</span>
-                <span className="text-xs text-slate-500">JPG · PNG · GIF · WebP · MP4 · WebM · max 20 MB</span>
+                <span className="text-xs text-muted-foreground/70">JPG · PNG · GIF · WebP · MP4 · WebM · max 20 MB</span>
               </>
             )}
           </button>
@@ -118,7 +118,7 @@ export function CoverUpload({ value, onChange, label }: Props) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="self-start text-xs text-cyan-300 underline underline-offset-4 hover:text-cyan-100"
+          className="self-start text-xs text-primary underline underline-offset-4 hover:text-primary"
         >
           {tr.admin.form.replaceCover}
         </button>

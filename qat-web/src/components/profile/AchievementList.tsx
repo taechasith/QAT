@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { ContentItem } from "@/lib/data/content";
@@ -29,11 +29,11 @@ function ItemRow({
         className="mt-0.5 size-4 cursor-pointer accent-cyan-400"
       />
       <div>
-        <p className={`text-sm font-medium ${done ? "text-slate-400 line-through" : "text-white"}`}>
+        <p className={`text-sm font-medium ${done ? "text-muted-foreground line-through" : "text-white"}`}>
           {item.title}
         </p>
         {item.excerpt && (
-          <p className="mt-0.5 text-xs text-slate-500 line-clamp-1">{item.excerpt}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground/70 line-clamp-1">{item.excerpt}</p>
         )}
       </div>
     </label>
@@ -42,7 +42,7 @@ function ItemRow({
 
 function EmptySlot({ label }: { label: string }) {
   return (
-    <p className="px-3 py-4 text-sm text-slate-500 italic">
+    <p className="px-3 py-4 text-sm text-muted-foreground/70 italic">
       No {label} available yet — check back soon.
     </p>
   );
@@ -82,8 +82,8 @@ export function AchievementList({ games, courses, achievements }: Props) {
       {/* Games */}
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">Games</h3>
-          <span className="font-mono text-xs text-cyan-300">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/70">Games</h3>
+          <span className="font-mono text-xs text-primary">
             {gamesDone}/{games.length}
           </span>
         </div>
@@ -106,8 +106,8 @@ export function AchievementList({ games, courses, achievements }: Props) {
       {/* Courses */}
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">Courses</h3>
-          <span className="font-mono text-xs text-cyan-300">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/70">Courses</h3>
+          <span className="font-mono text-xs text-primary">
             {coursesDone}/{courses.length}
           </span>
         </div>

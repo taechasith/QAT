@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { ContentFormData } from "@/lib/validation/content";
 import { useTr } from "@/lib/i18n/context";
@@ -19,7 +19,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
   const previewCards = [
     {
       locale: "EN",
-      accent: "text-cyan-200",
+      accent: "text-primary",
       cover: englishCover,
       title: values.title || tr.admin.form.untitled,
       excerpt: values.excerpt,
@@ -35,7 +35,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
 
   return (
     <div className="glass-panel rounded-xl p-5">
-      <p className="font-mono text-xs uppercase tracking-widest text-slate-400">
+      <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
         {tr.admin.form.preview}
       </p>
       <div className="mt-3 grid gap-4">
@@ -67,12 +67,12 @@ export function ContentPreview({ values }: ContentPreviewProps) {
               </div>
             ) : (
               <div className="mt-2 flex aspect-video items-center justify-center rounded-md border border-white/10 bg-white/5">
-                <p className="text-xs text-slate-500">{tr.admin.form.noCoverImage}</p>
+                <p className="text-xs text-muted-foreground/70">{tr.admin.form.noCoverImage}</p>
               </div>
             )}
             <div className="mt-3">
               {values.content_type ? (
-                <p className="font-mono text-xs uppercase tracking-widest text-slate-400">
+                <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                   {values.content_type.replace("_", " ")}
                 </p>
               ) : null}
@@ -80,7 +80,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
                 {card.title}
               </h2>
               {card.excerpt ? (
-                <p className="mt-2 text-sm leading-6 text-slate-300">{card.excerpt}</p>
+                <p className="mt-2 text-sm leading-6 text-foreground/70">{card.excerpt}</p>
               ) : null}
             </div>
           </div>
@@ -93,7 +93,7 @@ export function ContentPreview({ values }: ContentPreviewProps) {
               values.status === "published"
                 ? "bg-green-400/15 text-green-300"
                 : values.status === "archived"
-                  ? "bg-slate-400/15 text-slate-300"
+                  ? "bg-muted/50 text-foreground/70"
                   : "bg-amber-400/15 text-amber-300"
             }`}
           >

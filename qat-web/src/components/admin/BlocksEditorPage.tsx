@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -56,12 +56,12 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
         <div>
           <Link
             href={`/admin/content/${itemId}/edit`}
-            className="text-xs text-slate-500 hover:text-slate-300 transition"
+            className="text-xs text-muted-foreground/70 hover:text-foreground/80 transition"
           >
             {tr.admin.editContent.backToDetails}
           </Link>
           <h1 className="mt-1 text-2xl font-semibold text-white">{title}</h1>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="mt-0.5 text-xs text-muted-foreground/70">
             {tr.admin.editContent.visualBlockEditor}
           </p>
         </div>
@@ -70,7 +70,7 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
           type="button"
           onClick={save}
           disabled={saving}
-          className="inline-flex h-10 items-center rounded-lg bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
+          className="inline-flex h-10 items-center rounded-lg bg-primary px-6 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50"
         >
           {saving ? tr.admin.editContent.saving : saved ? tr.admin.editContent.saved : tr.admin.editContent.saveBlocks}
         </button>
@@ -88,7 +88,7 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
             type="button"
             onClick={() => setActiveLocale("en")}
             className={`h-9 rounded-md px-4 text-sm font-medium transition ${
-              activeLocale === "en" ? "bg-cyan-200 text-slate-950" : "text-slate-300 hover:text-white"
+              activeLocale === "en" ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-white"
             }`}
           >
             English
@@ -97,14 +97,14 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
             type="button"
             onClick={() => setActiveLocale("th")}
             className={`h-9 rounded-md px-4 text-sm font-medium transition ${
-              activeLocale === "th" ? "bg-amber-300 text-slate-950" : "text-slate-300 hover:text-white"
+              activeLocale === "th" ? "bg-amber-300 text-slate-950" : "text-foreground/70 hover:text-white"
             }`}
           >
             Thai
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             Editing {activeLocale === "en" ? "English" : "Thai"} layout
             {activeLocale === "th" && titleTh ? ` for ${titleTh}` : ""}
           </p>
@@ -126,18 +126,18 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
         </div>
 
         <aside className="xl:sticky xl:top-4 xl:self-start">
-          <div className="overflow-hidden rounded-xl border border-white/10 bg-slate-950">
+          <div className="overflow-hidden rounded-xl border border-white/10 bg-background">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
               <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground/70">
                   Preview page
                 </p>
-                <p className="mt-1 text-sm font-medium text-slate-200">
+                <p className="mt-1 text-sm font-medium text-foreground/85">
                   {activeLocale === "en" ? "English user mode" : "Thai user mode"}
                 </p>
               </div>
               <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                activeLocale === "en" ? "bg-cyan-300/15 text-cyan-200" : "bg-amber-300/15 text-amber-200"
+                activeLocale === "en" ? "bg-primary/15 text-primary" : "bg-amber-300/15 text-amber-200"
               }`}>
                 {activeLocale.toUpperCase()}
               </span>
@@ -147,7 +147,7 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
                 <BlockRenderer blocks={activeBlocks} />
               ) : (
                 <div className="flex min-h-60 items-center justify-center rounded-lg border border-dashed border-white/10 bg-white/[0.03] text-center">
-                  <p className="text-xs text-slate-500">Add blocks to preview this page.</p>
+                  <p className="text-xs text-muted-foreground/70">Add blocks to preview this page.</p>
                 </div>
               )}
             </div>
@@ -161,7 +161,7 @@ export function BlocksEditorPage({ itemId, title, titleTh, initialBlocks, initia
             type="button"
             onClick={save}
             disabled={saving}
-            className="inline-flex h-10 items-center rounded-lg bg-cyan-200 px-6 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:opacity-50"
+            className="inline-flex h-10 items-center rounded-lg bg-primary px-6 text-sm font-semibold text-slate-950 transition hover:bg-primary/90 disabled:opacity-50"
           >
             {saving ? tr.admin.editContent.saving : saved ? tr.admin.editContent.saved : tr.admin.editContent.saveBlocks}
           </button>
