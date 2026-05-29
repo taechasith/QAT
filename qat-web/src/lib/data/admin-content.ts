@@ -1,7 +1,12 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import type { createClient as createServerClient } from "@/lib/supabase/server";
 import { buildContentBlocks } from "@/lib/content-blocks";
 import type { ContentFormData } from "@/lib/validation/content";
 import type { Block } from "@/lib/types/blocks";
+
+type ContentDbClient =
+  | ReturnType<typeof createAdminClient>
+  | Awaited<ReturnType<typeof createServerClient>>;
 
 const adminSelectBase = `
   id,
@@ -27,9 +32,6 @@ const adminSelectEngagement = `
   content_likes(count),
   content_comments(count)
 `;
-
-// Keep adminSelect pointing at the engagement version for getContentById
-const adminSelect = adminSelectEngagement;
 
 export async function listAllContent() {
   const supabase = createAdminClient();
@@ -66,8 +68,9 @@ export async function createContent(
   userId: string,
   values: ContentFormData,
   bodyBlocks: Block[] = [],
+  db?: ContentDbClient,
 ): Promise<{ id?: string; error?: string }> {
-  const supabase = createAdminClient();
+  const supabase = db ?? createAdminClient();
 
   const { title_th, excerpt_th, body_md_th, cover_image_url_th, author_name, author_bio, ...rest } = values;
 
@@ -126,8 +129,9 @@ export async function updateContent(
   userId: string,
   values: ContentFormData,
   bodyBlocks: Block[] = [],
+  db?: ContentDbClient,
 ): Promise<{ error?: string }> {
-  const supabase = createAdminClient();
+  const supabase = db ?? createAdminClient();
 
   const [existingResult, profile] = await Promise.all([
     supabase.from("content_items").select("status, published_at, body_blocks, metadata").eq("id", id).maybeSingle(),
@@ -204,8 +208,8 @@ export async function updateContent(
   return error ? { error: error.message } : {};
 }
 
-export async function deleteContent(id: string): Promise<{ error?: string }> {
-  const supabase = createAdminClient();
+export async function deleteContent(id: string, db?: ContentDbClient): Promise<{ error?: string }> {
+  const supabase = db ?? createAdminClient();
   const { error } = await supabase.from("content_items").delete().eq("id", id);
   return error ? { error: error.message } : {};
 }

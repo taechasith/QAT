@@ -89,7 +89,10 @@ begin
       'course',
       'exhibition',
       'research_article',
-      'news'
+      'news',
+      'talk',
+      'experiment',
+      'video'
     );
   end if;
 
