@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createContent(user.id, parsed.data, blocks, supabase);
+  const result = await createContent(user.id, parsed.data, blocks);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }

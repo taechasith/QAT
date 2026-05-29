@@ -9,7 +9,10 @@
       "PowerShell(Start-Process \"http://localhost:3000\")",
       "PowerShell(gh api *)",
       "PowerShell(pnpm *)",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP OMEN\\\\QAT\" -Recurse -Directory | Select-Object -First 30 | ForEach-Object { $_.FullName })"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP OMEN\\\\QAT\" -Recurse -Directory | Select-Object -First 30 | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP OMEN\\\\QAT\\\\qat-web\\\\src\" -Recurse -Force | Where-Object { -not $_.PSIsContainer } | Select-Object Name, @{Name=\"RelativePath\";Expression={$_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\HP OMEN\\\\QAT\\\\qat-web\\\\\"\\)}} | Sort-Object RelativePath | Format-Table -AutoSize -Wrap)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP OMEN\\\\QAT\\\\qat-web\\\\src\" -Recurse -Directory | Select-Object @{Name=\"Path\";Expression={$_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\HP OMEN\\\\QAT\\\\qat-web\\\\\"\\)}} | Sort-Object Path | Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem *)"
     ]
   }
 }

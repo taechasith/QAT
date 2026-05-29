@@ -30,7 +30,7 @@ export async function PATCH(request: Request, { params }: Params) {
     );
   }
 
-  const result = await updateContent(id, user.id, parsed.data, blocks, supabase);
+  const result = await updateContent(id, user.id, parsed.data, blocks);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
@@ -49,7 +49,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const { id } = await params;
-  const result = await deleteContent(id, supabase);
+  const result = await deleteContent(id);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }

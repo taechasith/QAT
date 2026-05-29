@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/auth/admin";
 import type { Block } from "@/lib/types/blocks";
 
@@ -21,7 +22,7 @@ export async function PATCH(request: Request, { params }: Params) {
   const blocks: Block[] = Array.isArray(body?.blocks) ? body.blocks : [];
   const blocksTh: Block[] = Array.isArray(body?.blocks_th) ? body.blocks_th : [];
 
-  const db = authClient;
+  const db = createAdminClient();
   const { data: existing, error: readError } = await db
     .from("content_items")
     .select("metadata")
