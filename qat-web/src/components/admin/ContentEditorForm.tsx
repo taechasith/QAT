@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { ChangeEvent, ChangeEventHandler } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +15,13 @@ import { CoverUpload } from "./CoverUpload";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -54,6 +62,95 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   experiment: "Experiment",
   video: "Video",
 };
+
+function handleCalendarDropdownChange(
+  value: string | number,
+  onChange: ChangeEventHandler<HTMLSelectElement>,
+) {
+  const event = {
+    target: {
+      value: String(value),
+    },
+  } as ChangeEvent<HTMLSelectElement>;
+  onChange(event);
+}
+
+type AdminDatePickerProps = {
+  value: Date | undefined;
+  onChange: (value: string) => void;
+};
+
+function AdminDatePicker({ value, onChange }: AdminDatePickerProps) {
+  const [month, setMonth] = useState<Date>(value ?? new Date());
+
+  useEffect(() => {
+    if (value) {
+      setMonth(value);
+    }
+  }, [value]);
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          className={cn(
+            "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30",
+            value ? "text-white" : "text-muted-foreground/70",
+          )}
+        >
+          <CalendarDays className="mr-2 h-4 w-4 text-white" />
+          {value ? format(value, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0 border-white/10 bg-background" align="start">
+        <Calendar
+          captionLayout="dropdown"
+          components={{
+            MonthCaption: (props) => <>{props.children}</>,
+            DropdownNav: (props) => (
+              <div className="flex w-full items-center gap-2 px-1">{props.children}</div>
+            ),
+            Dropdown: (props) => (
+              <Select
+                onValueChange={(selectedValue) => {
+                  if (props.onChange) {
+                    handleCalendarDropdownChange(selectedValue, props.onChange);
+                  }
+                }}
+                value={String(props.value)}
+              >
+                <SelectTrigger className="h-9 min-w-28 flex-1 border-white/15 bg-white/5 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="border-white/10 bg-slate-950 text-white">
+                  {props.options?.map((option) => (
+                    <SelectItem
+                      disabled={option.disabled}
+                      key={option.value}
+                      value={String(option.value)}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ),
+          }}
+          hideNavigation
+          mode="single"
+          month={month}
+          onMonthChange={setMonth}
+          selected={value}
+          onSelect={(date) => {
+            onChange(date ? format(date, "yyyy-MM-dd") : "");
+          }}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export function ContentEditorForm({
   mode,
@@ -366,60 +463,20 @@ export function ContentEditorForm({
                 {tr.admin.form.startDate}
               </label>
               <input type="hidden" {...register("start_at")} />
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30",
-                      watched.start_at ? "text-white" : "text-muted-foreground/70"
-                    )}
-                  >
-                    <CalendarDays className="mr-2 h-4 w-4 text-white" />
-                    {startAtDate ? format(startAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-white/10 bg-background" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={startAtDate}
-                    onSelect={(date) => {
-                      setValue("start_at", date ? format(date, "yyyy-MM-dd") : "");
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
+              <AdminDatePicker
+                value={startAtDate}
+                onChange={(date) => setValue("start_at", date)}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-foreground/85">
                 {tr.admin.form.endDate}
               </label>
               <input type="hidden" {...register("end_at")} />
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal border-white/15 bg-white/5 hover:bg-white/10 hover:text-white px-3 py-2.5 text-sm h-10 rounded-lg focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30",
-                      watched.end_at ? "text-white" : "text-muted-foreground/70"
-                    )}
-                  >
-                    <CalendarDays className="mr-2 h-4 w-4 text-white" />
-                    {endAtDate ? format(endAtDate, "yyyy-MM-dd") : <span>yyyy-mm-dd</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-white/10 bg-background" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={endAtDate}
-                    onSelect={(date) => {
-                      setValue("end_at", date ? format(date, "yyyy-MM-dd") : "");
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
+              <AdminDatePicker
+                value={endAtDate}
+                onChange={(date) => setValue("end_at", date)}
+              />
             </div>
           </div>
         </div>
