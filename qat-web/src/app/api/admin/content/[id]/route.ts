@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/auth/admin";
 import { contentSchema } from "@/lib/validation/content";
@@ -20,7 +21,7 @@ export async function PATCH(request: Request, { params }: Params) {
   const { id } = await params;
   const raw = await request.json().catch(() => null);
   const { body_blocks, ...rest } = raw ?? {};
-  const blocks: Block[] = Array.isArray(body_blocks) ? body_blocks : [];
+  const blocks: Block[] | undefined = Array.isArray(body_blocks) ? body_blocks : undefined;
 
   const parsed = contentSchema.safeParse(rest);
   if (!parsed.success) {
@@ -34,6 +35,13 @@ export async function PATCH(request: Request, { params }: Params) {
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
+
+  revalidatePath("/admin/layout");
+  revalidatePath("/admin/content");
+  revalidatePath(`/admin/content/${id}/edit`);
+  revalidatePath(`/admin/content/${id}/blocks`);
+  if (result.previousSlug) revalidatePath(`/content/${result.previousSlug}`);
+  if (result.slug && result.slug !== result.previousSlug) revalidatePath(`/content/${result.slug}`);
 
   return NextResponse.json({ ok: true });
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/auth/admin";
 import { contentSchema } from "@/lib/validation/content";
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
 
   const raw = await request.json().catch(() => null);
   const { body_blocks, ...rest } = raw ?? {};
-  const blocks: Block[] = Array.isArray(body_blocks) ? body_blocks : [];
+  const blocks: Block[] | undefined = Array.isArray(body_blocks) ? body_blocks : undefined;
 
   const parsed = contentSchema.safeParse(rest);
   if (!parsed.success) {
@@ -31,6 +32,9 @@ export async function POST(request: Request) {
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
+
+  revalidatePath("/admin/layout");
+  revalidatePath("/admin/content");
 
   return NextResponse.json({ id: result.id }, { status: 201 });
 }

@@ -67,7 +67,7 @@ export async function getContentById(id: string) {
 export async function createContent(
   userId: string,
   values: ContentFormData,
-  bodyBlocks: Block[] = [],
+  bodyBlocks?: Block[],
   db?: ContentDbClient,
 ): Promise<{ id?: string; error?: string }> {
   const supabase = db ?? createAdminClient();
@@ -96,7 +96,7 @@ export async function createContent(
 
   // DB title is NOT NULL — fall back to TH title if EN not provided
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
-  const resolvedBlocks = bodyBlocks.length > 0 ? bodyBlocks : buildContentBlocks(values, "en");
+  const resolvedBlocks = bodyBlocks ?? buildContentBlocks(values, "en");
 
   const payload = {
     ...rest,
@@ -128,13 +128,13 @@ export async function updateContent(
   id: string,
   userId: string,
   values: ContentFormData,
-  bodyBlocks: Block[] = [],
+  bodyBlocks?: Block[],
   db?: ContentDbClient,
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; previousSlug?: string; slug?: string }> {
   const supabase = db ?? createAdminClient();
 
   const [existingResult, profile] = await Promise.all([
-    supabase.from("content_items").select("status, published_at, body_blocks, metadata").eq("id", id).maybeSingle(),
+    supabase.from("content_items").select("status, slug, published_at, metadata").eq("id", id).maybeSingle(),
     supabase.from("profiles").select("full_name, bio, avatar_url, avatar_type").eq("id", userId).maybeSingle().then((r) => r.data),
   ]);
 
@@ -167,22 +167,10 @@ export async function updateContent(
   else delete metadata.author_avatar_type;
 
   const resolvedTitle = rest.title?.trim() || title_th?.trim() || "";
-  const existingBlocks = Array.isArray(existingResult.data?.body_blocks)
-    ? (existingResult.data.body_blocks as Block[])
-    : [];
-  const existingThaiBlocks = Array.isArray(metadata.body_blocks_th)
-    ? (metadata.body_blocks_th as Block[])
-    : [];
-  const resolvedBlocks = bodyBlocks.length > 0
-    ? bodyBlocks
-    : existingBlocks.length > 0
-      ? existingBlocks
-      : buildContentBlocks(values, "en");
-
-  if (existingThaiBlocks.length === 0) {
-    const thaiBlocks = buildContentBlocks(values, "th");
-    if (thaiBlocks.length > 0) metadata.body_blocks_th = thaiBlocks;
-  }
+  const resolvedBlocks = bodyBlocks ?? buildContentBlocks(values, "en");
+  const thaiBlocks = buildContentBlocks(values, "th");
+  if (thaiBlocks.length > 0) metadata.body_blocks_th = thaiBlocks;
+  else delete metadata.body_blocks_th;
 
   const payload = {
     ...rest,
@@ -205,7 +193,9 @@ export async function updateContent(
     .update(payload)
     .eq("id", id);
 
-  return error ? { error: error.message } : {};
+  return error
+    ? { error: error.message }
+    : { previousSlug: existingResult.data?.slug, slug: rest.slug };
 }
 
 export async function deleteContent(id: string, db?: ContentDbClient): Promise<{ error?: string }> {

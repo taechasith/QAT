@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/auth/admin";
@@ -25,7 +26,7 @@ export async function PATCH(request: Request, { params }: Params) {
   const db = createAdminClient();
   const { data: existing, error: readError } = await db
     .from("content_items")
-    .select("metadata")
+    .select("metadata, slug")
     .eq("id", id)
     .maybeSingle();
 
@@ -41,5 +42,10 @@ export async function PATCH(request: Request, { params }: Params) {
     .eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  revalidatePath("/admin/layout");
+  revalidatePath(`/admin/content/${id}/blocks`);
+  if (existing?.slug) revalidatePath(`/content/${existing.slug}`);
+
   return NextResponse.json({ ok: true });
 }
