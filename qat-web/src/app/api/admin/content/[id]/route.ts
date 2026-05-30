@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/auth/admin";
 import { contentSchema } from "@/lib/validation/content";
 import { updateContent, deleteContent } from "@/lib/data/admin-content";
@@ -57,10 +58,21 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const { id } = await params;
+  const supabaseAdmin = createAdminClient();
+  const { data: existing } = await supabaseAdmin
+    .from("content_items")
+    .select("slug")
+    .eq("id", id)
+    .maybeSingle();
+
   const result = await deleteContent(id);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
+
+  revalidatePath("/admin/layout");
+  revalidatePath("/admin/content");
+  if (existing?.slug) revalidatePath(`/content/${existing.slug}`);
 
   return NextResponse.json({ ok: true });
 }

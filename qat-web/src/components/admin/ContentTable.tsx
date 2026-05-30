@@ -1,6 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Edit, ExternalLink, Eye, Heart, LayoutTemplate, MessageCircle } from "lucide-react";
 import { getTranslations } from "@/lib/i18n/locale";
+import { DeleteContentButton } from "./DeleteContentButton";
 
 type ContentRow = {
   id: string;
@@ -121,6 +122,7 @@ export async function ContentTable({ items }: ContentTableProps) {
                     >
                       <Edit className="size-4" aria-hidden="true" />
                     </Link>
+                    <DeleteContentButton itemId={item.id} title={item.title} />
                   </div>
                 </td>
               </tr>
@@ -131,4 +133,3 @@ export async function ContentTable({ items }: ContentTableProps) {
     </div>
   );
 }
-
