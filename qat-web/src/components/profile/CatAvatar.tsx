@@ -310,7 +310,7 @@ function CatScene({ type }: { type: CatType }) {
       </mesh>
 
       {/* ── WHISKERS — left ── */}
-      {whiskers.map(([px, py, rz, sx], i) => (
+      {whiskers.map(([, py, rz, sx], i) => (
         <mesh key={`wl${i}`} position={[-0.18 - sx / 2, py, 0.41]} rotation={[0, 0, rz]}>
           <boxGeometry args={[sx, 0.010, 0.007]} />
           <meshStandardMaterial color={WHISKER} opacity={0.82} transparent />

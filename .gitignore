@@ -1,6 +1,9 @@
 # Claude Code local config
 .claude/
 
+# Antigravity CLI local config
+.antigravitycli/
+
 # private docs
 QAT_CLI_Phase_By_Phase_SRD.md
 

@@ -16,7 +16,7 @@ type Props = {
   onSaved?: (type: AvatarType, url: string | null) => void;
 };
 
-export function AvatarPicker({ userId, current, currentUrl, onSaved }: Props) {
+export function AvatarPicker({ current, currentUrl, onSaved }: Props) {
   const router = useRouter();
   const [selected, setSelected] = useState<AvatarType>(current);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl);

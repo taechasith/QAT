@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
-const path = require('path');
 
 const supabaseJsPath = "C:\\Users\\HP OMEN\\QAT\\qat-web\\node_modules\\@supabase\\supabase-js";
 const { createClient } = require(supabaseJsPath);

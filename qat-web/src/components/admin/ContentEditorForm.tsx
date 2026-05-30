@@ -1,9 +1,9 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { contentSchema, slugify, CONTENT_TYPES, CONTENT_STATUSES } from "@/lib/validation/content";
@@ -26,6 +26,7 @@ import { CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useTr, useLocale } from "@/lib/i18n/context";
+import type { Block } from "@/lib/types/blocks";
 
 function parseLocalDate(dateStr: string | undefined | null): Date | undefined {
   if (!dateStr) return undefined;
@@ -80,15 +81,16 @@ type AdminDatePickerProps = {
   onChange: (value: string) => void;
 };
 
+type DocumentImportResult = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  bodyMd: string;
+  coverImageUrl: string;
+  blocks: Block[];
+};
+
 function AdminDatePicker({ value, onChange }: AdminDatePickerProps) {
-  const [month, setMonth] = useState<Date>(value ?? new Date());
-
-  useEffect(() => {
-    if (value) {
-      setMonth(value);
-    }
-  }, [value]);
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -138,10 +140,9 @@ function AdminDatePicker({ value, onChange }: AdminDatePickerProps) {
               </Select>
             ),
           }}
+          defaultMonth={value ?? new Date()}
           hideNavigation
           mode="single"
-          month={month}
-          onMonthChange={setMonth}
           selected={value}
           onSelect={(date) => {
             onChange(date ? format(date, "yyyy-MM-dd") : "");
@@ -149,6 +150,75 @@ function AdminDatePicker({ value, onChange }: AdminDatePickerProps) {
         />
       </PopoverContent>
     </Popover>
+  );
+}
+
+function DocumentImportPanel({
+  disabled,
+  onImported,
+}: {
+  disabled: boolean;
+  onImported: (document: DocumentImportResult) => void;
+}) {
+  const [importing, setImporting] = useState(false);
+  const [error, setError] = useState("");
+  const [summary, setSummary] = useState("");
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+
+    setImporting(true);
+    setError("");
+    setSummary("");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/admin/content/import-document", {
+      method: "POST",
+      body: formData,
+    });
+    const json = await res.json().catch(() => ({}));
+
+    setImporting(false);
+
+    if (!res.ok) {
+      setError(json.error ?? "Could not import this document.");
+      return;
+    }
+
+    onImported(json as DocumentImportResult);
+    setSummary(`${json.blocks?.length ?? 0} layout blocks imported from ${file.name}.`);
+  }
+
+  return (
+    <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            Import project layout
+          </p>
+          <p className="mt-1 text-xs text-foreground/70">
+            Upload a Word .docx file, or export a Google Doc as .docx. Headings, paragraphs, and embedded images become page blocks.
+          </p>
+        </div>
+        <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-lg border border-primary/35 px-4 text-sm font-semibold text-primary transition hover:bg-primary/10 has-disabled:cursor-not-allowed has-disabled:opacity-50">
+          {importing ? "Importing..." : "Upload document"}
+          <input
+            type="file"
+            accept=".docx,.md,.markdown,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/markdown,text/plain"
+            className="sr-only"
+            disabled={disabled || importing}
+            onChange={(event) => {
+              void handleFile(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+          />
+        </label>
+      </div>
+      {summary ? <p className="mt-3 text-xs text-emerald-300">{summary}</p> : null}
+      {error ? <p className="mt-3 text-xs text-red-300">{error}</p> : null}
+    </div>
   );
 }
 
@@ -162,11 +232,12 @@ export function ContentEditorForm({
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [importedBlocks, setImportedBlocks] = useState<Block[]>([]);
 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     formState: { errors },
   } = useForm<ContentFormData>({
@@ -180,13 +251,25 @@ export function ContentEditorForm({
     },
   });
 
-  const watched = watch();
+  const watched = useWatch({ control });
   const startAtDate = parseLocalDate(watched.start_at);
   const endAtDate = parseLocalDate(watched.end_at);
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (mode === "create" && !watched.slug) {
       setValue("slug", slugify(e.target.value));
+    }
+  }
+
+  function handleDocumentImported(document: DocumentImportResult) {
+    setImportedBlocks(document.blocks);
+    setValue("content_type", "project");
+    setValue("title", document.title);
+    setValue("slug", document.slug);
+    setValue("excerpt", document.excerpt);
+    setValue("body_md", document.bodyMd);
+    if (document.coverImageUrl) {
+      setValue("cover_image_url", document.coverImageUrl);
     }
   }
 
@@ -200,7 +283,7 @@ export function ContentEditorForm({
     const res = await fetch(endpoint, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify(importedBlocks.length > 0 ? { ...values, body_blocks: importedBlocks } : values),
     });
 
     const json = await res.json().catch(() => ({}));
@@ -275,6 +358,10 @@ export function ContentEditorForm({
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             2 · Content — at least one language required
           </p>
+
+          {mode === "create" ? (
+            <DocumentImportPanel disabled={submitting} onImported={handleDocumentImported} />
+          ) : null}
 
           {/* Title + Excerpt EN / TH */}
           <div className="grid gap-4 xl:grid-cols-2">
