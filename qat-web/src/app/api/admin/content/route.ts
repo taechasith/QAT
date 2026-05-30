@@ -17,8 +17,9 @@ export async function POST(request: Request) {
   }
 
   const raw = await request.json().catch(() => null);
-  const { body_blocks, ...rest } = raw ?? {};
+  const { body_blocks, body_blocks_th, ...rest } = raw ?? {};
   const blocks: Block[] | undefined = Array.isArray(body_blocks) ? body_blocks : undefined;
+  const blocksTh: Block[] | undefined = Array.isArray(body_blocks_th) ? body_blocks_th : undefined;
 
   const parsed = contentSchema.safeParse(rest);
   if (!parsed.success) {
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createContent(user.id, parsed.data, blocks);
+  const result = await createContent(user.id, parsed.data, blocks, blocksTh);
   if (result.error) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }

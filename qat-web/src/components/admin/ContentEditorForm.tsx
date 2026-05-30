@@ -158,18 +158,18 @@ function DocumentImportPanel({
   onImported,
 }: {
   disabled: boolean;
-  onImported: (document: DocumentImportResult) => void;
+  onImported: (locale: "en" | "th", document: DocumentImportResult) => void;
 }) {
-  const [importing, setImporting] = useState(false);
+  const [importing, setImporting] = useState<"en" | "th" | null>(null);
   const [error, setError] = useState("");
-  const [summary, setSummary] = useState("");
+  const [summary, setSummary] = useState<{ en?: string; th?: string }>({});
 
-  async function handleFile(file: File | undefined) {
+  async function handleFile(locale: "en" | "th", file: File | undefined) {
     if (!file) return;
 
-    setImporting(true);
+    setImporting(locale);
     setError("");
-    setSummary("");
+    setSummary((current) => ({ ...current, [locale]: undefined }));
 
     const formData = new FormData();
     formData.append("file", file);
@@ -180,15 +180,18 @@ function DocumentImportPanel({
     });
     const json = await res.json().catch(() => ({}));
 
-    setImporting(false);
+    setImporting(null);
 
     if (!res.ok) {
       setError(json.error ?? "Could not import this document.");
       return;
     }
 
-    onImported(json as DocumentImportResult);
-    setSummary(`${json.blocks?.length ?? 0} layout blocks imported from ${file.name}.`);
+    onImported(locale, json as DocumentImportResult);
+    setSummary((current) => ({
+      ...current,
+      [locale]: `${json.blocks?.length ?? 0} layout blocks imported from ${file.name}.`,
+    }));
   }
 
   return (
@@ -199,24 +202,40 @@ function DocumentImportPanel({
             Import project layout
           </p>
           <p className="mt-1 text-xs text-foreground/70">
-            Upload a Word .docx file, or export a Google Doc as .docx. Headings, paragraphs, and embedded images become page blocks.
+            Upload separate English and Thai files. Word .docx, exported Google Docs .docx, Markdown, and text are supported.
           </p>
         </div>
-        <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-lg border border-primary/35 px-4 text-sm font-semibold text-primary transition hover:bg-primary/10 has-disabled:cursor-not-allowed has-disabled:opacity-50">
-          {importing ? "Importing..." : "Upload document"}
-          <input
-            type="file"
-            accept=".docx,.md,.markdown,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/markdown,text/plain"
-            className="sr-only"
-            disabled={disabled || importing}
-            onChange={(event) => {
-              void handleFile(event.target.files?.[0]);
-              event.target.value = "";
-            }}
-          />
-        </label>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {(["en", "th"] as const).map((locale) => (
+            <label
+              key={locale}
+              className={`inline-flex h-10 cursor-pointer items-center justify-center rounded-lg border px-4 text-sm font-semibold transition has-disabled:cursor-not-allowed has-disabled:opacity-50 ${
+                locale === "en"
+                  ? "border-primary/35 text-primary hover:bg-primary/10"
+                  : "border-amber-300/35 text-amber-200 hover:bg-amber-300/10"
+              }`}
+            >
+              {importing === locale
+                ? "Importing..."
+                : locale === "en"
+                  ? "Upload EN file"
+                  : "Upload TH file"}
+              <input
+                type="file"
+                accept=".docx,.md,.markdown,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/markdown,text/plain"
+                className="sr-only"
+                disabled={disabled || importing !== null}
+                onChange={(event) => {
+                  void handleFile(locale, event.target.files?.[0]);
+                  event.target.value = "";
+                }}
+              />
+            </label>
+          ))}
+        </div>
       </div>
-      {summary ? <p className="mt-3 text-xs text-emerald-300">{summary}</p> : null}
+      {summary.en ? <p className="mt-3 text-xs text-emerald-300">EN: {summary.en}</p> : null}
+      {summary.th ? <p className="mt-2 text-xs text-emerald-300">TH: {summary.th}</p> : null}
       {error ? <p className="mt-3 text-xs text-red-300">{error}</p> : null}
     </div>
   );
@@ -233,6 +252,7 @@ export function ContentEditorForm({
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [importedBlocks, setImportedBlocks] = useState<Block[]>([]);
+  const [importedBlocksTh, setImportedBlocksTh] = useState<Block[]>([]);
 
   const {
     register,
@@ -261,15 +281,30 @@ export function ContentEditorForm({
     }
   }
 
-  function handleDocumentImported(document: DocumentImportResult) {
-    setImportedBlocks(document.blocks);
+  function handleDocumentImported(importLocale: "en" | "th", document: DocumentImportResult) {
     setValue("content_type", "project");
-    setValue("title", document.title);
-    setValue("slug", document.slug);
-    setValue("excerpt", document.excerpt);
-    setValue("body_md", document.bodyMd);
+
+    if (importLocale === "en") {
+      setImportedBlocks(document.blocks);
+      setValue("title", document.title);
+      setValue("slug", document.slug);
+      setValue("excerpt", document.excerpt);
+      setValue("body_md", document.bodyMd);
+      if (document.coverImageUrl) {
+        setValue("cover_image_url", document.coverImageUrl);
+      }
+      return;
+    }
+
+    setImportedBlocksTh(document.blocks);
+    setValue("title_th", document.title);
+    if (!watched.slug) {
+      setValue("slug", document.slug);
+    }
+    setValue("excerpt_th", document.excerpt);
+    setValue("body_md_th", document.bodyMd);
     if (document.coverImageUrl) {
-      setValue("cover_image_url", document.coverImageUrl);
+      setValue("cover_image_url_th", document.coverImageUrl);
     }
   }
 
@@ -283,7 +318,11 @@ export function ContentEditorForm({
     const res = await fetch(endpoint, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(importedBlocks.length > 0 ? { ...values, body_blocks: importedBlocks } : values),
+      body: JSON.stringify({
+        ...values,
+        ...(importedBlocks.length > 0 ? { body_blocks: importedBlocks } : {}),
+        ...(importedBlocksTh.length > 0 ? { body_blocks_th: importedBlocksTh } : {}),
+      }),
     });
 
     const json = await res.json().catch(() => ({}));

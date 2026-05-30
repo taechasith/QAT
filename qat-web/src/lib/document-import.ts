@@ -73,19 +73,37 @@ function paragraphFormat(xml: string) {
 
 function parseZip(buffer: Buffer): ZipEntry[] {
   const entries: ZipEntry[] = [];
-  let offset = 0;
+  let eocdOffset = -1;
 
-  while (offset < buffer.length - 30) {
+  for (let i = buffer.length - 22; i >= 0; i -= 1) {
+    if (buffer.readUInt32LE(i) === 0x06054b50) {
+      eocdOffset = i;
+      break;
+    }
+  }
+
+  if (eocdOffset < 0) return entries;
+
+  const centralDirectorySize = buffer.readUInt32LE(eocdOffset + 12);
+  const centralDirectoryOffset = buffer.readUInt32LE(eocdOffset + 16);
+  let offset = centralDirectoryOffset;
+  const end = centralDirectoryOffset + centralDirectorySize;
+
+  while (offset < end && offset < buffer.length - 46) {
     const signature = buffer.readUInt32LE(offset);
-    if (signature !== 0x04034b50) break;
+    if (signature !== 0x02014b50) break;
 
-    const method = buffer.readUInt16LE(offset + 8);
-    const compressedSize = buffer.readUInt32LE(offset + 18);
-    const fileNameLength = buffer.readUInt16LE(offset + 26);
-    const extraLength = buffer.readUInt16LE(offset + 28);
-    const nameStart = offset + 30;
-    const dataStart = nameStart + fileNameLength + extraLength;
+    const method = buffer.readUInt16LE(offset + 10);
+    const compressedSize = buffer.readUInt32LE(offset + 20);
+    const fileNameLength = buffer.readUInt16LE(offset + 28);
+    const extraLength = buffer.readUInt16LE(offset + 30);
+    const commentLength = buffer.readUInt16LE(offset + 32);
+    const localHeaderOffset = buffer.readUInt32LE(offset + 42);
+    const nameStart = offset + 46;
     const name = buffer.subarray(nameStart, nameStart + fileNameLength).toString("utf8");
+    const localFileNameLength = buffer.readUInt16LE(localHeaderOffset + 26);
+    const localExtraLength = buffer.readUInt16LE(localHeaderOffset + 28);
+    const dataStart = localHeaderOffset + 30 + localFileNameLength + localExtraLength;
     const compressed = buffer.subarray(dataStart, dataStart + compressedSize);
 
     let data: Buffer | null = null;
@@ -93,10 +111,19 @@ function parseZip(buffer: Buffer): ZipEntry[] {
     if (method === 8) data = inflateRawSync(compressed);
     if (data) entries.push({ name, data });
 
-    offset = dataStart + compressedSize;
+    offset = nameStart + fileNameLength + extraLength + commentLength;
   }
 
   return entries;
+}
+
+function normalizeDocxTarget(target: string) {
+  const normalized = target.startsWith("/") ? target.slice(1) : `word/${target.replace(/^\.\.\//, "")}`;
+  try {
+    return decodeURIComponent(normalized);
+  } catch {
+    return normalized;
+  }
 }
 
 function relTargets(relsXml: string) {
@@ -108,7 +135,7 @@ function relTargets(relsXml: string) {
     const id = attrs.match(/\bId="([^"]+)"/)?.[1];
     const target = attrs.match(/\bTarget="([^"]+)"/)?.[1];
     if (id && target) {
-      targets.set(id, target.startsWith("/") ? target.slice(1) : `word/${target.replace(/^\.\.\//, "")}`);
+      targets.set(id, normalizeDocxTarget(target));
     }
   }
 
@@ -116,7 +143,7 @@ function relTargets(relsXml: string) {
 }
 
 function imageRelationshipIds(xml: string) {
-  return [...xml.matchAll(/r:embed="([^"]+)"/g)].map((match) => match[1]).filter(Boolean);
+  return [...xml.matchAll(/(?:r:embed|r:id)="([^"]+)"/g)].map((match) => match[1]).filter(Boolean);
 }
 
 function mimeFromPath(path: string) {

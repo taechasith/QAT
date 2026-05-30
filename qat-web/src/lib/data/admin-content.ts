@@ -68,6 +68,7 @@ export async function createContent(
   userId: string,
   values: ContentFormData,
   bodyBlocks?: Block[],
+  bodyBlocksTh?: Block[],
   db?: ContentDbClient,
 ): Promise<{ id?: string; error?: string }> {
   const supabase = db ?? createAdminClient();
@@ -91,7 +92,7 @@ export async function createContent(
   if (author_bio?.trim()) metadata.author_bio = author_bio.trim();
   if (profile?.avatar_url) metadata.author_avatar_url = profile.avatar_url;
   if (profile?.avatar_type) metadata.author_avatar_type = profile.avatar_type;
-  const thaiBlocks = buildContentBlocks(values, "th");
+  const thaiBlocks = bodyBlocksTh ?? buildContentBlocks(values, "th");
   if (thaiBlocks.length > 0) metadata.body_blocks_th = thaiBlocks;
 
   // DB title is NOT NULL — fall back to TH title if EN not provided
