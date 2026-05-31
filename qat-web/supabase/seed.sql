@@ -2,6 +2,10 @@ insert into public.admin_emails (email)
 values ('tae.creativelab@gmail.com')
 on conflict (email) do nothing;
 
+insert into public.admin_emails (email)
+values ('nathakarn88ka@gmail.com')
+on conflict (email) do nothing;
+
 insert into public.site_settings (key, value)
 values
   (
