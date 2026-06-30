@@ -82,6 +82,24 @@ type ContentQueryResult = {
   error?: string;
 };
 
+function startOfTodayIso() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+}
+
+function getEventComparisonDate(item: ContentItem) {
+  const value = item.end_at ?? item.start_at;
+  if (!value) return null;
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function isUpcomingEvent(item: ContentItem, today: Date) {
+  const eventDate = getEventComparisonDate(item);
+  return eventDate ? eventDate >= today : false;
+}
+
 const publicContentSelect = `
   id,
   content_type,
@@ -158,21 +176,53 @@ export async function getPublishedContentBySlug(slug: string) {
 export async function getFeaturedPublishedContent() {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("content_items")
-      .select(publicContentSelect)
-      .eq("status", "published")
-      .in("content_type", ["event", "project"])
-      .order("sort_order", { ascending: true })
-      .order("published_at", { ascending: false })
-      .limit(6);
+    const todayIso = startOfTodayIso();
+    const [eventsResult, projectsResult] = await Promise.all([
+      supabase
+        .from("content_items")
+        .select(publicContentSelect)
+        .eq("status", "published")
+        .eq("content_type", "event")
+        .or(`end_at.gte.${todayIso},and(end_at.is.null,start_at.gte.${todayIso})`)
+        .order("sort_order", { ascending: true })
+        .order("start_at", { ascending: true })
+        .limit(6),
+      supabase
+        .from("content_items")
+        .select(publicContentSelect)
+        .eq("status", "published")
+        .eq("content_type", "project")
+        .order("sort_order", { ascending: true })
+        .order("published_at", { ascending: false })
+        .limit(6),
+    ]);
+
+    const error = eventsResult.error ?? projectsResult.error;
 
     if (error) {
       return { items: [], error: error.message };
     }
 
     const locale = await getLocale();
-    const localized = (data ?? []).map((item) => localizeItem(item as ContentItem, locale));
+    const today = new Date(todayIso);
+    const events = (eventsResult.data ?? [])
+      .map((item) => item as ContentItem)
+      .filter((item) => isUpcomingEvent(item, today));
+    const projects = (projectsResult.data ?? []).map((item) => item as ContentItem);
+    const localized = [...events, ...projects]
+      .sort((a, b) => {
+        if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
+        if (a.content_type !== b.content_type) return a.content_type === "event" ? -1 : 1;
+
+        const aDate = a.content_type === "event" ? a.start_at : a.published_at;
+        const bDate = b.content_type === "event" ? b.start_at : b.published_at;
+        const aTime = new Date(aDate ?? 0).getTime();
+        const bTime = new Date(bDate ?? 0).getTime();
+
+        return a.content_type === "project" ? bTime - aTime : aTime - bTime;
+      })
+      .slice(0, 6)
+      .map((item) => localizeItem(item, locale));
     return { items: localized };
   } catch (error) {
     return {
