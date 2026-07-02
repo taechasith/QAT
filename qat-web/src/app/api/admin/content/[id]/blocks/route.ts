@@ -43,6 +43,7 @@ export async function PATCH(request: Request, { params }: Params) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  revalidatePath("/");
   revalidatePath("/admin/layout");
   revalidatePath(`/admin/content/${id}/blocks`);
   if (existing?.slug) revalidatePath(`/content/${existing.slug}`);

@@ -100,6 +100,23 @@ function isUpcomingEvent(item: ContentItem, today: Date) {
   return eventDate ? eventDate >= today : false;
 }
 
+function getTime(value: string | null) {
+  if (!value) return 0;
+
+  const time = new Date(value).getTime();
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function sortByPublishedNewest(a: ContentItem, b: ContentItem) {
+  const publishedDiff = getTime(b.published_at) - getTime(a.published_at);
+  if (publishedDiff !== 0) return publishedDiff;
+
+  const updatedDiff = getTime(b.updated_at) - getTime(a.updated_at);
+  if (updatedDiff !== 0) return updatedDiff;
+
+  return a.sort_order - b.sort_order;
+}
+
 const publicContentSelect = `
   id,
   content_type,
@@ -130,15 +147,19 @@ export async function getPublishedContentByType(
       .select(publicContentSelect)
       .eq("content_type", contentType)
       .eq("status", "published")
-      .order("sort_order", { ascending: true })
-      .order("published_at", { ascending: false });
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("updated_at", { ascending: false, nullsFirst: false })
+      .order("sort_order", { ascending: true });
 
     if (error) {
       return { items: [], error: error.message };
     }
 
     const locale = await getLocale();
-    const localized = (data ?? []).map((item) => localizeItem(item as ContentItem, locale));
+    const localized = (data ?? [])
+      .map((item) => item as ContentItem)
+      .sort(sortByPublishedNewest)
+      .map((item) => localizeItem(item, locale));
     return { items: localized };
   } catch (error) {
     return {
@@ -184,16 +205,15 @@ export async function getFeaturedPublishedContent() {
         .eq("status", "published")
         .eq("content_type", "event")
         .or(`end_at.gte.${todayIso},and(end_at.is.null,start_at.gte.${todayIso})`)
-        .order("sort_order", { ascending: true })
-        .order("start_at", { ascending: true })
-        .limit(6),
+        .order("start_at", { ascending: true, nullsFirst: false })
+        .limit(12),
       supabase
         .from("content_items")
         .select(publicContentSelect)
         .eq("status", "published")
         .eq("content_type", "project")
-        .order("sort_order", { ascending: true })
-        .order("published_at", { ascending: false })
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .order("updated_at", { ascending: false, nullsFirst: false })
         .limit(6),
     ]);
 
@@ -207,19 +227,18 @@ export async function getFeaturedPublishedContent() {
     const today = new Date(todayIso);
     const events = (eventsResult.data ?? [])
       .map((item) => item as ContentItem)
-      .filter((item) => isUpcomingEvent(item, today));
-    const projects = (projectsResult.data ?? []).map((item) => item as ContentItem);
+      .filter((item) => isUpcomingEvent(item, today))
+      .sort((a, b) => getTime(a.start_at) - getTime(b.start_at));
+    const projects = (projectsResult.data ?? [])
+      .map((item) => item as ContentItem)
+      .sort(sortByPublishedNewest);
     const localized = [...events, ...projects]
       .sort((a, b) => {
-        if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
         if (a.content_type !== b.content_type) return a.content_type === "event" ? -1 : 1;
 
-        const aDate = a.content_type === "event" ? a.start_at : a.published_at;
-        const bDate = b.content_type === "event" ? b.start_at : b.published_at;
-        const aTime = new Date(aDate ?? 0).getTime();
-        const bTime = new Date(bDate ?? 0).getTime();
-
-        return a.content_type === "project" ? bTime - aTime : aTime - bTime;
+        return a.content_type === "project"
+          ? sortByPublishedNewest(a, b)
+          : getTime(a.start_at) - getTime(b.start_at);
       })
       .slice(0, 6)
       .map((item) => localizeItem(item, locale));

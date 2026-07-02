@@ -34,6 +34,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
+  revalidatePath("/");
   revalidatePath("/admin/layout");
   revalidatePath("/admin/content");
 

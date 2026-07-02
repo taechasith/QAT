@@ -37,6 +37,7 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
+  revalidatePath("/");
   revalidatePath("/admin/layout");
   revalidatePath("/admin/content");
   revalidatePath(`/admin/content/${id}/edit`);
@@ -70,6 +71,7 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
+  revalidatePath("/");
   revalidatePath("/admin/layout");
   revalidatePath("/admin/content");
   if (existing?.slug) revalidatePath(`/content/${existing.slug}`);
