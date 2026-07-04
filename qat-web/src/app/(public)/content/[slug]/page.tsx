@@ -12,6 +12,7 @@ import { getPublishedContentBySlug } from "@/lib/data/content";
 import { getOgSettings } from "@/lib/data/site-settings";
 import { getLocale, getTranslations } from "@/lib/i18n/locale";
 import { isVideoUrl } from "@/lib/media";
+import { SITE_NAME, siteUrl } from "@/lib/metadata";
 import type { Block } from "@/lib/types/blocks";
 
 type ContentDetailPageProps = {
@@ -29,15 +30,24 @@ export async function generateMetadata({ params }: ContentDetailPageProps): Prom
 
   const description = item.excerpt ?? og.description;
   const image = item.cover_image_url ?? og.imageUrl;
+  const url = siteUrl(`/content/${item.slug}`);
+  const authorName = (item.metadata?.author_name as string | undefined) ?? SITE_NAME;
 
   return {
     title: item.title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: item.title,
       description,
+      url,
       type: "article",
       images: image ? [{ url: image, width: 1200, height: 630 }] : [],
+      publishedTime: item.published_at ?? undefined,
+      modifiedTime: item.updated_at ?? undefined,
+      authors: [authorName],
     },
     twitter: {
       card: "summary_large_image",
@@ -59,6 +69,58 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
 
   if (!item) notFound();
 
+  const description = item.excerpt ?? "";
+  const image = item.cover_image_url ? siteUrl(item.cover_image_url) : undefined;
+  const authorName = (item.metadata?.author_name as string | undefined) ?? SITE_NAME;
+  const jsonLd =
+    item.content_type === "event" && item.start_at
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          name: item.title,
+          description,
+          url: siteUrl(`/content/${item.slug}`),
+          image: image ? [image] : undefined,
+          startDate: item.start_at,
+          endDate: item.end_at ?? undefined,
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+          location: item.location
+            ? {
+                "@type": "Place",
+                name: item.location,
+              }
+            : undefined,
+          organizer: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            url: siteUrl("/"),
+          },
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": item.content_type === "news" ? "NewsArticle" : "Article",
+          headline: item.title,
+          description,
+          url: siteUrl(`/content/${item.slug}`),
+          mainEntityOfPage: siteUrl(`/content/${item.slug}`),
+          image: image ? [image] : undefined,
+          datePublished: item.published_at ?? undefined,
+          dateModified: item.updated_at ?? item.published_at ?? undefined,
+          author: {
+            "@type": "Person",
+            name: authorName,
+          },
+          publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            logo: {
+              "@type": "ImageObject",
+              url: siteUrl("/brand/QAT_Logo.png"),
+            },
+          },
+        };
+
   const { data: { user } } = await supabase.auth.getUser();
 
   const date = item.start_at ?? item.published_at
@@ -73,6 +135,11 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
       title={item.title}
       description={item.excerpt ?? ""}
     >
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="glass-panel overflow-hidden rounded-lg">
         {item.cover_image_url ? (
           <div className="relative aspect-[16/9] w-full">

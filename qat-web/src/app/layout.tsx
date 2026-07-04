@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SplashScreen } from "@/components/layout/SplashScreen";
 import { LocaleProvider } from "@/lib/i18n/context";
 import { getLocale } from "@/lib/i18n/locale";
-import { metadataBase } from "@/lib/metadata";
+import {
+  DEFAULT_DESCRIPTION,
+  SITE_NAME,
+  metadataBase,
+  siteUrl,
+} from "@/lib/metadata";
 
 import "./globals.css";
 
@@ -26,27 +31,58 @@ const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-const DESCRIPTION =
-  "A CreativeLabTH Group initiative connecting quantum science, art, and public imagination.";
-
 export const metadata: Metadata = {
   metadataBase: metadataBase(),
+  applicationName: SITE_NAME,
   title: {
-    default: "Quantum Art Thailand Association",
+    default: SITE_NAME,
     template: "%s | QAT",
   },
-  description: DESCRIPTION,
+  description: DEFAULT_DESCRIPTION,
+  keywords: [
+    "Quantum Art Thailand",
+    "QAT",
+    "quantum art",
+    "quantum science",
+    "science communication",
+    "creative technology",
+    "Thailand",
+  ],
+  authors: [{ name: "CreativeLabTH Group" }],
+  creator: "CreativeLabTH Group",
+  publisher: SITE_NAME,
+  alternates: {
+    canonical: siteUrl("/"),
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/brand/QAT_Logo.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    siteName: "Quantum Art Thailand Association",
-    title: "Quantum Art Thailand Association",
-    description: DESCRIPTION,
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
+    url: siteUrl("/"),
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Quantum Art Thailand Association",
-    description: DESCRIPTION,
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
   },
+  category: "education",
 };
 
 export default async function RootLayout({

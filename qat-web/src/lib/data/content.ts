@@ -82,6 +82,11 @@ type ContentQueryResult = {
   error?: string;
 };
 
+export type SitemapContentEntry = Pick<
+  ContentItem,
+  "slug" | "content_type" | "published_at" | "updated_at"
+>;
+
 function startOfTodayIso() {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
@@ -248,5 +253,22 @@ export async function getFeaturedPublishedContent() {
       items: [],
       error: error instanceof Error ? error.message : "Unable to load content.",
     };
+  }
+}
+
+export async function getPublishedSitemapContent(): Promise<SitemapContentEntry[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("content_items")
+      .select("slug, content_type, published_at, updated_at")
+      .eq("status", "published")
+      .order("updated_at", { ascending: false, nullsFirst: false });
+
+    if (error) return [];
+
+    return (data ?? []) as SitemapContentEntry[];
+  } catch {
+    return [];
   }
 }
