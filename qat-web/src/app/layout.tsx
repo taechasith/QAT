@@ -7,7 +7,6 @@ import { SplashScreen } from "@/components/layout/SplashScreen";
 import { LocaleProvider } from "@/lib/i18n/context";
 import { getLocale } from "@/lib/i18n/locale";
 import {
-  DEFAULT_DESCRIPTION,
   SITE_NAME,
   metadataBase,
   siteUrl,

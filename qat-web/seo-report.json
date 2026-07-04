@@ -1,0 +1,852 @@
+{
+  "generatedAt": "2026-07-04T19:36:10.890Z",
+  "healthScore": 80,
+  "mode": "apply",
+  "filesChanged": [
+    "src/app/robots.ts"
+  ],
+  "issuesFixed": [
+    "[SEO] forgot-password page is not disallowed in robots.ts -> Fixed"
+  ],
+  "summary": {
+    "totalIssues": 14,
+    "critical": 0,
+    "warnings": 3,
+    "info": 11
+  },
+  "issues": [
+    {
+      "route": "Global",
+      "category": "SEO",
+      "severity": "Warning",
+      "message": "forgot-password page is not disallowed in robots.ts",
+      "suggestedFix": "Add '/forgot-password' to the disallow array in src/app/robots.ts.",
+      "safeToApply": true,
+      "fileAffected": "src/app/robots.ts",
+      "reason": "forgot-password page is a private auth route that should not be indexed by search engines."
+    },
+    {
+      "route": "/",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/course",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/exhibition",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/experiment",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/game",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/news",
+      "category": "SEO",
+      "severity": "Warning",
+      "message": "Very little static text content detected (~195 characters)",
+      "suggestedFix": "Add more human-written content describing the section to improve crawl visibility.",
+      "safeToApply": false,
+      "fileAffected": "src\\app\\(public)\\news\\page.tsx"
+    },
+    {
+      "route": "/news",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/research",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/talk",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/video",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"item.cover_image_url\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\ContentCard.tsx"
+    },
+    {
+      "route": "/content/[slug]",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Fill image missing sizes attribute (oversized loading risk): src=\"item.cover_image_url\"",
+      "suggestedFix": "Add sizes attribute to Next.js Image tag in src\\app\\(public)\\content\\[slug]\\page.tsx to enable responsive image generation.",
+      "safeToApply": false,
+      "fileAffected": "src\\app\\(public)\\content\\[slug]\\page.tsx"
+    },
+    {
+      "route": "/content/[slug]",
+      "category": "Performance",
+      "severity": "Info",
+      "message": "Non-priority image could use lazy loading: src=\"avatarUrl\"",
+      "suggestedFix": "Add loading=\"lazy\" or rely on Next.js default lazy loading (ensure priority is not set unnecessarily).",
+      "safeToApply": false,
+      "fileAffected": "src\\app\\(public)\\content\\[slug]\\page.tsx"
+    },
+    {
+      "route": "/content/[slug]",
+      "category": "Performance",
+      "severity": "Warning",
+      "message": "Image missing width/height attributes (layout shift risk): src=\"block.url\"",
+      "suggestedFix": "Define explicit width and height on Next.js Image tag in src\\components\\content\\BlockRenderer.tsx or use fill layout.",
+      "safeToApply": false,
+      "fileAffected": "src\\components\\content\\BlockRenderer.tsx"
+    }
+  ],
+  "pageAnalyses": [
+    {
+      "route": "/",
+      "filePath": "src\\app\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "className=\"mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl\">\n            {h.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl\">\n          {p.heading}"
+        },
+        {
+          "level": 3,
+          "text": "className=\"text-lg font-semibold text-white transition-colors duration-200 group-hover:text-foreground\">{title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl\">\n        {upcomingTitle}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl\">\n        {m.heading}"
+        },
+        {
+          "level": 3,
+          "text": "className=\"mt-3 text-2xl font-semibold tracking-tight text-white\">\n              {m.mission1Title}"
+        },
+        {
+          "level": 3,
+          "text": "className=\"mt-3 text-2xl font-semibold tracking-tight text-white\">\n              {m.mission2Title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "#mission",
+          "text": "{h.discoverMission}",
+          "file": "src\\components\\landing\\QuantumLanding.tsx"
+        },
+        {
+          "href": "#portal",
+          "text": "{h.exploreDestinations}",
+          "file": "src\\components\\landing\\QuantumLanding.tsx"
+        },
+        {
+          "href": "href",
+          "text": "{badge ? (\n          \n            {badge}\n          \n        ) : null}\n      \n      \n        {title}\n        {description}\n      \n      \n        {actionLabel}",
+          "file": "src\\components\\landing\\PortalCard.tsx"
+        },
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 1971,
+      "visitedComponents": [
+        "src\\app\\page.tsx",
+        "src\\components\\landing\\QuantumLanding.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\components\\landing\\QuantumHeroClient.tsx",
+        "src\\components\\three\\ThreeErrorBoundary.tsx",
+        "src\\components\\landing\\FinalPortal.tsx",
+        "src\\components\\landing\\PortalCard.tsx",
+        "src\\components\\landing\\UpcomingHighlights.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\landing\\MissionSection.tsx",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts",
+        "src\\lib\\metadata.ts"
+      ],
+      "titleLength": 70,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/course",
+      "filePath": "src\\app\\(public)\\course\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 236,
+      "visitedComponents": [
+        "src\\app\\(public)\\course\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/exhibition",
+      "filePath": "src\\app\\(public)\\exhibition\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 225,
+      "visitedComponents": [
+        "src\\app\\(public)\\exhibition\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/experiment",
+      "filePath": "src\\app\\(public)\\experiment\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 223,
+      "visitedComponents": [
+        "src\\app\\(public)\\experiment\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/game",
+      "filePath": "src\\app\\(public)\\game\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 215,
+      "visitedComponents": [
+        "src\\app\\(public)\\game\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/news",
+      "filePath": "src\\app\\(public)\\news\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 195,
+      "visitedComponents": [
+        "src\\app\\(public)\\news\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/research",
+      "filePath": "src\\app\\(public)\\research\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 224,
+      "visitedComponents": [
+        "src\\app\\(public)\\research\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/talk",
+      "filePath": "src\\app\\(public)\\talk\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 218,
+      "visitedComponents": [
+        "src\\app\\(public)\\talk\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/video",
+      "filePath": "src\\app\\(public)\\video\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"mt-3 text-xl font-semibold text-white\">{item.title}"
+        },
+        {
+          "level": 2,
+          "text": "className=\"relative mt-6 text-lg font-semibold tracking-tight text-white\">\n        {title}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": true,
+          "priority": false,
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "href",
+          "text": "{tr.card.readMore}",
+          "file": "src\\components\\content\\ContentCard.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 207,
+      "visitedComponents": [
+        "src\\app\\(public)\\video\\page.tsx",
+        "src\\components\\content\\ContentGrid.tsx",
+        "src\\components\\content\\ContentCard.tsx",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\lib\\types\\blocks.ts",
+        "src\\lib\\media.ts",
+        "src\\components\\content\\EmptyContentState.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\metadata.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts"
+      ],
+      "titleLength": 35,
+      "descriptionLength": 100
+    },
+    {
+      "route": "/content/[slug]",
+      "filePath": "src\\app\\(public)\\content\\[slug]\\page.tsx",
+      "hasMetadata": true,
+      "hasTitle": true,
+      "hasDescription": true,
+      "hasCanonical": true,
+      "hasOG": true,
+      "hasTwitter": true,
+      "hasJSONLD": true,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": 2,
+          "text": "className=\"flex items-center gap-2 text-lg font-semibold text-white\">\n        \n        {c.heading}\n        {comments.length > 0 && (\n          \n            ({comments.length})\n          \n        )}"
+        },
+        {
+          "level": 1,
+          "text": "className=\"mt-3 max-w-5xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem]\">\n              {title}"
+        }
+      ],
+      "images": [
+        {
+          "src": "item.cover_image_url",
+          "alt": "item.title",
+          "fill": true,
+          "sizes": false,
+          "priority": true,
+          "file": "src\\app\\(public)\\content\\[slug]\\page.tsx"
+        },
+        {
+          "src": "avatarUrl",
+          "alt": "authorName",
+          "fill": false,
+          "sizes": false,
+          "width": "48",
+          "height": "48",
+          "priority": false,
+          "file": "src\\app\\(public)\\content\\[slug]\\page.tsx"
+        },
+        {
+          "src": "block.url",
+          "alt": "block.alt || \"\"",
+          "fill": false,
+          "sizes": false,
+          "loading": "lazy",
+          "priority": false,
+          "file": "src\\components\\content\\BlockRenderer.tsx"
+        }
+      ],
+      "links": [
+        {
+          "href": "item.external_url",
+          "text": "{tr.contentDetail.openLink}",
+          "file": "src\\app\\(public)\\content\\[slug]\\page.tsx"
+        },
+        {
+          "href": "/login",
+          "text": "{c.signIn}",
+          "file": "src\\components\\content\\ContentComments.tsx"
+        }
+      ],
+      "isClientComponent": false,
+      "textLength": 343,
+      "visitedComponents": [
+        "src\\app\\(public)\\content\\[slug]\\page.tsx",
+        "src\\components\\content\\BlockRenderer.tsx",
+        "src\\lib\\types\\blocks.ts",
+        "src\\components\\content\\ContentComments.tsx",
+        "src\\lib\\i18n\\context.tsx",
+        "src\\lib\\i18n\\translations.ts",
+        "src\\components\\content\\ContentEngagement.tsx",
+        "src\\components\\content\\PublicPageShell.tsx",
+        "src\\lib\\supabase\\server.ts",
+        "src\\lib\\env.ts",
+        "src\\lib\\data\\content.ts",
+        "src\\lib\\i18n\\locale.ts",
+        "src\\lib\\data\\site-settings.ts",
+        "src\\lib\\supabase\\admin.ts",
+        "src\\lib\\media.ts",
+        "src\\lib\\metadata.ts"
+      ]
+    }
+  ]
+}
