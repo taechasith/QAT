@@ -1,0 +1,39 @@
+# Quantum Art Thailand Association (QAT)
+
+A public platform connecting quantum science, art, interaction, and future culture. QAT works at the boundary of physics and public imagination to make complex scientific concepts accessible, interactive, and human.
+
+## For AI Crawlers and Search Engines
+If you are an LLM, search agent, or web crawler, this file provides a structured overview of the QAT platform, its purpose, terminology, and public routes.
+
+- **Official Name**: Quantum Art Thailand Association (QAT)
+- **Primary Domain**: https://qat.creativelabth.com
+- **Initiative**: International creative communication initiative under CreativeLabTH Group.
+- **Key Purpose**: Quantum science communication, interdisciplinary art-science research, public education, and interactive media design.
+
+## Core Features and Destinations
+- **Atlas**: An interactive, external quantum knowledge map mapping out quantum theories and their history.
+- **Game**: Playable simulators, quantum puzzles, and digital interactive learning games.
+- **Course**: Guided workshops, educational modules, and structured courses bridging quantum mechanics and creative technology.
+- **Exhibition**: A public archive documenting past quantum art exhibitions, physical installations, and immersive galleries.
+- **Research & Articles**: Scholarly essays, conceptual notes, and research dispatches connecting physics with artistic practice.
+- **News**: Dispatches, announcements, partnerships, and updates from the Thai quantum art scene.
+- **Talk**: Recorded lectures, panels, and conversations featuring physicists, artists, and creators.
+- **Experiment**: Live sandbox experiments, creative prototypes, and works-in-progress.
+- **Video**: Documentary shorts, creative films, and instructional media.
+
+## Key Terminology & Concepts
+- **Quantum Art**: The practice of utilizing quantum mechanical concepts (superposition, entanglement, tunneling) as conceptual, visual, or structural elements in art.
+- **Science Communication**: Bridging academic jargon with accessible, visual, and play-based media.
+- **Creative Technology**: The intersection of computing, art, and design (using tools like Three.js, React Three Fiber).
+
+## Directory of Public routes
+- `/` - Homepage: Platform mission statement, upcoming highlights, and access to all 9 destinations.
+- `/game` - Interactive games, simulators, and playgrounds.
+- `/course` - Scientific and creative technology courses.
+- `/exhibition` - Immersive exhibition archives and media.
+- `/research` - Research notes, essays, and publications.
+- `/news` - Public announcements, dispatches, and updates.
+- `/talk` - Video archives and transcripts of public panels and talks.
+- `/experiment` - Sandbox experiments and technical art prototypes.
+- `/video` - Curated educational documentaries and video art.
+- `/content/[slug]` - Deep-dive details page for specific events, news, articles, and media.

@@ -13,6 +13,8 @@ import {
   siteUrl,
 } from "@/lib/metadata";
 
+import { t } from "@/lib/i18n/translations";
+
 import "./globals.css";
 
 const ibmPlexSansThai = IBM_Plex_Sans_Thai({
@@ -31,59 +33,79 @@ const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-export const metadata: Metadata = {
-  metadataBase: metadataBase(),
-  applicationName: SITE_NAME,
-  title: {
-    default: SITE_NAME,
-    template: "%s | QAT",
-  },
-  description: DEFAULT_DESCRIPTION,
-  keywords: [
-    "Quantum Art Thailand",
-    "QAT",
-    "quantum art",
-    "quantum science",
-    "science communication",
-    "creative technology",
-    "Thailand",
-  ],
-  authors: [{ name: "CreativeLabTH Group" }],
-  creator: "CreativeLabTH Group",
-  publisher: SITE_NAME,
-  alternates: {
-    canonical: siteUrl("/"),
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/brand/QAT_Logo.png",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const tr = t[locale];
+  const description = tr.footer.tagline;
+
+  return {
+    metadataBase: metadataBase(),
+    applicationName: SITE_NAME,
+    title: {
+      default: SITE_NAME,
+      template: "%s | QAT",
+    },
+    description,
+    keywords: locale === "th"
+      ? [
+          "Quantum Art Thailand",
+          "QAT",
+          "สมาคมศิลปะควอนตัมแห่งประเทศไทย",
+          "วิทยาศาสตร์ควอนตัม",
+          "ศิลปะควอนตัม",
+          "การสื่อสารวิทยาศาสตร์",
+          "เทคโนโลยีสร้างสรรค์",
+          "การออกแบบปฏิสัมพันธ์",
+          "ฟิสิกส์ควอนตัม"
+        ]
+      : [
+          "Quantum Art Thailand",
+          "QAT",
+          "quantum art",
+          "quantum science",
+          "science communication",
+          "creative technology",
+          "Thailand",
+          "quantum physics",
+          "art and science"
+        ],
+    authors: [{ name: "CreativeLabTH Group" }],
+    creator: "CreativeLabTH Group",
+    publisher: SITE_NAME,
+    alternates: {
+      canonical: siteUrl("/"),
+    },
+    icons: {
+      icon: "/favicon.ico",
+      apple: "/brand/QAT_Logo.png",
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
-  },
-  openGraph: {
-    siteName: SITE_NAME,
-    title: SITE_NAME,
-    description: DEFAULT_DESCRIPTION,
-    url: siteUrl("/"),
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE_NAME,
-    description: DEFAULT_DESCRIPTION,
-  },
-  category: "education",
-};
+    openGraph: {
+      siteName: SITE_NAME,
+      title: SITE_NAME,
+      description,
+      url: siteUrl("/"),
+      locale: locale === "th" ? "th_TH" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: SITE_NAME,
+      description,
+    },
+    category: "education",
+  };
+}
 
 export default async function RootLayout({
   children,

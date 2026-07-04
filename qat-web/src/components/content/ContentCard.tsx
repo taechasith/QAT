@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 
@@ -43,7 +43,7 @@ export async function ContentCard({ item }: ContentCardProps) {
           ) : (
             <Image
               src={item.cover_image_url}
-              alt=""
+              alt={item.title}
               fill
               unoptimized
               className="object-cover"

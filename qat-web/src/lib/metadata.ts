@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { t } from "@/lib/i18n/translations";
 import { getOgSettings } from "@/lib/data/site-settings";
+import { getLocale } from "@/lib/i18n/locale";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://qat.creativelabth.com";
@@ -22,27 +23,32 @@ export function metadataBase() {
 export async function getListingMetadata(
   pageKey: keyof (typeof t)["en"]["pages"],
 ): Promise<Metadata> {
-  const p = t["en"].pages[pageKey];
+  const locale = await getLocale();
+  const p = t[locale].pages[pageKey];
   const og = await getOgSettings();
+  const title = `${p.title} | ${SITE_SHORT_NAME}`;
+  const description = p.description;
+  const canonicalUrl = siteUrl(`/${pageKey}`);
 
   return {
-    title: `${p.title} | ${SITE_SHORT_NAME}`,
-    description: p.description,
+    title,
+    description,
     alternates: {
-      canonical: siteUrl(`/${pageKey}`),
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: `${p.title} | Quantum Art Thailand`,
-      description: p.description,
-      url: siteUrl(`/${pageKey}`),
+      description,
+      url: canonicalUrl,
       siteName: SITE_NAME,
       images: og.imageUrl ? [{ url: og.imageUrl, width: 1200, height: 630 }] : [],
+      locale: locale === "th" ? "th_TH" : "en_US",
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: `${p.title} | Quantum Art Thailand`,
-      description: p.description,
+      description,
       images: og.imageUrl ? [og.imageUrl] : [],
     },
   };

@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import { QuantumLanding } from "@/components/landing/QuantumLanding";
 import { getFeaturedPublishedContent } from "@/lib/data/content";
-import { getHomepageSettings } from "@/lib/data/site-settings";
+import { getHomepageSettings, getOgSettings } from "@/lib/data/site-settings";
+import { getLocale } from "@/lib/i18n/locale";
+import { t } from "@/lib/i18n/translations";
 import {
-  DEFAULT_DESCRIPTION,
   SITE_NAME,
   SITE_SHORT_NAME,
   siteUrl,
@@ -10,11 +12,75 @@ import {
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const tr = t[locale];
+  const og = await getOgSettings();
+  
+  const title = locale === "th"
+    ? `${SITE_NAME} (QAT) | วิทยาศาสตร์ควอนตัม ศิลปะ และจินตนาการ`
+    : `${SITE_NAME} (QAT) | Quantum Science, Art & Imagination`;
+    
+  const description = tr.hero.description;
+  const canonicalUrl = siteUrl("/");
+
+  return {
+    title,
+    description,
+    keywords: locale === "th" 
+      ? [
+          "Quantum Art Thailand",
+          "QAT",
+          "สมาคมศิลปะควอนตัมแห่งประเทศไทย",
+          "วิทยาศาสตร์ควอนตัม",
+          "ศิลปะควอนตัม",
+          "การสื่อสารวิทยาศาสตร์",
+          "เทคโนโลยีสร้างสรรค์",
+          "การออกแบบปฏิสัมพันธ์",
+          "ศิลปะและวิทยาศาสตร์",
+          "ฟิสิกส์ควอนตัม"
+        ]
+      : [
+          "Quantum Art Thailand",
+          "QAT",
+          "quantum art",
+          "quantum science",
+          "science communication",
+          "creative technology",
+          "Thailand",
+          "interaction design",
+          "quantum physics",
+          "art and science"
+        ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: SITE_NAME,
+      images: og.imageUrl ? [{ url: og.imageUrl, width: 1200, height: 630 }] : [],
+      locale: locale === "th" ? "th_TH" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: og.imageUrl ? [og.imageUrl] : [],
+    },
+  };
+}
+
 export default async function Home() {
-  const [homepageSettings, featuredContent] = await Promise.all([
+  const [homepageSettings, featuredContent, locale] = await Promise.all([
     getHomepageSettings(),
     getFeaturedPublishedContent(),
+    getLocale(),
   ]);
+
+  const tr = t[locale];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -26,7 +92,7 @@ export default async function Home() {
         alternateName: SITE_SHORT_NAME,
         url: siteUrl("/"),
         logo: siteUrl("/brand/QAT_Logo.png"),
-        description: DEFAULT_DESCRIPTION,
+        description: tr.footer.tagline,
       },
       {
         "@type": "WebSite",
@@ -34,8 +100,22 @@ export default async function Home() {
         name: SITE_NAME,
         alternateName: SITE_SHORT_NAME,
         url: siteUrl("/"),
-        description: DEFAULT_DESCRIPTION,
+        description: tr.hero.description,
         publisher: {
+          "@id": siteUrl("/#organization"),
+        },
+      },
+      {
+        "@type": "WebApplication",
+        "@id": siteUrl("/#webapplication"),
+        name: SITE_NAME,
+        alternateName: SITE_SHORT_NAME,
+        url: siteUrl("/"),
+        image: siteUrl("/brand/QAT_Logo.png"),
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "All",
+        browserRequirements: "Requires JavaScript. Requires HTML5.",
+        author: {
           "@id": siteUrl("/#organization"),
         },
       },

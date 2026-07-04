@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock, ExternalLink, MapPin, User } from "lucide-react";
@@ -72,10 +72,26 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
   const description = item.excerpt ?? "";
   const image = item.cover_image_url ? siteUrl(item.cover_image_url) : undefined;
   const authorName = (item.metadata?.author_name as string | undefined) ?? SITE_NAME;
-  const jsonLd =
+  const categoryPathMap: Record<string, string> = {
+    game: "game",
+    course: "course",
+    exhibition: "exhibition",
+    research_article: "research",
+    news: "news",
+    talk: "talk",
+    experiment: "experiment",
+    video: "video",
+    event: "news",
+    project: "experiment",
+  };
+
+  const categoryPath = categoryPathMap[item.content_type] ?? "news";
+  const categoryKey = categoryPath === "research" ? "research" : categoryPath;
+  const categoryTitle = tr.pages[categoryKey as keyof typeof tr.pages]?.title ?? categoryPath;
+
+  const mainEntity =
     item.content_type === "event" && item.start_at
       ? {
-          "@context": "https://schema.org",
           "@type": "Event",
           name: item.title,
           description,
@@ -98,7 +114,6 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           },
         }
       : {
-          "@context": "https://schema.org",
           "@type": item.content_type === "news" ? "NewsArticle" : "Article",
           headline: item.title,
           description,
@@ -121,6 +136,35 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
           },
         };
 
+  const breadcrumbs = {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": locale === "th" ? "หน้าแรก" : "Home",
+        "item": siteUrl("/"),
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryTitle,
+        "item": siteUrl(`/${categoryPath}`),
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": item.title,
+        "item": siteUrl(`/content/${item.slug}`),
+      },
+    ],
+  };
+
+  const jsonLdGraph = {
+    "@context": "https://schema.org",
+    "@graph": [mainEntity, breadcrumbs],
+  };
+
   const { data: { user } } = await supabase.auth.getUser();
 
   const date = item.start_at ?? item.published_at
@@ -138,7 +182,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
       />
       <article className="glass-panel overflow-hidden rounded-lg">
         {item.cover_image_url ? (
@@ -156,7 +200,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
             ) : (
               <Image
                 src={item.cover_image_url}
-                alt=""
+                alt={item.title}
                 fill
                 unoptimized
                 className="object-cover"
