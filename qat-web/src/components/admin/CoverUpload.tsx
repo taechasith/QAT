@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useTr } from "@/lib/i18n/context";
 import { clientUploadMedia } from "@/lib/supabase/client-upload";
 import { isVideoUrl } from "@/lib/media";
+import { ADMIN_MEDIA_MAX_UPLOAD_MB } from "@/lib/upload-limits";
 
 type Props = {
   value: string;
@@ -22,10 +23,6 @@ export function CoverUpload({ value, onChange, label }: Props) {
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
       setError(tr.admin.form.onlyImages);
-      return;
-    }
-    if (file.size > 20 * 1024 * 1024) {
-      setError(tr.admin.form.maxSize);
       return;
     }
     setError("");
@@ -107,7 +104,9 @@ export function CoverUpload({ value, onChange, label }: Props) {
               <>
                 <span className="text-3xl">🖼</span>
                 <span className="text-sm">{tr.admin.form.dragToUpload}</span>
-                <span className="text-xs text-muted-foreground/70">JPG · PNG · GIF · WebP · MP4 · WebM · max 20 MB</span>
+                <span className="text-xs text-muted-foreground/70">
+                  JPG · PNG · GIF · WebP · MP4 · WebM · max {ADMIN_MEDIA_MAX_UPLOAD_MB} MB
+                </span>
               </>
             )}
           </button>

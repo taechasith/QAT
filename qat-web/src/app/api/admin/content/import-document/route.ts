@@ -3,10 +3,13 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/auth/admin";
 import { importDocx, importPlainText } from "@/lib/document-import";
+import {
+  ADMIN_DOCUMENT_IMPORT_MAX_UPLOAD_BYTES,
+  ADMIN_DOCUMENT_IMPORT_MAX_UPLOAD_MB,
+  fileTooLargeMessage,
+} from "@/lib/upload-limits";
 
 export const runtime = "nodejs";
-
-const MAX_MB = 25;
 
 function extensionFromName(name: string) {
   return name.split(".").pop()?.toLowerCase() ?? "";
@@ -29,8 +32,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
   }
 
-  if (file.size > MAX_MB * 1024 * 1024) {
-    return NextResponse.json({ error: `File must be under ${MAX_MB} MB` }, { status: 400 });
+  if (file.size > ADMIN_DOCUMENT_IMPORT_MAX_UPLOAD_BYTES) {
+    return NextResponse.json(
+      { error: fileTooLargeMessage(ADMIN_DOCUMENT_IMPORT_MAX_UPLOAD_MB) },
+      { status: 400 },
+    );
   }
 
   const ext = extensionFromName(file.name);

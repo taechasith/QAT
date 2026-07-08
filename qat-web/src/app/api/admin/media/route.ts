@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/auth/admin";
+import {
+  ADMIN_MEDIA_MAX_UPLOAD_BYTES,
+  ADMIN_MEDIA_MAX_UPLOAD_MB,
+  fileTooLargeMessage,
+} from "@/lib/upload-limits";
 
 const BUCKET = "qat-media";
-const MAX_MB = 10;
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -22,8 +26,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
   }
 
-  if (file.size > MAX_MB * 1024 * 1024) {
-    return NextResponse.json({ error: `File must be under ${MAX_MB} MB` }, { status: 400 });
+  if (file.size > ADMIN_MEDIA_MAX_UPLOAD_BYTES) {
+    return NextResponse.json(
+      { error: fileTooLargeMessage(ADMIN_MEDIA_MAX_UPLOAD_MB) },
+      { status: 400 },
+    );
   }
 
   const ext = file.name.split(".").pop() ?? "bin";

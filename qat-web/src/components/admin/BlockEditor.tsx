@@ -255,10 +255,6 @@ function ImageBlockEditor({
       setErr("Images only.");
       return;
     }
-    if (file.size > 20 * 1024 * 1024) {
-      setErr("Max 20 MB.");
-      return;
-    }
     setErr("");
     setUploading(true);
     const { url, error: uploadErr } = await clientUploadMedia(file);
