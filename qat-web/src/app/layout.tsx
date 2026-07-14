@@ -8,6 +8,7 @@ import { LocaleProvider } from "@/lib/i18n/context";
 import { getLocale } from "@/lib/i18n/locale";
 import {
   SITE_NAME,
+  aiTextAlternates,
   metadataBase,
   siteUrl,
 } from "@/lib/metadata";
@@ -73,6 +74,7 @@ export async function generateMetadata(): Promise<Metadata> {
     publisher: SITE_NAME,
     alternates: {
       canonical: siteUrl("/"),
+      types: aiTextAlternates(),
     },
     icons: {
       icon: "/favicon.ico",

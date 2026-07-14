@@ -5,7 +5,7 @@ import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import type { ContentItem } from "@/lib/data/content";
 import { getLocale } from "@/lib/i18n/locale";
 import { t } from "@/lib/i18n/translations";
-import { isVideoUrl } from "@/lib/media";
+import { isNextImageOptimizable, isVideoUrl } from "@/lib/media";
 
 type ContentCardProps = {
   item: ContentItem;
@@ -45,7 +45,7 @@ export async function ContentCard({ item }: ContentCardProps) {
               src={item.cover_image_url}
               alt={item.title}
               fill
-              unoptimized
+              unoptimized={!isNextImageOptimizable(item.cover_image_url)}
               className="object-cover"
               sizes="(min-width: 1024px) 33vw, 100vw"
             />

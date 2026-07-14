@@ -7,6 +7,7 @@ import { t } from "@/lib/i18n/translations";
 import {
   SITE_NAME,
   SITE_SHORT_NAME,
+  aiTextAlternates,
   siteUrl,
 } from "@/lib/metadata";
 
@@ -54,6 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
         ],
     alternates: {
       canonical: canonicalUrl,
+      types: aiTextAlternates(),
     },
     openGraph: {
       title,

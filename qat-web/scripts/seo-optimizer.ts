@@ -524,10 +524,12 @@ function scanGlobalAssets() {
   const sitemapTsPath = path.join(SRC_DIR, "app/sitemap.ts");
   const sitemapXmlPath = path.join(PUBLIC_DIR, "sitemap.xml");
   const llmsTxtPath = path.join(PUBLIC_DIR, "llms.txt");
+  const llmsFullTxtPath = path.join(PUBLIC_DIR, "llms-full.txt");
 
   const hasRobots = fs.existsSync(robotsTsPath) || fs.existsSync(robotsTxtPath);
   const hasSitemap = fs.existsSync(sitemapTsPath) || fs.existsSync(sitemapXmlPath);
   const hasLlms = fs.existsSync(llmsTxtPath);
+  const hasLlmsFull = fs.existsSync(llmsFullTxtPath);
 
   if (!hasRobots) {
     issuesList.push({
@@ -578,6 +580,18 @@ function scanGlobalAssets() {
       reason: "AI agents look for llms.txt to quickly summarize web content.",
     });
   }
+
+  if (!hasLlmsFull) {
+    issuesList.push({
+      route: "Global",
+      category: "AI Visibility",
+      severity: "Warning",
+      message: "Missing /llms-full.txt for expanded AI search context",
+      suggestedFix: "Create a /llms-full.txt file in the public/ folder with expanded site context for AI agents.",
+      safeToApply: true,
+      reason: "llms-full.txt gives AI search agents a more complete site summary than the short index file.",
+    });
+  }
 }
 
 // Apply safe fixes
@@ -612,26 +626,65 @@ function applySafeFixes() {
 
   // 2. Generate llms.txt if missing (already exists, but if deleted or missing we enforce it)
   const llmsTxtPath = path.join(PUBLIC_DIR, "llms.txt");
+  const llmsFullTxtPath = path.join(PUBLIC_DIR, "llms-full.txt");
   if (!fs.existsSync(llmsTxtPath)) {
     const llmsContent = `# Quantum Art Thailand Association (QAT)
 
-A public platform connecting quantum science, art, interaction, and future culture. QAT works at the boundary of physics and public imagination to make complex scientific concepts accessible, interactive, and human.
+> Quantum Art Thailand Association (QAT) is a CreativeLabTH Group initiative connecting quantum science, art, creative technology, public education, and cultural imagination in Thailand.
 
-## Directory of Public routes
-- / - Homepage: Platform mission statement, upcoming highlights, and access to destinations.
-- /game - Interactive games, simulators, and playgrounds.
-- /course - Scientific and creative technology courses.
-- /exhibition - Immersive exhibition archives and media.
-- /research - Research notes, essays, and publications.
-- /news - Public announcements, dispatches, and updates.
-- /talk - Video archives and transcripts of public panels and talks.
-- /experiment - Sandbox experiments and technical art prototypes.
-- /video - Curated educational documentaries and video art.
-- /content/[slug] - Deep-dive details page for specific events, news, articles, and media.
+## AI Search Summary
+- Official name: Quantum Art Thailand Association
+- Short name: QAT
+- Primary URL: https://qat.creativelabth.com
+- Core topics: quantum art, quantum science communication, interaction design, exhibitions, courses, research notes, games, talks, experiments, video, and creative technology
+
+## Public Routes
+- \`/\` - Homepage with mission, featured content, and destination links
+- \`/game\` - Interactive games, simulators, and quantum learning playgrounds
+- \`/course\` - Courses, workshops, and educational modules
+- \`/exhibition\` - Exhibition archives, installations, and immersive galleries
+- \`/research\` - Research notes, essays, and interdisciplinary publications
+- \`/news\` - Announcements, partnerships, events, and public updates
+- \`/talk\` - Lectures, panels, interviews, and recorded conversations
+- \`/experiment\` - Sandbox experiments, prototypes, and technical art works-in-progress
+- \`/video\` - Educational documentaries, video art, and instructional media
+- \`/content/[slug]\` - Published detail pages for articles, events, projects, and media
+
+## AI-Readable Resources
+- Full AI reference: https://qat.creativelabth.com/llms-full.txt
+- Sitemap: https://qat.creativelabth.com/sitemap.xml
+- Robots policy: https://qat.creativelabth.com/robots.txt
 `;
     fs.writeFileSync(llmsTxtPath, llmsContent, "utf-8");
     console.log("✔ Safe Fix applied: Generated missing public/llms.txt file");
     filesChanged.push("public/llms.txt");
+  }
+
+  if (!fs.existsSync(llmsFullTxtPath)) {
+    const llmsFullContent = `# Quantum Art Thailand Association (QAT) - Full AI Reference
+
+Quantum Art Thailand Association (QAT) is a CreativeLabTH Group initiative connecting quantum science, art, creative technology, public education, and cultural imagination in Thailand.
+
+Primary domain: https://qat.creativelabth.com
+
+## Public Routes
+- / - Homepage with mission, featured content, and destination links.
+- /game - Interactive games, simulators, and quantum learning playgrounds.
+- /course - Courses, workshops, and educational modules.
+- /exhibition - Exhibition archives, installations, and immersive galleries.
+- /research - Research notes, essays, and interdisciplinary publications.
+- /news - Announcements, partnerships, events, and public updates.
+- /talk - Lectures, panels, interviews, and recorded conversations.
+- /experiment - Sandbox experiments, prototypes, and technical art works-in-progress.
+- /video - Educational documentaries, video art, and instructional media.
+- /content/[slug] - Published detail pages for articles, events, projects, and media.
+
+## Crawling Guidance
+Prioritize public routes, sitemap URLs, and published content detail pages. Do not index account, authentication, admin, or API routes as public content.
+`;
+    fs.writeFileSync(llmsFullTxtPath, llmsFullContent, "utf-8");
+    console.log("✔ Safe Fix applied: Generated missing public/llms-full.txt file");
+    filesChanged.push("public/llms-full.txt");
   }
 }
 
@@ -729,6 +782,7 @@ ${pageAnalyses.map((p: PageAnalysis) => `| \`${p.route}\` | ${p.hasMetadata ? "�
 - **robots.txt Status:** ✅ Active
 - **sitemap.xml Status:** ✅ Dynamic configuration active (\`src/app/sitemap.ts\`)
 - **llms.txt Status:** ✅ Active (\`/llms.txt\`)
+- **llms-full.txt Status:** ✅ Active (\`/llms-full.txt\`)
 - **Semantic HTML Check:** ✅ Fully validated. Headers are correctly structured.
 
 ---

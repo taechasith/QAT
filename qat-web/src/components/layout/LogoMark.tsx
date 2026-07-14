@@ -17,7 +17,6 @@ export function LogoMark({ locale = "en" }: { locale?: Locale }) {
         width={36}
         height={36}
         className="size-9 object-contain"
-        priority
       />
       <span className="flex flex-col leading-none">
         <span className="text-sm font-semibold tracking-[0.18em] text-white">

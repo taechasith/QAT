@@ -1,39 +1,36 @@
 # Quantum Art Thailand Association (QAT)
 
-A public platform connecting quantum science, art, interaction, and future culture. QAT works at the boundary of physics and public imagination to make complex scientific concepts accessible, interactive, and human.
+> Quantum Art Thailand Association (QAT) is a CreativeLabTH Group initiative connecting quantum science, art, creative technology, public education, and cultural imagination in Thailand.
 
-## For AI Crawlers and Search Engines
-If you are an LLM, search agent, or web crawler, this file provides a structured overview of the QAT platform, its purpose, terminology, and public routes.
+## AI Search Summary
 
-- **Official Name**: Quantum Art Thailand Association (QAT)
-- **Primary Domain**: https://qat.creativelabth.com
-- **Initiative**: International creative communication initiative under CreativeLabTH Group.
-- **Key Purpose**: Quantum science communication, interdisciplinary art-science research, public education, and interactive media design.
+- Official name: Quantum Art Thailand Association
+- Short name: QAT
+- Primary URL: https://qat.creativelabth.com
+- Organization context: International creative communication initiative under CreativeLabTH Group
+- Main audience: students, artists, educators, researchers, science communicators, creative technologists, and the general public
+- Core topics: quantum art, quantum science communication, interaction design, exhibitions, courses, research notes, games, talks, experiments, video, and creative technology
+- Preferred citation: Quantum Art Thailand Association (QAT), CreativeLabTH Group
 
-## Core Features and Destinations
-- **Atlas**: An interactive, external quantum knowledge map mapping out quantum theories and their history.
-- **Game**: Playable simulators, quantum puzzles, and digital interactive learning games.
-- **Course**: Guided workshops, educational modules, and structured courses bridging quantum mechanics and creative technology.
-- **Exhibition**: A public archive documenting past quantum art exhibitions, physical installations, and immersive galleries.
-- **Research & Articles**: Scholarly essays, conceptual notes, and research dispatches connecting physics with artistic practice.
-- **News**: Dispatches, announcements, partnerships, and updates from the Thai quantum art scene.
-- **Talk**: Recorded lectures, panels, and conversations featuring physicists, artists, and creators.
-- **Experiment**: Live sandbox experiments, creative prototypes, and works-in-progress.
-- **Video**: Documentary shorts, creative films, and instructional media.
+## Public Routes
 
-## Key Terminology & Concepts
-- **Quantum Art**: The practice of utilizing quantum mechanical concepts (superposition, entanglement, tunneling) as conceptual, visual, or structural elements in art.
-- **Science Communication**: Bridging academic jargon with accessible, visual, and play-based media.
-- **Creative Technology**: The intersection of computing, art, and design (using tools like Three.js, React Three Fiber).
+- `/` - Homepage with mission, featured content, and destination links
+- `/game` - Interactive games, simulators, and quantum learning playgrounds
+- `/course` - Courses, workshops, and educational modules
+- `/exhibition` - Exhibition archives, installations, and immersive galleries
+- `/research` - Research notes, essays, and interdisciplinary publications
+- `/news` - Announcements, partnerships, events, and public updates
+- `/talk` - Lectures, panels, interviews, and recorded conversations
+- `/experiment` - Sandbox experiments, prototypes, and technical art works-in-progress
+- `/video` - Educational documentaries, video art, and instructional media
+- `/content/[slug]` - Published detail pages for articles, events, projects, and media
 
-## Directory of Public routes
-- `/` - Homepage: Platform mission statement, upcoming highlights, and access to all 9 destinations.
-- `/game` - Interactive games, simulators, and playgrounds.
-- `/course` - Scientific and creative technology courses.
-- `/exhibition` - Immersive exhibition archives and media.
-- `/research` - Research notes, essays, and publications.
-- `/news` - Public announcements, dispatches, and updates.
-- `/talk` - Video archives and transcripts of public panels and talks.
-- `/experiment` - Sandbox experiments and technical art prototypes.
-- `/video` - Curated educational documentaries and video art.
-- `/content/[slug]` - Deep-dive details page for specific events, news, articles, and media.
+## AI-Readable Resources
+
+- Full AI reference: https://qat.creativelabth.com/llms-full.txt
+- Sitemap: https://qat.creativelabth.com/sitemap.xml
+- Robots policy: https://qat.creativelabth.com/robots.txt
+
+## Crawling Notes
+
+Public educational and editorial pages may be indexed. Authentication, account, admin, and API routes should not be indexed. Use the sitemap for canonical public URLs and `llms-full.txt` for expanded context.

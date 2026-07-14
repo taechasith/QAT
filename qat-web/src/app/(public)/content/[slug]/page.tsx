@@ -11,8 +11,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getPublishedContentBySlug } from "@/lib/data/content";
 import { getOgSettings } from "@/lib/data/site-settings";
 import { getLocale, getTranslations } from "@/lib/i18n/locale";
-import { isVideoUrl } from "@/lib/media";
-import { SITE_NAME, siteUrl } from "@/lib/metadata";
+import { isNextImageOptimizable, isVideoUrl } from "@/lib/media";
+import { SITE_NAME, aiTextAlternates, siteUrl } from "@/lib/metadata";
 import type { Block } from "@/lib/types/blocks";
 
 type ContentDetailPageProps = {
@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: ContentDetailPageProps): Prom
     description,
     alternates: {
       canonical: url,
+      types: aiTextAlternates(),
     },
     openGraph: {
       title: item.title,
@@ -202,7 +203,8 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
                 src={item.cover_image_url}
                 alt={item.title}
                 fill
-                unoptimized
+                sizes="(min-width: 1280px) 1280px, 100vw"
+                unoptimized={!isNextImageOptimizable(item.cover_image_url)}
                 className="object-cover"
                 priority
               />
@@ -278,6 +280,7 @@ export default async function ContentDetailPage({ params }: ContentDetailPagePro
                   alt={authorName}
                   width={48}
                   height={48}
+                  unoptimized={!isNextImageOptimizable(avatarUrl)}
                   className="rounded-full object-cover ring-2 ring-primary/30 shrink-0"
                 />
               ) : catTypes.includes(avatarType) ? (

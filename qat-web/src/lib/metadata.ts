@@ -20,6 +20,15 @@ export function metadataBase() {
   return new URL(SITE_URL);
 }
 
+export function aiTextAlternates(): NonNullable<Metadata["alternates"]>["types"] {
+  return {
+    "text/plain": [
+      { title: "LLMs TXT", url: siteUrl("/llms.txt") },
+      { title: "LLMs Full TXT", url: siteUrl("/llms-full.txt") },
+    ],
+  };
+}
+
 export async function getListingMetadata(
   pageKey: keyof (typeof t)["en"]["pages"],
 ): Promise<Metadata> {
@@ -35,6 +44,7 @@ export async function getListingMetadata(
     description,
     alternates: {
       canonical: canonicalUrl,
+      types: aiTextAlternates(),
     },
     openGraph: {
       title: `${p.title} | Quantum Art Thailand`,
