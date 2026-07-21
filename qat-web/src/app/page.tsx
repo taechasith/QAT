@@ -62,7 +62,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: canonicalUrl,
       siteName: SITE_NAME,
-      images: og.imageUrl ? [{ url: og.imageUrl, width: 1200, height: 630 }] : [],
+      images: og.imageUrl
+        ? [{ url: og.imageUrl, width: 1200, height: 630 }]
+        : [{ url: siteUrl("/brand/QAT_Logo.png"), width: 1200, height: 630 }],
       locale: locale === "th" ? "th_TH" : "en_US",
       type: "website",
     },
@@ -70,7 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: og.imageUrl ? [og.imageUrl] : [],
+      images: og.imageUrl ? [og.imageUrl] : [siteUrl("/brand/QAT_Logo.png")],
     },
   };
 }

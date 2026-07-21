@@ -45,7 +45,9 @@ export async function generateMetadata({ params }: ContentDetailPageProps): Prom
       description,
       url,
       type: "article",
-      images: image ? [{ url: image, width: 1200, height: 630 }] : [],
+      images: image
+        ? [{ url: image, width: 1200, height: 630 }]
+        : [{ url: siteUrl("/brand/QAT_Logo.png"), width: 1200, height: 630 }],
       publishedTime: item.published_at ?? undefined,
       modifiedTime: item.updated_at ?? undefined,
       authors: [authorName],
@@ -54,7 +56,7 @@ export async function generateMetadata({ params }: ContentDetailPageProps): Prom
       card: "summary_large_image",
       title: item.title,
       description,
-      images: image ? [image] : [],
+      images: image ? [image] : [siteUrl("/brand/QAT_Logo.png")],
     },
   };
 }
